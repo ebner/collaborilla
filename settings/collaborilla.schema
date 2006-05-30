@@ -1,0 +1,78 @@
+objectIdentifier CollaborillaLDAPRoot 1.3.6.1.4.1.4203.666
+objectIdentifier CollaborillaLDAPAttributeType CollaborillaLDAPRoot:1
+objectIdentifier CollaborillaLDAPObjectClass CollaborillaLDAPRoot:3
+
+attributetype ( CollaborillaLDAPAttributeType:201
+	NAME 'collaborillaUriOriginal'
+	DESC ''
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{4096}
+	)
+
+attributetype ( CollaborillaLDAPAttributeType:202
+	NAME 'collaborillaUriOther'
+	DESC ''
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{4096}
+	)
+
+attributetype ( CollaborillaLDAPAttributeType:203
+	NAME 'collaborillaContextRdfInfo'
+	DESC ''
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{65536}
+	SINGLE-VALUE
+	)
+
+attributetype ( CollaborillaLDAPAttributeType:204
+	NAME 'collaborillaLocation'
+	DESC ''
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{4096}
+	)
+
+attributetype ( CollaborillaLDAPAttributeType:205
+	NAME 'collaborillaContainerRdfInfo'
+	DESC ''
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{65536}
+	SINGLE-VALUE
+	)
+
+attributetype ( CollaborillaLDAPAttributeType:206
+	NAME 'collaborillaObjectType'
+	DESC ''
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{32}
+	SINGLE-VALUE
+	)
+
+attributetype ( CollaborillaLDAPAttributeType:207
+	NAME 'collaborillaObjectDeleted'
+	DESC ''
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE
+	)
+
+objectClass ( CollaborillaLDAPObjectClass:200
+	NAME 'collaborillaObject'
+	DESC ''
+	SUP top
+	STRUCTURAL
+	MUST ( 	cn )
+	MAY ( 	description $
+		collaborillaUriOriginal $
+		collaborillaUriOther $
+		collaborillaContextRdfInfo $
+		collaborillaLocation $
+		collaborillaContainerRdfInfo $
+		collaborillaObjectType $
+		collaborillaObjectDeleted )
+	)
