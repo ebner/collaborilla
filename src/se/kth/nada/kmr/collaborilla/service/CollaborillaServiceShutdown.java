@@ -36,49 +36,44 @@ public class CollaborillaServiceShutdown extends Thread {
     private int shutdownTimeout;
 
     /**
-     * @param shutdownTimeout
-     *            Timeout in milliseconds
-     */
+         * @param shutdownTimeout
+         *                Timeout in milliseconds
+         */
     public CollaborillaServiceShutdown(int shutdownTimeout) {
-        this.shutdownTimeout = shutdownTimeout;
+	this.shutdownTimeout = shutdownTimeout;
     }
 
     public void run() {
-        // disallow new connections
-        CollaborillaService.allowConnections = false;
+	// disallow new connections
+	CollaborillaService.allowConnections = false;
 
-        // sleep 100 ms while waiting for clients to disconnect
-        int sleepIntervall = 100;
-        int timer = 0;
+	// sleep 100 ms while waiting for clients to disconnect
+	int sleepIntervall = 100;
+	int timer = 0;
 
-        log.writeLog(CollaborillaService.applicationName,
-                "Received signal to exit");
+	log.writeLog(CollaborillaService.applicationName, "Received signal to exit");
 
-        if (CollaborillaServiceCommunication.getClientCount() > 0) {
-            log.writeLog(CollaborillaService.applicationName,
-                    "Waiting a max. of " + shutdownTimeout / 1000
-                            + " seconds for client(s) to disconnect");
+	if (CollaborillaServiceCommunication.getClientCount() > 0) {
+	    log.writeLog(CollaborillaService.applicationName, "Waiting a max. of " + shutdownTimeout / 1000
+		    + " seconds for client(s) to disconnect");
 
-            while ((CollaborillaServiceCommunication.getClientCount() > 0)) {
-                timer += sleepIntervall;
+	    while ((CollaborillaServiceCommunication.getClientCount() > 0)) {
+		timer += sleepIntervall;
 
-                if (timer >= this.shutdownTimeout) {
-                    log
-                            .writeLog(CollaborillaService.applicationName,
-                                    "Shutdown timeout expired. Clients still connected");
-                    break;
-                }
+		if (timer >= this.shutdownTimeout) {
+		    log.writeLog(CollaborillaService.applicationName, "Shutdown timeout expired. Clients still connected");
+		    break;
+		}
 
-                try {
-                    sleep(sleepIntervall);
-                } catch (InterruptedException ie) {
-                }
-            }
+		try {
+		    sleep(sleepIntervall);
+		} catch (InterruptedException ie) {
+		}
+	    }
 
-            log.writeLog(CollaborillaService.applicationName,
-                    "All connections closed");
-        }
+	    log.writeLog(CollaborillaService.applicationName, "All connections closed");
+	}
 
-        log.writeLog(CollaborillaService.applicationName, "Shutting down");
+	log.writeLog(CollaborillaService.applicationName, "Shutting down");
     }
 }

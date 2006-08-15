@@ -31,8 +31,7 @@ public class CollaborillaServiceStatus {
 
     public static final String PROTOCOLVERSION = "1.0";
 
-    public static final String PROTOCOLFOOTPRINT = PROTOCOLNAME + "/"
-            + PROTOCOLVERSION;
+    public static final String PROTOCOLFOOTPRINT = PROTOCOLNAME + "/" + PROTOCOLVERSION;
 
     /* 2XX: generally "OK" */
     public static final int SC_OK = 200;
@@ -60,8 +59,8 @@ public class CollaborillaServiceStatus {
     public static final int SC_SERVICE_UNAVAILABLE = 503;
 
     /*
-     * 6XX: request status THIS IS NON HTTP AND COLLABORILLA SPECIFIC
-     */
+         * 6XX: request status THIS IS NON HTTP AND COLLABORILLA SPECIFIC
+         */
     public static final int SC_CLIENT_DISCONNECT = 600;
 
     public static final int SC_NO_SUCH_OBJECT = 601;
@@ -79,56 +78,56 @@ public class CollaborillaServiceStatus {
     public static final int SC_UNKNOWN = 999;
 
     /**
-     * Returns a status message for the given status code.
-     * 
-     * @param code
-     *            Status code
-     * @return Status message
-     */
+         * Returns a status message for the given status code.
+         * 
+         * @param code
+         *                Status code
+         * @return Status message
+         */
     public static String getMessage(int code) {
-        String message;
+	String message;
 
-        switch (code) {
-        case SC_OK:
-            message = "OK";
-            break;
-        case SC_CREATED:
-            message = "CREATED";
-            break;
-        case SC_NOT_FOUND:
-            message = "NOT FOUND";
-            break;
-        case SC_BAD_REQUEST:
-            message = "BAD REQUEST";
-            break;
-        case SC_INTERNAL_ERROR:
-            message = "INTERNAL ERROR";
-            break;
-        case SC_NO_SUCH_ATTRIBUTE:
-            message = "NO SUCH ATTRIBUTE";
-            break;
-        case SC_NO_SUCH_OBJECT:
-            message = "NO SUCH OBJECT";
-            break;
-        case SC_NO_SUCH_VALUE:
-            message = "NO SUCH VALUE";
-            break;
-        case SC_CLIENT_DISCONNECT:
-            message = "CLIENT DISCONNECT. BYE";
-            break;
-        case SC_CLIENT_TIMEOUT:
-            message = "TIMEOUT EXCEEDED";
-            break;
-        case SC_ATTRIBUTE_OR_VALUE_EXISTS:
-            message = "ATTRIBUTE OR VALUE EXISTS";
-            break;
-        case SC_UNKNOWN:
-        default:
-            message = "UNKNOWN ERROR";
-            break;
-        }
+	switch (code) {
+	case SC_OK:
+	    message = "OK";
+	    break;
+	case SC_CREATED:
+	    message = "CREATED";
+	    break;
+	case SC_NOT_FOUND:
+	    message = "NOT FOUND";
+	    break;
+	case SC_BAD_REQUEST:
+	    message = "BAD REQUEST";
+	    break;
+	case SC_INTERNAL_ERROR:
+	    message = "INTERNAL ERROR";
+	    break;
+	case SC_NO_SUCH_ATTRIBUTE:
+	    message = "NO SUCH ATTRIBUTE";
+	    break;
+	case SC_NO_SUCH_OBJECT:
+	    message = "NO SUCH OBJECT";
+	    break;
+	case SC_NO_SUCH_VALUE:
+	    message = "NO SUCH VALUE";
+	    break;
+	case SC_CLIENT_DISCONNECT:
+	    message = "CLIENT DISCONNECT. BYE";
+	    break;
+	case SC_CLIENT_TIMEOUT:
+	    message = "TIMEOUT EXCEEDED";
+	    break;
+	case SC_ATTRIBUTE_OR_VALUE_EXISTS:
+	    message = "ATTRIBUTE OR VALUE EXISTS";
+	    break;
+	case SC_UNKNOWN:
+	default:
+	    message = "UNKNOWN ERROR";
+	    break;
+	}
 
-        return PROTOCOLFOOTPRINT + " " + String.valueOf(code) + " " + message;
+	return PROTOCOLFOOTPRINT + " " + String.valueOf(code) + " " + message;
     }
 
 }

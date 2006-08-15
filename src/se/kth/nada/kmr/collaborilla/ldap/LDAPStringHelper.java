@@ -53,320 +53,318 @@ public class LDAPStringHelper {
     private static final int ENCODING = ENCODING_ESCAPE;
 
     /*
-     * Constructors
-     */
+         * Constructors
+         */
 
     /**
-     * Initializes the object with the Distinctive Name (DN) of the LDAP server
-     * connection and the URI which should be converted.
-     * 
-     * @param serverDN
-     *            Distinctive Name (DN) of the server connection
-     * @param uri
-     *            URI
-     */
+         * Initializes the object with the Distinctive Name (DN) of the LDAP
+         * server connection and the URI which should be converted.
+         * 
+         * @param serverDN
+         *                Distinctive Name (DN) of the server connection
+         * @param uri
+         *                URI
+         */
     public LDAPStringHelper(String serverDN, String uri) {
-        this.serverDN = serverDN;
-        this.uri = uri;
+	this.serverDN = serverDN;
+	this.uri = uri;
     }
 
     /**
-     * Initializes the object with the Distinctive Name (DN) of the LDAP server
-     * connection, the URI which should be converted and the ID of the leaf
-     * entry.
-     * 
-     * @param serverDN
-     *            Distinctive Name (DN) of the server connection
-     * @param uri
-     *            URI
-     * @param entryMainID
-     *            Identifier of the leaf entry.&nbsp;Example: "cn"
-     */
-    public LDAPStringHelper(String root, String serverDN, String uri,
-            String entryMainID) {
-        this(serverDN, uri);
-        this.entryMainID = entryMainID;
-        this.root = root;
+         * Initializes the object with the Distinctive Name (DN) of the LDAP
+         * server connection, the URI which should be converted and the ID of
+         * the leaf entry.
+         * 
+         * @param serverDN
+         *                Distinctive Name (DN) of the server connection
+         * @param uri
+         *                URI
+         * @param entryMainID
+         *                Identifier of the leaf entry.&nbsp;Example: "cn"
+         */
+    public LDAPStringHelper(String root, String serverDN, String uri, String entryMainID) {
+	this(serverDN, uri);
+	this.entryMainID = entryMainID;
+	this.root = root;
     }
 
     /*
-     * Setters for the private variables
-     */
+         * Setters for the private variables
+         */
 
     /**
-     * Sets the URI.
-     * 
-     * @param uri
-     *            URI
-     */
+         * Sets the URI.
+         * 
+         * @param uri
+         *                URI
+         */
     public void setUri(String uri) {
-        this.uri = uri;
+	this.uri = uri;
     }
 
     /**
-     * Sets the Server Distinctive Name (DN).
-     * 
-     * @param serverDN
-     *            Server Distinctive Name (DN).&nbsp;Example: "dc=test,dc=com"
-     */
+         * Sets the Server Distinctive Name (DN).
+         * 
+         * @param serverDN
+         *                Server Distinctive Name (DN).&nbsp;Example:
+         *                "dc=test,dc=com"
+         */
     public void setServerDN(String serverDN) {
-        this.serverDN = serverDN;
+	this.serverDN = serverDN;
     }
 
     /*
-     * Getters for the private variables
-     */
+         * Getters for the private variables
+         */
 
     /**
-     * Returns the current URI.
-     * 
-     * @return URI
-     */
+         * Returns the current URI.
+         * 
+         * @return URI
+         */
     public String getUri() {
-        return this.uri;
+	return this.uri;
     }
 
     /**
-     * Returns the current server Distinctive Name (DN).
-     * 
-     * @return Server Distinctive Name (DN)
-     */
+         * Returns the current server Distinctive Name (DN).
+         * 
+         * @return Server Distinctive Name (DN)
+         */
     public String getServerDN() {
-        return this.serverDN;
+	return this.serverDN;
     }
 
     /**
-     * Returns the Distinctive Name (DN) of the parent entry of the current URI.
-     * 
-     * @return DN of the parent entry
-     */
+         * Returns the Distinctive Name (DN) of the parent entry of the current
+         * URI.
+         * 
+         * @return DN of the parent entry
+         */
     public String getParentDN() {
-        return dnToParentDN(this.getBaseDN());
+	return dnToParentDN(this.getBaseDN());
     }
 
     /**
-     * Returns the Distinctive Name (DN) of the parent entry.
-     * 
-     * @param dn
-     *            DN of which the parent DN is demanded
-     * @return DN of the parent entry
-     */
+         * Returns the Distinctive Name (DN) of the parent entry.
+         * 
+         * @param dn
+         *                DN of which the parent DN is demanded
+         * @return DN of the parent entry
+         */
     public static String dnToParentDN(String dn) {
-        return dn.substring(dn.indexOf(",") + 1);
+	return dn.substring(dn.indexOf(",") + 1);
     }
 
     /**
-     * Converts a URI to a Distinctive Name (DN) and returns the parent DN.
-     * 
-     * @param serverDN
-     *            Server Distinctive Name (DN)
-     * @param uri
-     *            URI
-     * @param entryMainID
-     *            Identifier of the leaf entry.&nbsp;Example: "cn"
-     * @return Parent Distinctive Name (DN)
-     */
-    public static String uriToParentDN(String root, String serverDN,
-            String uri, String entryMainID) {
-        return dnToParentDN(uriToBaseDN(root, serverDN, uri, entryMainID));
+         * Converts a URI to a Distinctive Name (DN) and returns the parent DN.
+         * 
+         * @param serverDN
+         *                Server Distinctive Name (DN)
+         * @param uri
+         *                URI
+         * @param entryMainID
+         *                Identifier of the leaf entry.&nbsp;Example: "cn"
+         * @return Parent Distinctive Name (DN)
+         */
+    public static String uriToParentDN(String root, String serverDN, String uri, String entryMainID) {
+	return dnToParentDN(uriToBaseDN(root, serverDN, uri, entryMainID));
     }
 
     /**
-     * Get the ID of the LDAP Distinctive Name (DN) out of a URI or DN. Returns
-     * for example "test", and not "cn=test".
-     * 
-     * @return Relative DN of the LDAP entry
-     */
+         * Get the ID of the LDAP Distinctive Name (DN) out of a URI or DN.
+         * Returns for example "test", and not "cn=test".
+         * 
+         * @return Relative DN of the LDAP entry
+         */
     public String getEntryID() {
-        return dnToEntryID(this.getBaseDN());
+	return dnToEntryID(this.getBaseDN());
     }
 
     /**
-     * Get the ID of an LDAP Distinctive Name (DN) out of a URI or DN. Returns
-     * for example "test", and not "cn=test".
-     * 
-     * @param dn
-     *            Full Distinctive Name (DN)
-     * @return Relative Distinctive Name (DN)
-     */
+         * Get the ID of an LDAP Distinctive Name (DN) out of a URI or DN.
+         * Returns for example "test", and not "cn=test".
+         * 
+         * @param dn
+         *                Full Distinctive Name (DN)
+         * @return Relative Distinctive Name (DN)
+         */
     public static String dnToEntryID(String dn) {
-        return dn.substring(dn.indexOf("=") + 1, dn.indexOf(","));
+	return dn.substring(dn.indexOf("=") + 1, dn.indexOf(","));
     }
 
     /**
-     * Get the ID of an LDAP Distinctive Name (DN) out of a URI or DN. Returns
-     * for example "test", and not "cn=test".
-     * 
-     * @param serverDN
-     *            Server Distinctive Name (DN)
-     * @param uri
-     *            URI
-     * @param entryMainID
-     *            Identifier of the leaf entry.&nbsp;Example: "cn"
-     * @return Relative Distinctive Name (DN)
-     */
-    public static String uriToEntryID(String root, String serverDN, String uri,
-            String entryMainID) {
-        return dnToEntryID(uriToBaseDN(root, serverDN, uri, entryMainID));
+         * Get the ID of an LDAP Distinctive Name (DN) out of a URI or DN.
+         * Returns for example "test", and not "cn=test".
+         * 
+         * @param serverDN
+         *                Server Distinctive Name (DN)
+         * @param uri
+         *                URI
+         * @param entryMainID
+         *                Identifier of the leaf entry.&nbsp;Example: "cn"
+         * @return Relative Distinctive Name (DN)
+         */
+    public static String uriToEntryID(String root, String serverDN, String uri, String entryMainID) {
+	return dnToEntryID(uriToBaseDN(root, serverDN, uri, entryMainID));
     }
 
     /*
-     * URI helpers
-     */
+         * URI helpers
+         */
 
     public static String getParentURI(String uri) {
-        String tmp = uri;
+	String tmp = uri;
 
-        // right now: URI like x:/x -> very bad URI check -> improve TODO
-        if (tmp.length() < 4) {
-            return null;
-        }
+	// right now: URI like x:/x -> very bad URI check -> improve TODO
+	if (tmp.length() < 4) {
+	    return null;
+	}
 
-        if (tmp.endsWith("/")) {
-            tmp = tmp.substring(0, tmp.length() - 2);
-        }
+	if (tmp.endsWith("/")) {
+	    tmp = tmp.substring(0, tmp.length() - 2);
+	}
 
-        if (tmp.indexOf("/") == tmp.lastIndexOf("/")) {
-            return null;
-        }
+	if (tmp.indexOf("/") == tmp.lastIndexOf("/")) {
+	    return null;
+	}
 
-        tmp = tmp.substring(0, tmp.lastIndexOf("/"));
+	tmp = tmp.substring(0, tmp.lastIndexOf("/"));
 
-        return tmp;
+	return tmp;
     }
 
     /*
-     * URI -> DN conversion
-     */
+         * URI -> DN conversion
+         */
 
     /**
-     * Returns a Distinctive Name (DN).
-     * 
-     * @return Base Distinctive Name (DN)
-     */
+         * Returns a Distinctive Name (DN).
+         * 
+         * @return Base Distinctive Name (DN)
+         */
     public String getBaseDN() {
-        return this.uriToBaseDN();
+	return this.uriToBaseDN();
     }
 
     /**
-     * Converts a URI to a Distinctive Name (DN).
-     * 
-     * @return Base Distinctive Name (DN)
-     */
+         * Converts a URI to a Distinctive Name (DN).
+         * 
+         * @return Base Distinctive Name (DN)
+         */
     public String uriToBaseDN() {
-        return uriToBaseDN(this.root, this.serverDN, this.uri, this.entryMainID);
+	return uriToBaseDN(this.root, this.serverDN, this.uri, this.entryMainID);
     }
 
     /**
-     * Converts a URI to a Distinctive Name (DN).
-     * 
-     * @param serverDN
-     *            Server Distinctive Name (DN)
-     * @param uriIn
-     *            URI
-     * @param entryMainID
-     *            Identifier of the leaf entry.&nbsp;Example: "cn"
-     * @return Base Distinctive Name (DN)
-     */
-    public static String uriToBaseDN(String root, String serverDN,
-            String uriIn, String entryMainID) {
-        String checkSep1 = "://";
-        String checkSep2 = ":/";
-        String sep = checkSep2;
-        String uri = null;
-        int pos = -1;
+         * Converts a URI to a Distinctive Name (DN).
+         * 
+         * @param serverDN
+         *                Server Distinctive Name (DN)
+         * @param uriIn
+         *                URI
+         * @param entryMainID
+         *                Identifier of the leaf entry.&nbsp;Example: "cn"
+         * @return Base Distinctive Name (DN)
+         */
+    public static String uriToBaseDN(String root, String serverDN, String uriIn, String entryMainID) {
+	String checkSep1 = "://";
+	String checkSep2 = ":/";
+	String sep = checkSep2;
+	String uri = null;
+	int pos = -1;
 
-        if (uriIn.indexOf("/") == -1) {
-            return null;
-        }
+	if (uriIn.indexOf("/") == -1) {
+	    return null;
+	}
 
-        if (uriIn.indexOf(checkSep1) > -1) {
-            sep = checkSep1;
-        }
+	if (uriIn.indexOf(checkSep1) > -1) {
+	    sep = checkSep1;
+	}
 
-        // workaround to avoid and IndexOutOfBoundsException
-        String uriToConvert = uriIn + "/";
+	// workaround to avoid and IndexOutOfBoundsException
+	String uriToConvert = uriIn + "/";
 
-        if ((pos = uriToConvert.indexOf(sep)) > -1) {
-            /* construct a suitable uri out of a generic <type>:/[/]<path> */
+	if ((pos = uriToConvert.indexOf(sep)) > -1) {
+	    /* construct a suitable uri out of a generic <type>:/[/]<path> */
 
-            /* get the type */
-            String type = uriToConvert.substring(0, pos);
+	    /* get the type */
+	    String type = uriToConvert.substring(0, pos);
 
-            /* get the path and the host */
-            uri = uriToConvert.substring(pos + sep.length());
-            String hostPart = uri.substring(0, uri.indexOf("/"));
-            uri = uri.substring(uri.indexOf("/"));
+	    /* get the path and the host */
+	    uri = uriToConvert.substring(pos + sep.length());
+	    String hostPart = uri.substring(0, uri.indexOf("/"));
+	    uri = uri.substring(uri.indexOf("/"));
 
-            /* split the host into TLD, second level domain, subdomain, etc */
-            StringTokenizer stHostPart = new StringTokenizer(hostPart, ".");
-            while (stHostPart.hasMoreTokens()) {
-                uri = stHostPart.nextToken() + "/" + uri;
-            }
+	    /* split the host into TLD, second level domain, subdomain, etc */
+	    StringTokenizer stHostPart = new StringTokenizer(hostPart, ".");
+	    while (stHostPart.hasMoreTokens()) {
+		uri = stHostPart.nextToken() + "/" + uri;
+	    }
 
-            /* construct the generic uri */
-            uri = "/_" + type + "/" + uri;
-        } else if (uriToConvert.startsWith("/")) {
-            /* we already get a "good" uri */
-            uri = "/_generic" + uriToConvert;
-        } else {
-            return null;
-        }
+	    /* construct the generic uri */
+	    uri = "/_" + type + "/" + uri;
+	} else if (uriToConvert.startsWith("/")) {
+	    /* we already get a "good" uri */
+	    uri = "/_generic" + uriToConvert;
+	} else {
+	    return null;
+	}
 
-        if ((root != null) && (root.length() > 0)) {
-            /* we prepend the root entry */
-            uri = "/" + root + uri;
-        }
+	if ((root != null) && (root.length() > 0)) {
+	    /* we prepend the root entry */
+	    uri = "/" + root + uri;
+	}
 
-        /* finally we construct an LDAP Base DN */
-        String baseDN = new String();
-        StringTokenizer st = new StringTokenizer(uri, "/");
-        while (st.hasMoreTokens()) {
-            baseDN = entryMainID + "=" + st.nextToken() + "," + baseDN;
-        }
+	/* finally we construct an LDAP Base DN */
+	String baseDN = new String();
+	StringTokenizer st = new StringTokenizer(uri, "/");
+	while (st.hasMoreTokens()) {
+	    baseDN = entryMainID + "=" + st.nextToken() + "," + baseDN;
+	}
 
-        return baseDN += serverDN;
+	return baseDN += serverDN;
     }
 
     /*
-     * Other helpers
-     */
+         * Other helpers
+         */
 
     public static String encode(String input) {
-        switch (ENCODING) {
-        case ENCODING_BASE64:
-            return Base64.encode(input.getBytes());
-        case ENCODING_ESCAPE:
-            return input.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r");
-        default:
-            return input;
-        }
+	switch (ENCODING) {
+	case ENCODING_BASE64:
+	    return Base64.encode(input.getBytes());
+	case ENCODING_ESCAPE:
+	    return input.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r");
+	default:
+	    return input;
+	}
     }
 
     public static String decode(String input) {
-        switch (ENCODING) {
-        case ENCODING_BASE64:
-            return new String(Base64.decode(input));
-        case ENCODING_ESCAPE:
-            return input.replaceAll("\\\\n", "\n").replaceAll("\\\\r", "\r");
-        default:
-            return input;
-        }
+	switch (ENCODING) {
+	case ENCODING_BASE64:
+	    return new String(Base64.decode(input));
+	case ENCODING_ESCAPE:
+	    return input.replaceAll("\\\\n", "\n").replaceAll("\\\\r", "\r");
+	default:
+	    return input;
+	}
     }
 
     public static Date parseTimestamp(String utcTimestamp) {
-        Date date = null;
+	Date date = null;
 
-        // Setup a generalized X.208 date/time formatter
-        DateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss'Z'");
+	// Setup a generalized X.208 date/time formatter
+	DateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss'Z'");
 
-        try {
-            // parse UTC into Date
-            date = formatter.parse(utcTimestamp);
-        } catch (ParseException pe) {
-        }
+	try {
+	    // parse UTC into Date
+	    date = formatter.parse(utcTimestamp);
+	} catch (ParseException pe) {
+	}
 
-        return date;
+	return date;
     }
 
 }

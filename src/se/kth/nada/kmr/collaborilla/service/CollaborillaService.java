@@ -77,163 +77,153 @@ public class CollaborillaService {
     private static InfoMessage log = InfoMessage.getInstance();
 
     /**
-     * Reads the configuration file and set the private fields accordingly.
-     * 
-     * @return True if the configuration file could be read
-     */
+         * Reads the configuration file and set the private fields accordingly.
+         * 
+         * @return True if the configuration file could be read
+         */
     private static boolean readConfiguration(String file) {
-        boolean result = true;
+	boolean result = true;
 
-        /* set the filename */
-        Configuration conf = new Configuration(file);
+	/* set the filename */
+	Configuration conf = new Configuration(file);
 
-        /* load and assign values */
-        try {
-            /* load the configuration file */
-            conf.load();
+	/* load and assign values */
+	try {
+	    /* load the configuration file */
+	    conf.load();
 
-            /* port to listen on, default 5000 */
-            listenPort = Integer.parseInt(conf.getProperty("server.listenport",
-                    "5000"));
+	    /* port to listen on, default 5000 */
+	    listenPort = Integer.parseInt(conf.getProperty("server.listenport", "5000"));
 
-            /* client timeout in seconds, default 1 minute */
-            clientTimeOut = Integer.parseInt(conf.getProperty("server.timeout",
-                    "60")) * 1000;
+	    /* client timeout in seconds, default 1 minute */
+	    clientTimeOut = Integer.parseInt(conf.getProperty("server.timeout", "60")) * 1000;
 
-            /*
-             * number of maximum client connections before connection attempts
-             * are rejected
-             */
-            maxConnections = Integer.parseInt(conf.getProperty(
-                    "server.maxconnections", "20"));
+	    /*
+                 * number of maximum client connections before connection
+                 * attempts are rejected
+                 */
+	    maxConnections = Integer.parseInt(conf.getProperty("server.maxconnections", "20"));
 
-            /* time to wait during a shutdown before the clients are kicked out */
-            shutdownTimeout = Integer.parseInt(conf.getProperty(
-                    "server.shutdowntimeout", "10")) * 1000;
+	    /*
+                 * time to wait during a shutdown before the clients are kicked
+                 * out
+                 */
+	    shutdownTimeout = Integer.parseInt(conf.getProperty("server.shutdowntimeout", "10")) * 1000;
 
-            sslSocket = Boolean
-                    .valueOf(conf.getProperty("server.ssl", "false"))
-                    .booleanValue();
-            verbose = Boolean.valueOf(
-                    conf.getProperty("server.verbose", "false")).booleanValue();
-            ldapServerDN = conf.getProperty("ldap.serverdn");
-            ldapHostname = conf.getProperty("ldap.hostname");
-            ldapLoginDN = conf.getProperty("ldap.logindn");
-            ldapPassword = conf.getProperty("ldap.password");
-        } catch (Exception e) {
-            log.writeLog(applicationName, e.getMessage());
-            result = false;
-        }
+	    sslSocket = Boolean.valueOf(conf.getProperty("server.ssl", "false")).booleanValue();
+	    verbose = Boolean.valueOf(conf.getProperty("server.verbose", "false")).booleanValue();
+	    ldapServerDN = conf.getProperty("ldap.serverdn");
+	    ldapHostname = conf.getProperty("ldap.hostname");
+	    ldapLoginDN = conf.getProperty("ldap.logindn");
+	    ldapPassword = conf.getProperty("ldap.password");
+	} catch (Exception e) {
+	    log.writeLog(applicationName, e.getMessage());
+	    result = false;
+	}
 
-        return result;
+	return result;
     }
 
     /**
-     * Main function. Creates the server socket and creates a thread for each
-     * client.
-     * 
-     * @param args
-     */
+         * Main function. Creates the server socket and creates a thread for
+         * each client.
+         * 
+         * @param args
+         */
     public static void main(String[] args) {
-        ServerSocket listener = null;
+	ServerSocket listener = null;
 
-        if (args.length > 0) {
-            if (args[0].startsWith("--config=")) {
-                configFile = args[0].substring(args[0].indexOf("=") + 1);
-            } else {
-                log.write(applicationName + "\n\n" + "Possible parameter: "
-                        + "--config=<path to config file>");
-                System.exit(0);
-            }
-        }
+	if (args.length > 0) {
+	    if (args[0].startsWith("--config=")) {
+		configFile = args[0].substring(args[0].indexOf("=") + 1);
+	    } else {
+		log.write(applicationName + "\n\n" + "Possible parameter: " + "--config=<path to config file>");
+		System.exit(0);
+	    }
+	}
 
-        /* read the configuration */
-        if (!readConfiguration(configFile)) {
-            log.write("Configuration error. Exiting.");
-            System.exit(1);
-        }
+	/* read the configuration */
+	if (!readConfiguration(configFile)) {
+	    log.write("Configuration error. Exiting.");
+	    System.exit(1);
+	}
 
-        try {
-            /* add a shutdown hook */
-            Runtime.getRuntime().addShutdownHook(
-                    new CollaborillaServiceShutdown(shutdownTimeout));
+	try {
+	    /* add a shutdown hook */
+	    Runtime.getRuntime().addShutdownHook(new CollaborillaServiceShutdown(shutdownTimeout));
 
-            /* create an SSL server socket */
-            /* UNTESTED */
-            if (sslSocket) {
-                SSLServerSocketFactory sslFact = (SSLServerSocketFactory) SSLServerSocketFactory
-                        .getDefault();
-                listener = sslFact.createServerSocket(listenPort);
-            }
-            /* create a plain text socket */
-            else {
-                listener = new ServerSocket(listenPort);
-            }
+	    /* create an SSL server socket */
+	    /* UNTESTED */
+	    if (sslSocket) {
+		SSLServerSocketFactory sslFact = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+		listener = sslFact.createServerSocket(listenPort);
+	    }
+	    /* create a plain text socket */
+	    else {
+		listener = new ServerSocket(listenPort);
+	    }
 
-            log.writeLog(applicationName, "Started. Listening on port "
-                    + listenPort);
+	    log.writeLog(applicationName, "Started. Listening on port " + listenPort);
 
-            if (maxConnections > 0) {
-                log.writeLog(applicationName, "Allowing a maximum of "
-                        + maxConnections + " concurrent connections");
-            }
+	    if (maxConnections > 0) {
+		log.writeLog(applicationName, "Allowing a maximum of " + maxConnections + " concurrent connections");
+	    }
 
-            /*
-             * shared LDAP connection LDAPAccess ldapConnection = new
-             * LDAPAccess(ldapHostname, ldapLoginDN, ldapPassword);
-             */
+	    /*
+                 * shared LDAP connection LDAPAccess ldapConnection = new
+                 * LDAPAccess(ldapHostname, ldapLoginDN, ldapPassword);
+                 */
 
-            /* wait for incoming connections */
-            while (allowConnections) {
-                /* create a new socket for each client */
-                Socket server = listener.accept();
+	    /* wait for incoming connections */
+	    while (allowConnections) {
+		/* create a new socket for each client */
+		Socket server = listener.accept();
 
-                /*
+		/*
                  * workaround if a shutdown occurs while the listener is
                  * blocking during waiting for a new connection
                  */
-                if (!allowConnections) {
-                    server.close();
-                    break;
-                }
+		if (!allowConnections) {
+		    server.close();
+		    break;
+		}
 
-                /* set a timeout on the connection */
-                server.setSoTimeout(clientTimeOut);
+		/* set a timeout on the connection */
+		server.setSoTimeout(clientTimeOut);
 
-                /* create a communication object (thread) */
-                CollaborillaServiceCommunication clientConnection = new CollaborillaServiceCommunication(
-                        server, ldapServerDN, ldapHostname, ldapLoginDN,
-                        ldapPassword, verbose);
+		/* create a communication object (thread) */
+		CollaborillaServiceCommunication clientConnection = new CollaborillaServiceCommunication(server, ldapServerDN,
+			ldapHostname, ldapLoginDN, ldapPassword, verbose);
 
-                /*
+		/*
                  * share LDAP connection CollaborillaServiceCommunication
                  * clientConnection = new CollaborillaServiceCommunication(
                  * server, ldapServerDN, ldapConnection, verbose);
                  */
 
-                /* create and start a new thread */
-                Thread clientThread = new Thread(clientConnection);
-                clientThread.setDaemon(true);
+		/* create and start a new thread */
+		Thread clientThread = new Thread(clientConnection);
+		clientThread.setDaemon(true);
 
-                clientThread.start();
+		clientThread.start();
 
-                if (maxConnections > 0) {
-                    /*
-                     * if we already have max connections, we wait until a
-                     * client thread finishes
-                     */
-                    while (CollaborillaServiceCommunication.getClientCount() >= maxConnections) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                        }
-                    }
-                }
-            }
-        } catch (IOException ioe) {
-            log.writeLog(applicationName, ioe.getMessage() + ". Exiting.");
-        } catch (Exception e) {
-            log.writeLog(applicationName, e.getMessage() + ". Exiting.");
-        }
+		if (maxConnections > 0) {
+		    /*
+                         * if we already have max connections, we wait until a
+                         * client thread finishes
+                         */
+		    while (CollaborillaServiceCommunication.getClientCount() >= maxConnections) {
+			try {
+			    Thread.sleep(1000);
+			} catch (InterruptedException ie) {
+			}
+		    }
+		}
+	    }
+	} catch (IOException ioe) {
+	    log.writeLog(applicationName, ioe.getMessage() + ". Exiting.");
+	} catch (Exception e) {
+	    log.writeLog(applicationName, e.getMessage() + ". Exiting.");
+	}
     }
 }

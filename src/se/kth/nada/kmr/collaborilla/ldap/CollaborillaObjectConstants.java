@@ -28,32 +28,32 @@ package se.kth.nada.kmr.collaborilla.ldap;
  * @author Hannes Ebner
  */
 public final class CollaborillaObjectConstants {
-    /*
-     * LDAP internal timestamp attributes
-     */
 
+    /*
+         * LDAP internal timestamp attributes
+         */
     public static final String DATECREATED = "createTimestamp";
 
     public static final String DATEMODIFIED = "modifyTimestamp";
 
     /*
-     * Prefix for ObjectClass and Attribute names
-     */
+         * Prefix for ObjectClass and Attribute names
+         */
     public static final String PREFIX = "collaborilla";
 
     /*
-     * Tree root in the LDAP directory
-     */
+         * Tree root in the LDAP directory
+         */
     public static final String ROOT = PREFIX + "DataTree";
 
     /*
-     * Name of the custom ObjectClass
-     */
+         * Name of the custom ObjectClass
+         */
     public static final String OBJECTCLASS = PREFIX + "Object";
 
     /*
-     * Name and Type of the INFO node containing data (revision, ...)
-     */
+         * Name and Type of the INFO node containing data (revision, ...)
+         */
     public static final String INFONODE = PREFIX + "Data";
 
     public static final String INFONODETYPE = "cn"; /* common name */
@@ -61,15 +61,15 @@ public final class CollaborillaObjectConstants {
     public static final String INFOCONTAINERTYPE = "ou"; /* organizationalUnit */
 
     /*
-     * Attributes inherited from LDAP ObjectClass "top"
-     */
+         * Attributes inherited from LDAP ObjectClass "top"
+         */
     public static final String ID = "cn";
 
     public static final String DESCRIPTION = "description";
 
     /*
-     * Referrer Attributes
-     */
+         * Referrer Attributes
+         */
     public static final String URIORIG = PREFIX + "UriOriginal";
 
     public static final String URIOTHER = PREFIX + "UriOther";
@@ -77,15 +77,17 @@ public final class CollaborillaObjectConstants {
     public static final String CONTEXTRDFINFO = PREFIX + "ContextRdfInfo";
 
     /*
-     * Resolver Attributes
-     */
+         * Resolver Attributes
+         */
     public static final String LOCATION = PREFIX + "Location";
 
     public static final String CONTAINERRDFINFO = PREFIX + "ContainerRdfInfo";
 
+    public static final String CONTAINERREVISION = PREFIX + "ContainerRevision";
+
     /*
-     * Not used / deprecated
-     */
+         * Not used / deprecated
+         */
     public static final String TYPE = PREFIX + "ObjectType";
 
     public static final String DELETED = PREFIX + "ObjectDeleted";

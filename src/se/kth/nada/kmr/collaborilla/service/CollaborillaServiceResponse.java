@@ -31,19 +31,19 @@ public class CollaborillaServiceResponse {
     }
 
     public CollaborillaServiceResponse(int code) {
-        this();
-        this.statusCode = code;
+	this();
+	this.statusCode = code;
     }
 
     public CollaborillaServiceResponse(int code, String response) {
-        this(code);
-        this.responseMessage = new String[1];
-        this.responseMessage[0] = response;
+	this(code);
+	this.responseMessage = new String[1];
+	this.responseMessage[0] = response;
     }
 
     public CollaborillaServiceResponse(int code, String[] response) {
-        this(code);
-        this.responseMessage = response;
+	this(code);
+	this.responseMessage = response;
     }
 
 }

@@ -54,6 +54,8 @@ public class CollaborillaServiceCommands {
 
     public static final String ATTR_CONTAINER_RDFINFO = "CONTAINERRDFINFO";
 
+    public static final String ATTR_CONTAINER_REVISION = "CONTAINERREVISION";
+
     public static final String ATTR_DESCRIPTION = "DESC";
 
     public static final String ATTR_LDIF = "LDIF";
