@@ -44,159 +44,159 @@ import com.novell.ldap.LDAPException;
  * @see CollaborillaService
  */
 public class CollaborillaServiceCommunication implements Runnable {
-    private Socket serverSocket;
+	private Socket serverSocket;
 
-    private static InfoMessage log = InfoMessage.getInstance();
+	private static InfoMessage log = InfoMessage.getInstance();
 
-    private LDAPAccess ldapConnection;
+	private LDAPAccess ldapConnection;
 
-    private String serverDN;
+	private String serverDN;
 
-    private boolean verbose;
+	private boolean verbose;
 
-    private String clientIP;
+	private String clientIP;
 
-    // thread/client counter
-    private static int clientCount = 0;
+	// thread/client counter
+	private static int clientCount = 0;
 
-    /**
-         * Initializes the object and creates a new LDAP connection.
-         * 
-         * @param server
-         *                Socket to communicate with the client
-         * @param serverDN
-         *                Server DN for the LDAP connection
-         * @param ldapHostname
-         *                Hostname for the LDAP connection
-         * @param ldapLoginDN
-         *                Login DN for the LDAP connection
-         * @param ldapPassword
-         *                Password for the LDAP connection
-         */
-
-    /*
-         * shared LDAP connection CollaborillaServiceCommunication(Socket
-         * server, String serverDN, LDAPAccess ldapConnection, boolean verbose)
-         */
-    CollaborillaServiceCommunication(Socket server, String serverDN, String ldapHostname, String ldapLoginDN, String ldapPassword,
-	    boolean verbose) {
-	this.serverSocket = server;
-	this.serverDN = serverDN;
-	this.verbose = verbose;
-
-	this.clientIP = this.serverSocket.getInetAddress().getHostAddress();
-
-	// non-shared connection
-	this.ldapConnection = new LDAPAccess(ldapHostname, ldapLoginDN, ldapPassword);
+	/**
+	 * Initializes the object and creates a new LDAP connection.
+	 * 
+	 * @param server
+	 *            Socket to communicate with the client
+	 * @param serverDN
+	 *            Server DN for the LDAP connection
+	 * @param ldapHostname
+	 *            Hostname for the LDAP connection
+	 * @param ldapLoginDN
+	 *            Login DN for the LDAP connection
+	 * @param ldapPassword
+	 *            Password for the LDAP connection
+	 */
 
 	/*
-         * shared connection this.ldapConnection = ldapConnection;
-         */
+	 * shared LDAP connection CollaborillaServiceCommunication(Socket server,
+	 * String serverDN, LDAPAccess ldapConnection, boolean verbose)
+	 */
+	CollaborillaServiceCommunication(Socket server, String serverDN, String ldapHostname, String ldapLoginDN,
+			String ldapPassword, boolean verbose) {
+		this.serverSocket = server;
+		this.serverDN = serverDN;
+		this.verbose = verbose;
 
-	incClientCount();
-    }
+		this.clientIP = this.serverSocket.getInetAddress().getHostAddress();
 
-    /**
-         * Overrides java.lang.Runnable.run(), necessary for the tread.
-         */
-    public void run() {
-	String request = null;
-	String statusMessage = null;
-	CollaborillaServiceResponse response = null;
-	BufferedReader in = null;
-	PrintStream out = null;
+		// non-shared connection
+		this.ldapConnection = new LDAPAccess(ldapHostname, ldapLoginDN, ldapPassword);
 
-	try {
-	    if (verbose) {
-		log.writeLog(clientIP, "Client connected");
-		log.writeLog("CollaborillaService", "Active clients: " + getClientCount());
-	    }
+		/*
+		 * shared connection this.ldapConnection = ldapConnection;
+		 */
 
-	    // setup reader and writer
-	    in = new BufferedReader(new InputStreamReader(new BufferedInputStream(serverSocket.getInputStream())));
-	    out = new PrintStream(new BufferedOutputStream(serverSocket.getOutputStream()), true);
-
-	    // create protocol handler
-	    CollaborillaServiceProtocol protocol = new CollaborillaServiceProtocol(ldapConnection, serverDN);
-
-	    // connect to the LDAP server
-	    ldapConnection.bind();
-
-	    // Get input from the client
-	    while ((request = in.readLine()) != null) {
-		if (verbose) {
-		    log.writeLog(this.clientIP, "> " + request);
-		}
-
-		// check whether client wants to quit the connection
-		if (request.equalsIgnoreCase(CollaborillaServiceCommands.CMD_QUIT)) {
-		    out.println(CollaborillaServiceStatus.getMessage(CollaborillaServiceStatus.SC_CLIENT_DISCONNECT));
-		    break;
-		}
-
-		// parse the request in a seperate method
-		response = protocol.requestDistributor(request);
-
-		// return the response
-		if (response.responseMessage != null) {
-		    for (int i = 0; i < response.responseMessage.length; i++) {
-			if (response.responseMessage[i] != null) {
-			    out.println(response.responseMessage[i]);
-			}
-		    }
-		}
-
-		statusMessage = CollaborillaServiceStatus.getMessage(response.statusCode);
-
-		// write the status message
-		out.println(statusMessage);
-
-		if (verbose) {
-		    log.writeLog(this.clientIP, "< " + statusMessage);
-		}
-	    }
-	} catch (SocketTimeoutException ste) {
-	    out.println(CollaborillaServiceStatus.getMessage(CollaborillaServiceStatus.SC_CLIENT_TIMEOUT));
-	    log.writeLog(this.clientIP, "Client timeout exceeded");
-	} catch (IOException e) {
-	    log.writeLog(this.clientIP, e.getMessage());
-	} catch (Exception e) {
-	    log.writeLog("CollaborillaService", e.getMessage());
-	} finally {
-	    try {
-		// close the socket to the client, implicitly closes also
-		// this.in and this.out
-		serverSocket.close();
-	    } catch (IOException ioe) {
-		log.writeLog(this.clientIP, ioe.getMessage());
-	    }
-
-	    try {
-		// close connection to the LDAP server
-		ldapConnection.disconnect();
-	    } catch (LDAPException ldape) {
-		log.writeLog(this.clientIP, ldape.getMessage());
-	    }
-
-	    decClientCount();
-
-	    if (verbose) {
-		log.writeLog(this.clientIP, "Client disconnected");
-		log.writeLog("CollaborillaService", "Active clients: " + getClientCount());
-	    }
+		incClientCount();
 	}
-    }
 
-    public synchronized static int getClientCount() {
-	return clientCount;
-    }
+	/**
+	 * Overrides java.lang.Runnable.run(), necessary for the tread.
+	 */
+	public void run() {
+		String request = null;
+		String statusMessage = null;
+		CollaborillaServiceResponse response = null;
+		BufferedReader in = null;
+		PrintStream out = null;
 
-    private synchronized static void incClientCount() {
-	clientCount++;
-    }
+		try {
+			if (verbose) {
+				log.writeLog(clientIP, "Client connected");
+				log.writeLog("CollaborillaService", "Active clients: " + getClientCount());
+			}
 
-    private synchronized static void decClientCount() {
-	clientCount--;
-    }
+			// setup reader and writer
+			in = new BufferedReader(new InputStreamReader(new BufferedInputStream(serverSocket.getInputStream())));
+			out = new PrintStream(new BufferedOutputStream(serverSocket.getOutputStream()), true);
+
+			// create protocol handler
+			CollaborillaServiceProtocol protocol = new CollaborillaServiceProtocol(ldapConnection, serverDN);
+
+			// connect to the LDAP server
+			ldapConnection.bind();
+
+			// Get input from the client
+			while ((request = in.readLine()) != null) {
+				if (verbose) {
+					log.writeLog(this.clientIP, "> " + request);
+				}
+
+				// check whether client wants to quit the connection
+				if (request.equalsIgnoreCase(CollaborillaServiceCommands.CMD_QUIT)) {
+					out.println(CollaborillaServiceStatus.getMessage(CollaborillaServiceStatus.SC_CLIENT_DISCONNECT));
+					break;
+				}
+
+				// parse the request in a seperate method
+				response = protocol.requestDistributor(request);
+
+				// return the response
+				if (response.responseMessage != null) {
+					for (int i = 0; i < response.responseMessage.length; i++) {
+						if (response.responseMessage[i] != null) {
+							out.println(response.responseMessage[i]);
+						}
+					}
+				}
+
+				statusMessage = CollaborillaServiceStatus.getMessage(response.statusCode);
+
+				// write the status message
+				out.println(statusMessage);
+
+				if (verbose) {
+					log.writeLog(this.clientIP, "< " + statusMessage);
+				}
+			}
+		} catch (SocketTimeoutException ste) {
+			out.println(CollaborillaServiceStatus.getMessage(CollaborillaServiceStatus.SC_CLIENT_TIMEOUT));
+			log.writeLog(this.clientIP, "Client timeout exceeded");
+		} catch (IOException e) {
+			log.writeLog(this.clientIP, e.getMessage());
+		} catch (Exception e) {
+			log.writeLog("CollaborillaService", e.getMessage());
+		} finally {
+			try {
+				// close the socket to the client, implicitly closes also
+				// this.in and this.out
+				serverSocket.close();
+			} catch (IOException ioe) {
+				log.writeLog(this.clientIP, ioe.getMessage());
+			}
+
+			try {
+				// close connection to the LDAP server
+				ldapConnection.disconnect();
+			} catch (LDAPException ldape) {
+				log.writeLog(this.clientIP, ldape.getMessage());
+			}
+
+			decClientCount();
+
+			if (verbose) {
+				log.writeLog(this.clientIP, "Client disconnected");
+				log.writeLog("CollaborillaService", "Active clients: " + getClientCount());
+			}
+		}
+	}
+
+	public synchronized static int getClientCount() {
+		return clientCount;
+	}
+
+	private synchronized static void incClientCount() {
+		clientCount++;
+	}
+
+	private synchronized static void decClientCount() {
+		clientCount--;
+	}
 
 }

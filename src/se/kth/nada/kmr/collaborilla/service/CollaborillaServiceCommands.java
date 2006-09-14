@@ -22,51 +22,51 @@
 package se.kth.nada.kmr.collaborilla.service;
 
 public class CollaborillaServiceCommands {
-    public static final String CMD_URI = "URI";
+	public static final String CMD_URI = "URI";
 
-    public static final String CMD_URI_NEW = "NEW";
+	public static final String CMD_URI_NEW = "NEW";
 
-    public static final String CMD_ADD = "ADD";
+	public static final String CMD_ADD = "ADD";
 
-    public static final String CMD_DEL = "DEL";
+	public static final String CMD_DEL = "DEL";
 
-    public static final String CMD_MOD = "MOD";
+	public static final String CMD_MOD = "MOD";
 
-    public static final String CMD_GET = "GET";
+	public static final String CMD_GET = "GET";
 
-    public static final String CMD_SET = "SET";
+	public static final String CMD_SET = "SET";
 
-    public static final String CMD_RESTORE = "RST";
+	public static final String CMD_RESTORE = "RST";
 
-    public static final String CMD_HELP = "HLP";
+	public static final String CMD_HELP = "HLP";
 
-    public static final String CMD_QUIT = "QUIT";
+	public static final String CMD_QUIT = "QUIT";
 
-    public static final String ATTR_URI_ORIG = "URIORIG";
+	public static final String ATTR_URI_ORIG = "URIORIG";
 
-    public static final String ATTR_URI_OTHER = "URIOTHER";
+	public static final String ATTR_URI_OTHER = "URIOTHER";
 
-    public static final String ATTR_CONTEXT_RDFINFO = "CONTEXTRDFINFO";
+	public static final String ATTR_CONTEXT_RDFINFO = "CONTEXTRDFINFO";
 
-    public static final String ATTR_LOCATION = "URL";
+	public static final String ATTR_LOCATION = "URL";
 
-    public static final String ATTR_ALIGNEDLOCATION = "ALIGNEDURL";
+	public static final String ATTR_ALIGNEDLOCATION = "ALIGNEDURL";
 
-    public static final String ATTR_CONTAINER_RDFINFO = "CONTAINERRDFINFO";
+	public static final String ATTR_CONTAINER_RDFINFO = "CONTAINERRDFINFO";
 
-    public static final String ATTR_CONTAINER_REVISION = "CONTAINERREVISION";
+	public static final String ATTR_CONTAINER_REVISION = "CONTAINERREVISION";
 
-    public static final String ATTR_DESCRIPTION = "DESC";
+	public static final String ATTR_DESCRIPTION = "DESC";
 
-    public static final String ATTR_LDIF = "LDIF";
+	public static final String ATTR_LDIF = "LDIF";
 
-    public static final String ATTR_REVISION = "REVISION";
+	public static final String ATTR_REVISION = "REVISION";
 
-    public static final String ATTR_REVISION_INFO = "REVISIONINFO";
+	public static final String ATTR_REVISION_INFO = "REVISIONINFO";
 
-    public static final String ATTR_REVISION_COUNT = "REVISIONCOUNT";
+	public static final String ATTR_REVISION_COUNT = "REVISIONCOUNT";
 
-    public static final String ATTR_INTERNAL_TIMESTAMP_CREATED = "TIMESTAMPCREATED";
+	public static final String ATTR_INTERNAL_TIMESTAMP_CREATED = "TIMESTAMPCREATED";
 
-    public static final String ATTR_INTERNAL_TIMESTAMP_MODIFIED = "TIMESTAMPMODIFIED";
+	public static final String ATTR_INTERNAL_TIMESTAMP_MODIFIED = "TIMESTAMPMODIFIED";
 }

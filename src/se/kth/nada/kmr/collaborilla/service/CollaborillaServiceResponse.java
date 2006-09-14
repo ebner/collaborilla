@@ -22,28 +22,28 @@
 package se.kth.nada.kmr.collaborilla.service;
 
 public class CollaborillaServiceResponse {
-    public int statusCode = CollaborillaServiceStatus.SC_UNKNOWN;
+	public int statusCode = CollaborillaServiceStatus.SC_UNKNOWN;
 
-    public String[] responseMessage = null;
+	public String[] responseMessage = null;
 
-    public CollaborillaServiceResponse() {
+	public CollaborillaServiceResponse() {
 
-    }
+	}
 
-    public CollaborillaServiceResponse(int code) {
-	this();
-	this.statusCode = code;
-    }
+	public CollaborillaServiceResponse(int code) {
+		this();
+		this.statusCode = code;
+	}
 
-    public CollaborillaServiceResponse(int code, String response) {
-	this(code);
-	this.responseMessage = new String[1];
-	this.responseMessage[0] = response;
-    }
+	public CollaborillaServiceResponse(int code, String response) {
+		this(code);
+		this.responseMessage = new String[1];
+		this.responseMessage[0] = response;
+	}
 
-    public CollaborillaServiceResponse(int code, String[] response) {
-	this(code);
-	this.responseMessage = response;
-    }
+	public CollaborillaServiceResponse(int code, String[] response) {
+		this(code);
+		this.responseMessage = response;
+	}
 
 }
