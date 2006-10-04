@@ -48,10 +48,12 @@ import se.kth.nada.kmr.collaborilla.service.CollaborillaServiceStatus;
  * @author Hannes Ebner
  */
 public final class CollaborillaServiceClient implements CollaborillaAccessible {
-	private String serverHost;
+	private String serverHost = null;
+	
+	private int serverPort = -1;
 
-	private int serverPort;
-
+	private String identifier = null;
+	
 	private int responseTimeOut = -1;
 
 	private Socket socket = null;
@@ -155,7 +157,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	private boolean isStatusLine(String line) {
-		return line.toUpperCase().startsWith(CollaborillaServiceStatus.PROTOCOLFOOTPRINT.toUpperCase());
+		return line.toUpperCase().startsWith(CollaborillaServiceStatus.PROTOCOL_FOOTPRINT.toUpperCase());
 	}
 
 	private void checkResponse(CollaborillaServiceResponse resp) throws CollaborillaException {
@@ -244,6 +246,44 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 		} else {
 			this.sendRequest(CollaborillaServiceCommands.CMD_URI + " " + uri);
 		}
+		
+		this.identifier = uri;
+	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getDataSet()
+	 */
+	public CollaborillaDataSet getDataSet() throws CollaborillaException {
+		CollaborillaDataSet dataset = new CollaborillaDataSet();
+		
+		try {
+			dataset.setIdentifier(this.getIdentifier());
+			dataset.setAlignedLocation(this.getAlignedLocation());
+			dataset.setContainerRdfInfo(this.getContainerRdfInfo());
+			dataset.setContextRdfInfo(this.getContextRdfInfo());
+			dataset.setLocation(this.getLocation());
+			dataset.setTimestampCreated(this.getTimestampCreated());
+			dataset.setTimestampModified(this.getTimestampModified());
+			dataset.setUriOriginal(this.getUriOriginal());
+			dataset.setUriOther(this.getUriOther());
+			dataset.setContainerRevision(this.getContainerRevision());
+			dataset.setDescription(this.getDescription());
+			dataset.setRevisionNumber(this.getRevisionNumber());
+			dataset.setRevisionInfo(this.getRevisionInfo());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		return dataset;
+	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getIdentifier()
+	 */
+	public String getIdentifier() {
+		return this.identifier;
 	}
 
 	/**

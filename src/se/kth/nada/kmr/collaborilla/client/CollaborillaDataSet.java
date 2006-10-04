@@ -17,6 +17,8 @@ import java.util.List;
  */
 public final class CollaborillaDataSet implements Serializable {
 	
+	private String identifier = null;
+	
 	private String[] location = null;
 
 	private String[] alignedLocation = null;
@@ -72,6 +74,14 @@ public final class CollaborillaDataSet implements Serializable {
 		}
 		
 		return result;
+	}
+	
+	public String getIdentifier() {
+		return this.identifier;
+	}
+	
+	public void setIdentifier(String ident) {
+		this.identifier = ident;
 	}
 	
 	public Collection getLocation() {

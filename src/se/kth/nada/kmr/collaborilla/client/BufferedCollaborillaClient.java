@@ -37,6 +37,7 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	public void refresh() throws CollaborillaException {
 		if (this.isConnected()) {
 			try {
+				this.dataset.setIdentifier(this.client.getIdentifier());
 				this.dataset.setAlignedLocation(this.client.getAlignedLocation());
 				this.dataset.setContainerRdfInfo(this.client.getContainerRdfInfo());
 				this.dataset.setContextRdfInfo(this.client.getContextRdfInfo());
@@ -50,8 +51,7 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 				this.dataset.setRevisionNumber(this.client.getRevisionNumber());
 				this.dataset.setRevisionInfo(this.client.getRevisionInfo());
 			} catch (CollaborillaException ce) {
-				if (!((ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE) ||
-						(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_VALUE))) {
+				if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
 					throw ce;
 				}
 			}
@@ -146,6 +146,13 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	 */
 	public String getLdif() throws CollaborillaException {
 		return this.client.getLdif();
+	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getIdentifier()
+	 */
+	public String getIdentifier() throws CollaborillaException {
+		return this.dataset.getIdentifier();
 	}
 
 	/**
@@ -323,6 +330,7 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	 */
 	public void setIdentifier(String uri, boolean create) throws CollaborillaException {
 		this.client.setIdentifier(uri, create);
+		this.refresh();
 	}
 
 	/**

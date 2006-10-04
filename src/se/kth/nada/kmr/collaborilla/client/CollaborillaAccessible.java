@@ -46,9 +46,22 @@ public interface CollaborillaAccessible {
 	 * Checks whether the connection is up.
 	 */
 	public abstract boolean isConnected();
+	
+	/**
+	 * Retrieves all information of the most recent revision into a serializable object. 
+	 * 
+	 * @return CollaborillaDataSet
+	 * @throws CollaborillaException
+	 */
+	public abstract CollaborillaDataSet getDataSet() throws CollaborillaException;
 
 	/**
-	 * Sets the URI of the LDAP entry and rebuilds the Base DN.
+	 * Gets the URI of the currently accessed LDAP entry.
+	 */
+	public abstract String getIdentifier() throws CollaborillaException;
+	
+	/**
+	 * Gets the URI of the LDAP entry and rebuilds the Base DN.
 	 * 
 	 * @param uri
 	 *            URI

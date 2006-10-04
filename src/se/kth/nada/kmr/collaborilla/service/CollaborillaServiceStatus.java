@@ -27,11 +27,11 @@ package se.kth.nada.kmr.collaborilla.service;
  * @author Hannes Ebner
  */
 public class CollaborillaServiceStatus {
-	public static final String PROTOCOLNAME = "COLLAB";
+	public static final String PROTOCOL_NAME = "COLLAB";
 
-	public static final String PROTOCOLVERSION = "1.0";
+	public static final String PROTOCOL_VERSION = "1.0";
 
-	public static final String PROTOCOLFOOTPRINT = PROTOCOLNAME + "/" + PROTOCOLVERSION;
+	public static final String PROTOCOL_FOOTPRINT = PROTOCOL_NAME + "/" + PROTOCOL_VERSION;
 	
 	/* 1XX: basic errors */
 	public static final int SC_CONNECTION_FAILED = 100;
@@ -137,7 +137,7 @@ public class CollaborillaServiceStatus {
 			break;
 		}
 
-		return PROTOCOLFOOTPRINT + " " + String.valueOf(code) + " " + message;
+		return PROTOCOL_FOOTPRINT + " " + String.valueOf(code) + " " + message;
 	}
 
 }
