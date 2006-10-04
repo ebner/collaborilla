@@ -27,6 +27,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -188,6 +189,8 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 			in = new BufferedReader(new InputStreamReader(new BufferedInputStream(socket.getInputStream())));
 		} catch (UnknownHostException e) {
 			throw new CollaborillaException(e);
+		} catch (ConnectException ce) {
+			throw new CollaborillaException(CollaborillaException.ErrorCode.SC_CONNECTION_FAILED, ce);
 		} catch (IOException ioe) {
 			this.disconnect();
 			throw new CollaborillaException(ioe);
@@ -199,10 +202,21 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	 */
 	public void disconnect() throws CollaborillaException {
 		try {
-			this.sendRequest(CollaborillaServiceCommands.CMD_QUIT);
-			this.out.close();
-			this.in.close();
-			this.socket.close();
+			if (this.isConnected()) {
+				this.sendRequest(CollaborillaServiceCommands.CMD_QUIT);
+			}
+
+			if (this.out != null) {
+				this.out.close();
+			}
+
+			if (this.in != null) {
+				this.in.close();
+			}
+
+			if (this.socket != null) {
+				this.socket.close();
+			}
 		} catch (Exception e) {
 			throw new CollaborillaException(e);
 		}

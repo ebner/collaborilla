@@ -32,6 +32,9 @@ public class CollaborillaServiceStatus {
 	public static final String PROTOCOLVERSION = "1.0";
 
 	public static final String PROTOCOLFOOTPRINT = PROTOCOLNAME + "/" + PROTOCOLVERSION;
+	
+	/* 1XX: basic errors */
+	public static final int SC_CONNECTION_FAILED = 100;
 
 	/* 2XX: generally "OK" */
 	public static final int SC_OK = 200;
@@ -89,6 +92,9 @@ public class CollaborillaServiceStatus {
 		String message;
 
 		switch (code) {
+		case SC_CONNECTION_FAILED:
+			message = "CONNECTION FAILED";
+			break;
 		case SC_OK:
 			message = "OK";
 			break;

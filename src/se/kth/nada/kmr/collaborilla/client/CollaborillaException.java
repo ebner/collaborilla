@@ -62,6 +62,9 @@ public class CollaborillaException extends Exception {
 		String status;
 
 		switch (resultCode) {
+		case ErrorCode.SC_CONNECTION_FAILED:
+			status = "Connection failed.";
+			break;
 		case ErrorCode.SC_BAD_REQUEST:
 			status = "Bad request to server.";
 			break;

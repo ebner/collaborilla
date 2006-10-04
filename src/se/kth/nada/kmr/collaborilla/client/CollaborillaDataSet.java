@@ -8,12 +8,14 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * DataSet to hold information of a Collaborilla data node.
- * Contains some functionality to convert between String[] and Collection.
+ * A data set to hold information of a Collaborilla data node.
+ * Contains some functionality to convert between String[] and Collection. The
+ * internal serializable fields are accessed via getters and setters. It implements
+ * Serializable to make caching to e.g. local storage possible.
  * 
  * @author Hannes Ebner
  */
-public class CollaborillaDataSet implements Serializable {
+public final class CollaborillaDataSet implements Serializable {
 	
 	private String[] location = null;
 
@@ -39,7 +41,10 @@ public class CollaborillaDataSet implements Serializable {
 
 	private String revisionInfo = null;
 	
-	private static String[] collectionToString(Collection coll) {
+	public CollaborillaDataSet() {
+	}
+	
+	private final static String[] collectionToString(Collection coll) {
 		if (coll == null) {
 			return null;
 		}
@@ -54,7 +59,7 @@ public class CollaborillaDataSet implements Serializable {
 		return result;
 	}
 	
-	private static Collection stringToCollection(String[] strArray) {
+	private final static Collection stringToCollection(String[] strArray) {
 		if (strArray == null) {
 			return null;
 		}
