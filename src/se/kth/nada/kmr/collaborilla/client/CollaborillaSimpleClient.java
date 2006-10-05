@@ -118,29 +118,7 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getDataSet()
 	 */
 	public CollaborillaDataSet getDataSet() throws CollaborillaException {
-		CollaborillaDataSet dataset = new CollaborillaDataSet();
-		
-		try {
-			dataset.setIdentifier(this.getIdentifier());
-			dataset.setAlignedLocation(this.getAlignedLocation());
-			dataset.setContainerRdfInfo(this.getContainerRdfInfo());
-			dataset.setContextRdfInfo(this.getContextRdfInfo());
-			dataset.setLocation(this.getLocation());
-			dataset.setTimestampCreated(this.getTimestampCreated());
-			dataset.setTimestampModified(this.getTimestampModified());
-			dataset.setUriOriginal(this.getUriOriginal());
-			dataset.setUriOther(this.getUriOther());
-			dataset.setContainerRevision(this.getContainerRevision());
-			dataset.setDescription(this.getDescription());
-			dataset.setRevisionNumber(this.getRevisionNumber());
-			dataset.setRevisionInfo(this.getRevisionInfo());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		return dataset;
+		return new CollaborillaDataSet(this);
 	}
 
 	/**

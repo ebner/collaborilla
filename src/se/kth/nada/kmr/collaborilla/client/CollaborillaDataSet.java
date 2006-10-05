@@ -43,7 +43,40 @@ public final class CollaborillaDataSet implements Serializable {
 
 	private String revisionInfo = null;
 	
+	/**
+	 * This constructor doesn't do much. It just makes creation of the object possible,
+	 * the fields are set afterwards.
+	 */
 	public CollaborillaDataSet() {
+	}
+	
+	/**
+	 * If this contructor is called with a Collaborilla client, all fields are fetched
+	 * automatically from the service.
+	 * 
+	 * @param client An instance of CollaborillaAccessible
+	 * @throws CollaborillaException
+	 */
+	public CollaborillaDataSet(CollaborillaAccessible client) throws CollaborillaException {
+		try {
+			this.setIdentifier(client.getIdentifier());
+			this.setAlignedLocation(client.getAlignedLocation());
+			this.setContainerRdfInfo(client.getContainerRdfInfo());
+			this.setContextRdfInfo(client.getContextRdfInfo());
+			this.setLocation(client.getLocation());
+			this.setTimestampCreated(client.getTimestampCreated());
+			this.setTimestampModified(client.getTimestampModified());
+			this.setUriOriginal(client.getUriOriginal());
+			this.setUriOther(client.getUriOther());
+			this.setContainerRevision(client.getContainerRevision());
+			this.setDescription(client.getDescription());
+			this.setRevisionNumber(client.getRevisionNumber());
+			this.setRevisionInfo(client.getRevisionInfo());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
 	}
 	
 	private final static String[] collectionToString(Collection coll) {

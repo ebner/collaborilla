@@ -61,7 +61,7 @@ public interface CollaborillaAccessible {
 	public abstract String getIdentifier() throws CollaborillaException;
 	
 	/**
-	 * Gets the URI of the LDAP entry and rebuilds the Base DN.
+	 * Sets the URI of the LDAP entry and rebuilds the Base DN.
 	 * 
 	 * @param uri
 	 *            URI
