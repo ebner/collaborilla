@@ -126,7 +126,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 
 	private CollaborillaServiceResponse parseResponse(String response) {
 		CollaborillaServiceResponse result = new CollaborillaServiceResponse();
-		String statMessage = null;
+		String statusMessage = null;
 
 		StringTokenizer responseTokens = new StringTokenizer(response, "\n");
 		int responseLines = responseTokens.countTokens();
@@ -141,14 +141,15 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 		while (responseTokens.hasMoreTokens()) {
 			String nextLine = responseTokens.nextToken();
 			if (this.isStatusLine(nextLine)) {
-				statMessage = nextLine;
+				statusMessage = nextLine;
 			} else {
 				result.responseMessage[i++] = nextLine;
 			}
 		}
 
-		if (statMessage != null) {
-			String strHelper = statMessage.substring(statMessage.indexOf(" ") + 1);
+		// try to parse the status code out of the returned message
+		if (statusMessage != null) {
+			String strHelper = statusMessage.substring(statusMessage.indexOf(" ") + 1);
 			String statusCode = strHelper.substring(0, strHelper.indexOf(" "));
 			result.statusCode = Integer.parseInt(statusCode);
 		}
@@ -170,6 +171,21 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 			throw new CollaborillaException(CollaborillaServiceStatus.SC_UNKNOWN);
 		}
 	}
+	
+	private Collection stringArrayToCollection(String[] strArray) {
+		if (strArray == null) {
+			return null;
+		}
+		
+		int size = strArray.length;
+		List result = new ArrayList(size);
+		
+		for (int i = 0; i < size; i++) {
+			result.add(strArray[i]);
+		}
+		
+		return result;
+	}
 
 	/*
 	 * Interface implementation
@@ -187,8 +203,8 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 				this.socket.setSoTimeout(this.responseTimeOut * 1000);
 			}
 
-			out = new PrintWriter(new BufferedOutputStream(socket.getOutputStream()), true);
-			in = new BufferedReader(new InputStreamReader(new BufferedInputStream(socket.getInputStream())));
+			this.out = new PrintWriter(new BufferedOutputStream(this.socket.getOutputStream()), true);
+			this.in = new BufferedReader(new InputStreamReader(new BufferedInputStream(this.socket.getInputStream())));
 		} catch (UnknownHostException e) {
 			throw new CollaborillaException(e);
 		} catch (ConnectException ce) {
@@ -303,16 +319,16 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRevisionInfo(int)
 	 */
 	public String getRevisionInfo(int rev) throws CollaborillaException {
-		String revInfo = new String();
+		String revisionInfo = new String();
 
 		CollaborillaServiceResponse resp = this.sendRequest(CollaborillaServiceCommands.CMD_GET + " "
 				+ CollaborillaServiceCommands.ATTR_REVISION_INFO + " " + rev);
 
 		for (int i = 0; i < resp.responseMessage.length; i++) {
-			revInfo += resp.responseMessage[i];
+			revisionInfo += resp.responseMessage[i];
 		}
 
-		return revInfo;
+		return revisionInfo;
 	}
 
 	/**
@@ -337,15 +353,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 		CollaborillaServiceResponse resp = this.sendRequest(CollaborillaServiceCommands.CMD_GET + " "
 				+ CollaborillaServiceCommands.ATTR_ALIGNEDLOCATION);
 
-		List result = new ArrayList();
-
-		if (resp.responseMessage != null) {
-			for (int i = 0; i < resp.responseMessage.length; i++) {
-				result.add(resp.responseMessage[i]);
-			}
-		}
-
-		return result;
+		return (List)this.stringArrayToCollection(resp.responseMessage);
 	}
 
 	/**
@@ -354,16 +362,8 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	public Collection getLocation() throws CollaborillaException {
 		CollaborillaServiceResponse resp = this.sendRequest(CollaborillaServiceCommands.CMD_GET + " "
 				+ CollaborillaServiceCommands.ATTR_LOCATION);
-
-		List result = new ArrayList();
-
-		if (resp.responseMessage != null) {
-			for (int i = 0; i < resp.responseMessage.length; i++) {
-				result.add(resp.responseMessage[i]);
-			}
-		}
-
-		return result;
+		
+		return (List)this.stringArrayToCollection(resp.responseMessage);
 	}
 
 	/**
@@ -398,15 +398,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 		CollaborillaServiceResponse resp = this.sendRequest(CollaborillaServiceCommands.CMD_GET + " "
 				+ CollaborillaServiceCommands.ATTR_URI_ORIG);
 
-		List result = new ArrayList();
-
-		if (resp.responseMessage != null) {
-			for (int i = 0; i < resp.responseMessage.length; i++) {
-				result.add(resp.responseMessage[i]);
-			}
-		}
-
-		return result;
+		return (List)this.stringArrayToCollection(resp.responseMessage);
 	}
 
 	/**
@@ -441,15 +433,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 		CollaborillaServiceResponse resp = this.sendRequest(CollaborillaServiceCommands.CMD_GET + " "
 				+ CollaborillaServiceCommands.ATTR_URI_OTHER);
 
-		List result = new ArrayList();
-
-		if (resp.responseMessage != null) {
-			for (int i = 0; i < resp.responseMessage.length; i++) {
-				result.add(resp.responseMessage[i]);
-			}
-		}
-
-		return result;
+		return (List)this.stringArrayToCollection(resp.responseMessage);
 	}
 
 	/**
@@ -536,8 +520,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeContainerRdfInfo()
 	 */
 	public void removeContainerRdfInfo() throws CollaborillaException {
-		this
-				.sendRequest(CollaborillaServiceCommands.CMD_DEL + " "
+		this.sendRequest(CollaborillaServiceCommands.CMD_DEL + " "
 						+ CollaborillaServiceCommands.ATTR_CONTAINER_RDFINFO);
 	}
 
@@ -545,23 +528,17 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getContainerRevision()
 	 */
 	public String getContainerRevision() throws CollaborillaException {
-		String containerRevision = new String();
-
 		CollaborillaServiceResponse resp = this.sendRequest(CollaborillaServiceCommands.CMD_GET + " "
 				+ CollaborillaServiceCommands.ATTR_CONTAINER_REVISION);
 
-		for (int i = 0; i < resp.responseMessage.length; i++) {
-			containerRevision += resp.responseMessage[i];
-		}
-
-		return containerRevision;
+		return resp.responseMessage[0];
 	}
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setContainerRevision(java.lang.String)
 	 */
 	public void setContainerRevision(String containerRevision) throws CollaborillaException {
-		this.sendRequest(CollaborillaServiceCommands.CMD_SET + " " + CollaborillaServiceCommands.ATTR_CONTAINER_RDFINFO
+		this.sendRequest(CollaborillaServiceCommands.CMD_SET + " " + CollaborillaServiceCommands.ATTR_CONTAINER_REVISION
 				+ " " + containerRevision);
 	}
 

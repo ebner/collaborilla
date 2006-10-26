@@ -45,14 +45,13 @@ public final class CollaborillaDataSet implements Serializable {
 	
 	/**
 	 * This constructor doesn't do much. It just makes creation of the object possible,
-	 * the fields are set afterwards.
+	 * the fields can be set afterwards.
 	 */
 	public CollaborillaDataSet() {
 	}
 	
 	/**
-	 * If this contructor is called with a Collaborilla client, all fields are fetched
-	 * automatically from the service.
+	 * By calling this constructor all fields are fetched automatically.
 	 * 
 	 * @param client An instance of CollaborillaAccessible
 	 * @throws CollaborillaException
@@ -94,15 +93,15 @@ public final class CollaborillaDataSet implements Serializable {
 		return result;
 	}
 	
-	private final static Collection stringToCollection(String[] strArray) {
+	private final static Collection stringArrayToCollection(String[] strArray) {
 		if (strArray == null) {
 			return null;
 		}
 		
-		List result = new ArrayList();
-		int arraySize = strArray.length;
+		int size = strArray.length;
+		List result = new ArrayList(size);
 		
-		for (int i = 0; i < arraySize; i++) {
+		for (int i = 0; i < size; i++) {
 			result.add(strArray[i]);
 		}
 		
@@ -118,7 +117,7 @@ public final class CollaborillaDataSet implements Serializable {
 	}
 	
 	public Collection getLocation() {
-		return stringToCollection(this.location);
+		return stringArrayToCollection(this.location);
 	}
 	
 	public void setLocation(Collection coll) {
@@ -126,7 +125,7 @@ public final class CollaborillaDataSet implements Serializable {
 	}
 	
 	public Collection getAlignedLocation() {
-		return stringToCollection(this.alignedLocation);
+		return stringArrayToCollection(this.alignedLocation);
 	}
 	
 	public void setAlignedLocation(Collection coll) {
@@ -150,7 +149,7 @@ public final class CollaborillaDataSet implements Serializable {
 	}
 	
 	public Collection getUriOriginal() {
-		return stringToCollection(this.uriOriginal);
+		return stringArrayToCollection(this.uriOriginal);
 	}
 	
 	public void setUriOriginal(Collection coll) {
@@ -158,7 +157,7 @@ public final class CollaborillaDataSet implements Serializable {
 	}
 	
 	public Collection getUriOther() {
-		return stringToCollection(this.uriOther);
+		return stringArrayToCollection(this.uriOther);
 	}
 	
 	public void setUriOther(Collection coll) {
