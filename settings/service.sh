@@ -1,5 +1,8 @@
+# $Id$
+#
 # CollaborillaService start script
 # Hannes Ebner <hebner@kth.se>, 2006
+#
 
 #!/bin/sh
 
