@@ -11,6 +11,11 @@ import java.util.Date;
  * purpose of buffering is to speed up the data access and make caching through
  * serialization to a local storage possible.
  * 
+ * TODO: The getters access already cached data, the same should be introduced
+ * for the setters. Perhaps introduce a commit()-method, or set the values directly
+ * if the connection is established. If there is not connection, the changes are
+ * cached and written at once when we connect or commit.
+ * 
  * @author Hannes Ebner
  */
 public class BufferedCollaborillaClient implements CollaborillaAccessible {
@@ -148,7 +153,8 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRevisionCount()
 	 */
 	public int getRevisionCount() throws CollaborillaException {
-		// we don't buffer information of other revisions
+		// we don't buffer information of other revisions,
+		// so we use "client" instead of "dataset"
 		return this.client.getRevisionCount();
 	}
 
@@ -163,7 +169,8 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRevisionInfo(int)
 	 */
 	public String getRevisionInfo(int rev) throws CollaborillaException {
-		// we don't buffer information of other revisions
+		// we don't buffer information of other revisions,
+		// so we use "client" instead of "dataset"
 		return this.client.getRevisionInfo(rev);
 	}
 
@@ -208,6 +215,12 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	public boolean isConnected() {
 		return this.client.isConnected();
 	}
+	
+	/* 
+	 * From here including the following methods we access the client directly,
+	 * without any caching for write-access. This will be probably implemented
+	 * at a later point
+	 */
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyLocation(java.lang.String, java.lang.String)

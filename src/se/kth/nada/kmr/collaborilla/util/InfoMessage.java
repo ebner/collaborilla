@@ -33,141 +33,141 @@ import java.util.Date;
  * @author Hannes Ebner
  */
 public class InfoMessage {
-    /*
-         * Available destinations
-         */
-    public static final int DEST_CONSOLE = 1;
+	/*
+	 * Available destinations
+	 */
+	public static final int DEST_CONSOLE = 1;
 
-    public static final int DEST_FILE = 2;
+	public static final int DEST_FILE = 2;
 
-    public static final int DEST_SYSLOG = 3;
+	public static final int DEST_SYSLOG = 3;
 
-    /**
-         * Destinaton to which the output should be written to.
-         */
-    private int destination;
+	/**
+	 * Destinaton to which the output should be written to.
+	 */
+	private int destination;
 
-    /**
-         * Our private and only instance of this Object.
-         */
-    private static InfoMessage instance;
+	/**
+	 * Our private and only instance of this Object.
+	 */
+	private static InfoMessage instance;
 
-    /**
-         * Initializes the object with the default destination "console".
-         */
-    private InfoMessage() {
-	this.destination = DEST_CONSOLE;
-    }
-
-    /*
-         * Initializes the object and sets a custom destination.
-         * 
-         * @param dest Destination.&nbsp;Expects a value from enum Destination.
-         */
-    /*
-         * private InfoMessage(int dest) { this.destination = dest; }
-         */
-
-    public synchronized static InfoMessage getInstance() {
-	if (instance == null) {
-	    instance = new InfoMessage();
+	/**
+	 * Initializes the object with the default destination "console".
+	 */
+	private InfoMessage() {
+		this.destination = DEST_CONSOLE;
 	}
 
-	return instance;
-    }
+	/*
+	 * Initializes the object and sets a custom destination.
+	 * 
+	 * @param dest Destination.&nbsp;Expects a value from enum Destination.
+	 */
+	/*
+	 * private InfoMessage(int dest) { this.destination = dest; }
+	 */
 
-    /*
-         * public synchronized static InfoMessage getInstance(int dest) { if
-         * (infoMessage == null) { infoMessage = new InfoMessage(dest); }
-         * 
-         * return infoMessage; }
-         */
+	public synchronized static InfoMessage getInstance() {
+		if (instance == null) {
+			instance = new InfoMessage();
+		}
 
-    /**
-         * Writes the given message to the console.
-         * 
-         * @param message
-         *                Message
-         */
-    private void writeToConsole(String message) {
-	System.out.println(message);
-    }
-
-    /**
-         * Writes the given message to a file.
-         * 
-         * @param message
-         *                Message
-         */
-    private void writeToFile(String message) {
-	// TODO
-    }
-
-    /**
-         * Writes the given message to the Syslog.
-         * 
-         * @param message
-         *                Message
-         */
-    private void writeToSyslog(String message) {
-	// TODO
-    }
-
-    /**
-         * Default writing function. Writes the message based on the destination
-         * value to various locations.
-         * 
-         * @param message
-         *                Message
-         */
-    public void write(String message) {
-	switch (this.destination) {
-	case DEST_CONSOLE:
-	    writeToConsole(message);
-	    break;
-	case DEST_FILE:
-	    writeToFile(message);
-	    break;
-	case DEST_SYSLOG:
-	    writeToSyslog(message);
-	    break;
-	default:
-	    throw new IllegalArgumentException("Unknown destination");
+		return instance;
 	}
-    }
 
-    /**
-         * Writes a message with the current date/time.
-         * 
-         * @param object
-         *                Object like IP address
-         * @param activity
-         *                Activity like Connect or Disconnect
-         */
-    public void writeLog(String object, String activity) {
-	this.write(getCurrentDateTime() + "  [" + object + "] " + activity);
-    }
+	/*
+	 * public synchronized static InfoMessage getInstance(int dest) { if
+	 * (infoMessage == null) { infoMessage = new InfoMessage(dest); }
+	 * 
+	 * return infoMessage; }
+	 */
 
-    /**
-         * Creates a String with the current date and the time.
-         * 
-         * @return Current Date/Time
-         */
-    public static String getCurrentDateTime() {
-	return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss zzz").format(new Date());
-    }
+	/**
+	 * Writes the given message to the console.
+	 * 
+	 * @param message
+	 *            Message
+	 */
+	private void writeToConsole(String message) {
+		System.out.println(message);
+	}
 
-    /**
-         * We don't allow a cloned Object, so we just throw an Exception.
-         * 
-         * An example how a clone could be done without this: SingletonObject
-         * clone = (SingletonObject) obj.clone();
-         * 
-         * @see java.lang.Object#clone()
-         */
-    public Object clone() throws CloneNotSupportedException {
-	// we want a Singleton, so we throw an Exception
-	throw new CloneNotSupportedException();
-    }
+	/**
+	 * Writes the given message to a file.
+	 * 
+	 * @param message
+	 *            Message
+	 */
+	private void writeToFile(String message) {
+		// TODO
+	}
+
+	/**
+	 * Writes the given message to the Syslog.
+	 * 
+	 * @param message
+	 *            Message
+	 */
+	private void writeToSyslog(String message) {
+		// TODO
+	}
+
+	/**
+	 * Default writing function. Writes the message based on the destination
+	 * value to various locations.
+	 * 
+	 * @param message
+	 *            Message
+	 */
+	public void write(String message) {
+		switch (this.destination) {
+		case DEST_CONSOLE:
+			writeToConsole(message);
+			break;
+		case DEST_FILE:
+			writeToFile(message);
+			break;
+		case DEST_SYSLOG:
+			writeToSyslog(message);
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown destination");
+		}
+	}
+
+	/**
+	 * Writes a message with the current date/time.
+	 * 
+	 * @param object
+	 *            Object like IP address
+	 * @param activity
+	 *            Activity like Connect or Disconnect
+	 */
+	public void writeLog(String object, String activity) {
+		this.write(getCurrentDateTime() + "  [" + object + "] " + activity);
+	}
+
+	/**
+	 * Creates a String with the current date and the time.
+	 * 
+	 * @return Current Date/Time
+	 */
+	public static String getCurrentDateTime() {
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss zzz").format(new Date());
+	}
+
+	/**
+	 * We don't allow a cloned Object, so we just throw an Exception.
+	 * 
+	 * An example how a clone could be done without this: SingletonObject clone =
+	 * (SingletonObject) obj.clone();
+	 * 
+	 * @see java.lang.Object#clone()
+	 */
+	public Object clone() throws CloneNotSupportedException {
+		// we want a Singleton, so we throw an Exception
+		throw new CloneNotSupportedException();
+	}
 
 }
