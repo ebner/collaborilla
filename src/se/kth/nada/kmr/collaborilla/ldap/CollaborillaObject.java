@@ -1,6 +1,5 @@
+/* $Id$ */
 /*
- $Id: $
- 
  This file is part of the project Collaborilla (http://collaborilla.sf.net)
  Copyright (c) 2006 Hannes Ebner
  
@@ -32,6 +31,7 @@ import com.novell.ldap.LDAPConnection;
  * 
  * @author Hannes Ebner
  * @see LDAPObject
+ * @version $Id$
  */
 public class CollaborillaObject extends LDAPObject implements Cloneable {
 	private int revision = 0;
@@ -372,16 +372,17 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 		result = this.readAttribute(CollaborillaObjectConstants.LOCATION);
 
 		if (result == null) {
-			/*
-			 * FLOW:
-			 * 
-			 * 1 check if we can go one level higher, if not -> throw
-			 * NO_SUCH_ATTRIBUTE 2 one level up, increase level counter 3 get
-			 * location 4 if NO_SUCH_ATTRIBUTE or NO_SUCH_OBJECT -> 1 (one level
-			 * up) 5 if we get a location: 1 get last part of URI depending on
-			 * the level counter 2 loop through the returned URL and append 5.1
-			 * 6 return result
-			 */
+			// FLOW
+			//
+			// 1 check if we can go one level higher, if not -> throw
+			// NO_SUCH_ATTRIBUTE
+			// 2 one level up, increase level counter
+			// 3 get location
+			// 4 if NO_SUCH_ATTRIBUTE or NO_SUCH_OBJECT -> 1 (one level up)
+			// 5 if we get a location:
+			// 5.1 get last part of URI depending on the level counter
+			// 5.2 loop through the returned URL and append 5.1
+			// 6 return result
 
 			while ((parentURI = LDAPStringHelper.getParentURI(parentURI)) != null) {
 				try {

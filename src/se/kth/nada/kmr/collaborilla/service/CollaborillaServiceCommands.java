@@ -1,6 +1,5 @@
-/*
- $Id: $
- 
+/* $Id$ */
+/* 
  This file is part of the project Collaborilla (http://collaborilla.sf.net)
  Copyright (c) 2006 Hannes Ebner
  
@@ -21,6 +20,10 @@
 
 package se.kth.nada.kmr.collaborilla.service;
 
+/**
+ * @author Hannes Ebner
+ * @version $Id$
+ */
 public class CollaborillaServiceCommands {
 	public static final String CMD_URI = "URI";
 

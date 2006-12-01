@@ -17,6 +17,8 @@ import java.util.List;
  */
 public final class CollaborillaDataSet implements Serializable {
 	
+	private static final long serialVersionUID = 4570510755164149152L;
+
 	private String identifier = null;
 	
 	private String[] location = null;

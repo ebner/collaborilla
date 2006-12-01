@@ -1,6 +1,5 @@
-/*
- $Id: $
- 
+/* $Id$ */
+/* 
  This file is part of the project Collaborilla (http://collaborilla.sf.net)
  Copyright (c) 2006 Hannes Ebner
  
@@ -41,7 +40,8 @@ import com.novell.ldap.LDAPException;
  * CollaborillaObject and manages the commands which are sent by the client.
  * 
  * @author Hannes Ebner
- * @see CollaborillaService
+ * @version $Id$
+ * @see se.kth.nada.kmr.collaborilla.service.CollaborillaService
  */
 public class CollaborillaServiceCommunication implements Runnable {
 	private Socket serverSocket;

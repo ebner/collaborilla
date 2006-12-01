@@ -24,6 +24,9 @@ package se.kth.nada.kmr.collaborilla.client;
 import se.kth.nada.kmr.collaborilla.service.CollaborillaServiceStatus;
 
 public class CollaborillaException extends Exception {
+	
+	private static final long serialVersionUID = 990737578487684483L;
+
 	public static final class ErrorCode extends CollaborillaServiceStatus {
 	}
 

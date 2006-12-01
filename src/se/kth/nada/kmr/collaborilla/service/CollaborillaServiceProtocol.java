@@ -1,6 +1,5 @@
+/* $Id$ */
 /*
- $Id: $
- 
  This file is part of the project Collaborilla (http://collaborilla.sf.net)
  Copyright (c) 2006 Hannes Ebner
  
@@ -28,6 +27,10 @@ import se.kth.nada.kmr.collaborilla.util.InfoMessage;
 
 import com.novell.ldap.LDAPException;
 
+/**
+ * @author Hannes Ebner
+ * @version $Id$
+ */
 public class CollaborillaServiceProtocol {
 	private CollaborillaObject collabObject;
 
