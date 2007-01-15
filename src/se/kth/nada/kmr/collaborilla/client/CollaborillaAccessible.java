@@ -35,9 +35,10 @@ public interface CollaborillaAccessible {
 	 * Checks whether the connection is up.
 	 */
 	public abstract boolean isConnected();
-	
+
 	/**
-	 * Retrieves all information of the most recent revision into a serializable object. 
+	 * Retrieves all information of the most recent revision into a serializable
+	 * object.
 	 * 
 	 * @return CollaborillaDataSet
 	 * @throws CollaborillaException
@@ -48,7 +49,7 @@ public interface CollaborillaAccessible {
 	 * Gets the URI of the currently accessed LDAP entry.
 	 */
 	public abstract String getIdentifier() throws CollaborillaException;
-	
+
 	/**
 	 * Sets the URI of the LDAP entry and rebuilds the Base DN.
 	 * 
@@ -305,8 +306,9 @@ public interface CollaborillaAccessible {
 	/**
 	 * Sets the revision of the container in the RCS.
 	 * 
-	 * @param rdfLocationInfo
-	 *            RDF location info
+	 * @param containerRevision
+	 *            Revision of the checked in container which corresponds to the
+	 *            collaboration information handled by this object.
 	 * @throws LDAPException
 	 */
 	public abstract void setContainerRevision(String containerRevision) throws CollaborillaException;

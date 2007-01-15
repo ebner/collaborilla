@@ -336,7 +336,8 @@ public class LDAPStringHelper {
 	 * header of this class.
 	 * 
 	 * @param input
-	 * @return
+	 *            String in normal representation.
+	 * @return Encoded string.
 	 */
 	public static String encode(String input) {
 		switch (ENCODING) {

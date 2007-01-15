@@ -50,8 +50,6 @@ public class InfoMessage {
 
 	/**
 	 * Initializes the object and sets a custom destination.
-	 * 
-	 * @param dest Destination.&nbsp;Expects a value from enum Destination.
 	 */
 	public synchronized static InfoMessage getInstance() {
 		if (instance == null) {
