@@ -1,21 +1,8 @@
-/* $Id$ */
 /*
- This file is part of the project Collaborilla (http://collaborilla.sf.net)
- Copyright (c) 2006 Hannes Ebner
- 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *  $Id$
+ *
+ *  Copyright (c) 2006-2007, Hannes Ebner
+ *  Licensed under the GNU GPL. For full terms see the file LICENSE.
  */
 
 package se.kth.nada.kmr.collaborilla.ldap;
@@ -30,8 +17,8 @@ import com.novell.ldap.LDAPConnection;
  * Extends the generic class LdapObject.
  * 
  * @author Hannes Ebner
- * @see LDAPObject
  * @version $Id$
+ * @see LDAPObject
  */
 public class CollaborillaObject extends LDAPObject implements Cloneable {
 	private int revision = 0;
@@ -39,7 +26,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	private String serverDN;
 
 	private String uri = new String();
-	
+
 	/*
 	 * Constructor
 	 * 
@@ -69,8 +56,9 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 
 		if (!this.entryExists()) {
 			if (create) {
-				this.createEntryWithContainer(LDAPStringHelper.dnToParentDN(this.baseDN), CollaborillaObjectConstants.OBJECTCLASS,
-						CollaborillaObjectConstants.INFONODETYPE, CollaborillaObjectConstants.INFONODE);
+				this.createEntryWithContainer(LDAPStringHelper.dnToParentDN(this.baseDN),
+						CollaborillaObjectConstants.OBJECTCLASS, CollaborillaObjectConstants.INFONODETYPE,
+						CollaborillaObjectConstants.INFONODE);
 			} else {
 				throw new LDAPException("NO SUCH OBJECT", LDAPException.NO_SUCH_OBJECT, LDAPException
 						.resultCodeToString(LDAPException.NO_SUCH_OBJECT), this.baseDN);
@@ -110,7 +98,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 * 
 	 * 
 	 */
-	
+
 	/**
 	 * Updates the Base DN for accessing the right LDAP entry. Takes the Server
 	 * DN, URI and the revision into consideration for creating a Base DN.
@@ -129,28 +117,35 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 
 		this.baseDN = tmpDN;
 	}
-	
+
+	/**
+	 * Checks whether the currently selected entry (and its respective revision)
+	 * can be modified. Throws an exception if a modification is against the
+	 * policy. (E.g. a revisioned entry cannot be modified.)
+	 * 
+	 * @throws LDAPException
+	 */
 	private void handleWriteAttempt() throws LDAPException {
 		if (!this.isEditable()) {
 			throw new LDAPException("UNWILLING TO PERFORM", LDAPException.UNWILLING_TO_PERFORM,
 					"Policy violation: Not allowed to modify revision", this.baseDN);
 		}
 	}
-	
+
 	/*
 	 * Public
 	 * 
 	 * 
 	 */
-	
+
 	/**
-	 * Tells whether we are allowed to edit the node to which the current
-	 * object points. It should not be allowed to edit the history of a node.
+	 * Tells whether we are allowed to edit the node to which the current object
+	 * points. It should not be allowed to edit the history of a node.
 	 * 
 	 * @return true or false
 	 */
 	public boolean isEditable() {
-		
+
 		if (this.getRevision() == 0) {
 			return true;
 		}
@@ -389,7 +384,8 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 					this.setAccessUri(parentURI);
 					result = this.readAttribute(CollaborillaObjectConstants.LOCATION);
 				} catch (LDAPException e) {
-					if ((e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) || (e.getResultCode() == LDAPException.NO_SUCH_OBJECT)) {
+					if ((e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)
+							|| (e.getResultCode() == LDAPException.NO_SUCH_OBJECT)) {
 						continue;
 					} else {
 						this.setAccessUri(originalURI);
@@ -416,8 +412,8 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 
 			this.setAccessUri(originalURI);
 
-			throw new LDAPException("NO SUCH ATTRIBUTE", LDAPException.NO_SUCH_ATTRIBUTE, "Unable to construct a URL from parent entries",
-					this.baseDN);
+			throw new LDAPException("NO SUCH ATTRIBUTE", LDAPException.NO_SUCH_ATTRIBUTE,
+					"Unable to construct a URL from parent entries", this.baseDN);
 		}
 
 		return result;
@@ -598,7 +594,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 */
 	public void setContextRdfInfo(String rdfInfo) throws LDAPException {
 		this.handleWriteAttempt();
-		
+
 		if (this.attributeExists(CollaborillaObjectConstants.CONTEXTRDFINFO)) {
 			this.resetAttribute(CollaborillaObjectConstants.CONTEXTRDFINFO, rdfInfo);
 		} else {
@@ -613,7 +609,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 */
 	public void removeContextRdfInfo() throws LDAPException {
 		this.handleWriteAttempt();
-		
+
 		if (this.attributeExists(CollaborillaObjectConstants.CONTEXTRDFINFO)) {
 			this.removeAttribute(CollaborillaObjectConstants.CONTEXTRDFINFO, this.getContextRdfInfo());
 		}
@@ -642,7 +638,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 */
 	public void setContainerRdfInfo(String rdfLocationInfo) throws LDAPException {
 		this.handleWriteAttempt();
-		
+
 		if (this.attributeExists(CollaborillaObjectConstants.CONTAINERRDFINFO)) {
 			this.resetAttribute(CollaborillaObjectConstants.CONTAINERRDFINFO, rdfLocationInfo);
 		} else {
@@ -657,7 +653,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 */
 	public void removeContainerRdfInfo() throws LDAPException {
 		this.handleWriteAttempt();
-		
+
 		if (this.attributeExists(CollaborillaObjectConstants.CONTAINERRDFINFO)) {
 			this.removeAttribute(CollaborillaObjectConstants.CONTAINERRDFINFO, this.getContainerRdfInfo());
 		}
@@ -692,7 +688,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 */
 	public void setDescription(String desc) throws LDAPException {
 		this.handleWriteAttempt();
-		
+
 		if (this.attributeExists(CollaborillaObjectConstants.DESCRIPTION)) {
 			this.resetAttribute(CollaborillaObjectConstants.DESCRIPTION, desc);
 		} else {
@@ -707,7 +703,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 */
 	public void removeDescription() throws LDAPException {
 		this.handleWriteAttempt();
-		
+
 		if (this.attributeExists(CollaborillaObjectConstants.DESCRIPTION)) {
 			this.removeAttribute(CollaborillaObjectConstants.DESCRIPTION, this.getDescription());
 		}
@@ -759,7 +755,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 */
 	public void setContainerRevision(String containerRevision) throws LDAPException {
 		this.handleWriteAttempt();
-		
+
 		if (this.attributeExists(CollaborillaObjectConstants.CONTAINERREVISION)) {
 			this.resetAttribute(CollaborillaObjectConstants.CONTAINERREVISION, containerRevision);
 		} else {

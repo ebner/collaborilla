@@ -1,34 +1,23 @@
 /*
- $Id: $
- 
- This file is part of the project Collaborilla (http://collaborilla.sf.net)
- Copyright (c) 2006 Hannes Ebner
- 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *  $Id$
+ *
+ *  Copyright (c) 2006-2007, Hannes Ebner
+ *  Licensed under the GNU GPL. For full terms see the file LICENSE.
  */
 
 package se.kth.nada.kmr.collaborilla.client;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
+
+import com.novell.ldap.LDAPException;
 
 /**
  * Collaborilla client interface. Defines all necessary functions in order to
  * implement a working client.
  * 
  * @author Hannes Ebner
+ * @version $Id$
  */
 public interface CollaborillaAccessible {
 
@@ -141,10 +130,10 @@ public interface CollaborillaAccessible {
 	 * attribute of this entry does not exist it will try to construct Locations
 	 * by querying the entries of the parent URIs.
 	 * 
-	 * @return Collection of URLs
+	 * @return Set of URLs
 	 * @throws LDAPException
 	 */
-	public abstract Collection getAlignedLocation() throws CollaborillaException;
+	public abstract Set getAlignedLocation() throws CollaborillaException;
 
 	/**
 	 * Reads all URLs of the entry and returns a collection of Strings.
@@ -152,7 +141,7 @@ public interface CollaborillaAccessible {
 	 * @return Collection of URLs
 	 * @throws LDAPException
 	 */
-	public abstract Collection getLocation() throws CollaborillaException;
+	public abstract Set getLocation() throws CollaborillaException;
 
 	/**
 	 * Adds a new URL field to the LDAP entry.
@@ -186,10 +175,10 @@ public interface CollaborillaAccessible {
 	/**
 	 * Reads all URIs of the entry and returns a String array.
 	 * 
-	 * @return Array of URIs
+	 * @return Set of URIs
 	 * @throws LDAPException
 	 */
-	public abstract Collection getUriOriginal() throws CollaborillaException;
+	public abstract Set getUriOriginal() throws CollaborillaException;
 
 	/**
 	 * Adds a new URI field to the LDAP entry.
@@ -223,10 +212,10 @@ public interface CollaborillaAccessible {
 	/**
 	 * Reads all URIs of the entry and returns a String array.
 	 * 
-	 * @return Array of URIs
+	 * @return Set of URIs
 	 * @throws LDAPException
 	 */
-	public abstract Collection getUriOther() throws CollaborillaException;
+	public abstract Set getUriOther() throws CollaborillaException;
 
 	/**
 	 * Adds a new URI field to the LDAP entry.

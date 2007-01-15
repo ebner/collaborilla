@@ -1,22 +1,8 @@
 /*
- $Id: $
- 
- This file is part of the project Collaborilla (http://collaborilla.sf.net)
- Copyright (c) 2006 Hannes Ebner
- 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *  $Id$
+ *
+ *  Copyright (c) 2006-2007, Hannes Ebner
+ *  Licensed under the GNU GPL. For full terms see the file LICENSE.
  */
 
 package se.kth.nada.kmr.collaborilla.service;
@@ -41,26 +27,33 @@ import se.kth.nada.kmr.collaborilla.util.InfoMessage;
  * @author Hannes Ebner
  */
 public class CollaborillaService {
-	/* application name */
+	
+	/**
+	 * Application name.
+	 */
 	public static final String applicationName = "CollaborillaService";
 
-	/* allow connections */
+	/**
+	 * Allow connections.
+	 */
 	public static boolean allowConnections = true;
 
-	/* standard value if no command line argument is given */
+	/**
+	 * Standard configuration file if no command line argument is given
+	 */
 	private static String configFile = "collaborilla.properties";
 
-	/* following values are read from a properties file */
+	// Following values are read from a properties file
 	private static int listenPort;
 
 	private static int clientTimeOut;
 
 	private static int maxConnections = 0;
 
-	/* use SSL */
+	// Use SSL
 	private static boolean sslSocket;
 
-	/* shutdown timeout */
+	// Shutdown timeout
 	private static int shutdownTimeout;
 
 	private static String ldapHostname;
@@ -73,7 +66,6 @@ public class CollaborillaService {
 
 	private static boolean verbose;
 
-	/* status message handling */
 	private static InfoMessage log = InfoMessage.getInstance();
 
 	/**
@@ -84,29 +76,25 @@ public class CollaborillaService {
 	private static boolean readConfiguration(String file) {
 		boolean result = true;
 
-		/* set the filename */
+		// Set the filename
 		Configuration conf = new Configuration(file);
 
-		/* load and assign values */
+		// Load and assign values
 		try {
-			/* load the configuration file */
+			// Load the configuration file
 			conf.load();
 
-			/* port to listen on, default 5000 */
+			// Port to listen on, default 5000
 			listenPort = Integer.parseInt(conf.getProperty("server.listenport", "5000"));
 
-			/* client timeout in seconds, default 1 minute */
+			// Client timeout in seconds, default 1 minute
 			clientTimeOut = Integer.parseInt(conf.getProperty("server.timeout", "60")) * 1000;
 
-			/*
-			 * number of maximum client connections before connection attempts
-			 * are rejected
-			 */
+			// Number of maximum client connections before connection attempts
+			// are rejected
 			maxConnections = Integer.parseInt(conf.getProperty("server.maxconnections", "20"));
 
-			/*
-			 * time to wait during a shutdown before the clients are kicked out
-			 */
+			// Time to wait during a shutdown before the clients are kicked out
 			shutdownTimeout = Integer.parseInt(conf.getProperty("server.shutdowntimeout", "10")) * 1000;
 
 			sslSocket = Boolean.valueOf(conf.getProperty("server.ssl", "false")).booleanValue();
@@ -128,6 +116,7 @@ public class CollaborillaService {
 	 * client.
 	 * 
 	 * @param args
+	 *            Commandline arguments.
 	 */
 	public static void main(String[] args) {
 		ServerSocket listener = null;
@@ -141,24 +130,23 @@ public class CollaborillaService {
 			}
 		}
 
-		/* read the configuration */
+		// Read the configuration
 		if (!readConfiguration(configFile)) {
 			log.write("Configuration error. Exiting.");
 			System.exit(1);
 		}
 
 		try {
-			/* add a shutdown hook */
-			Runtime.getRuntime().addShutdownHook(new CollaborillaServiceShutdown(shutdownTimeout));
+			// Add a shutdown hook
+			Runtime.getRuntime().addShutdownHook(new ShutdownDisposer(shutdownTimeout));
 
-			/* create an SSL server socket */
-			/* UNTESTED */
 			if (sslSocket) {
+				// Create an SSL server socket
+				// UNTESTED
 				SSLServerSocketFactory sslFact = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 				listener = sslFact.createServerSocket(listenPort);
-			}
-			/* create a plain text socket */
-			else {
+			} else {
+				// Create a plain text socket
 				listener = new ServerSocket(listenPort);
 			}
 
@@ -168,14 +156,9 @@ public class CollaborillaService {
 				log.writeLog(applicationName, "Allowing a maximum of " + maxConnections + " concurrent connections");
 			}
 
-			/*
-			 * shared LDAP connection LDAPAccess ldapConnection = new
-			 * LDAPAccess(ldapHostname, ldapLoginDN, ldapPassword);
-			 */
-
-			/* wait for incoming connections */
+			// Wait for incoming connections
 			while (allowConnections) {
-				/* create a new socket for each client */
+				// Create a new socket for each client
 				Socket server = listener.accept();
 
 				/*
@@ -187,21 +170,15 @@ public class CollaborillaService {
 					break;
 				}
 
-				/* set a timeout on the connection */
+				// Set a timeout on the connection
 				server.setSoTimeout(clientTimeOut);
 				log.writeLog(applicationName, "Client connection timeout set to " + clientTimeOut);
 
-				/* create a communication object (thread) */
-				CollaborillaServiceCommunication clientConnection = new CollaborillaServiceCommunication(server,
-						ldapServerDN, ldapHostname, ldapLoginDN, ldapPassword, verbose);
+				// Create a communication object (thread)
+				ClientConnector clientConnection = new ClientConnector(server, ldapServerDN, ldapHostname, ldapLoginDN,
+						ldapPassword, verbose);
 
-				/*
-				 * share LDAP connection CollaborillaServiceCommunication
-				 * clientConnection = new CollaborillaServiceCommunication(
-				 * server, ldapServerDN, ldapConnection, verbose);
-				 */
-
-				/* create and start a new thread */
+				// Create and start a new thread
 				Thread clientThread = new Thread(clientConnection);
 				clientThread.setDaemon(true);
 
@@ -209,10 +186,10 @@ public class CollaborillaService {
 
 				if (maxConnections > 0) {
 					/*
-					 * if we already have reached max connections, we wait until a
-					 * client thread finishes
+					 * if we already have reached max connections, we wait until
+					 * a client thread finishes
 					 */
-					while (CollaborillaServiceCommunication.getClientCount() >= maxConnections) {
+					while (ClientConnector.getClientCount() >= maxConnections) {
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException ie) {

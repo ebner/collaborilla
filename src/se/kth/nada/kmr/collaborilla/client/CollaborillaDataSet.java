@@ -1,11 +1,17 @@
+/*
+ *  $Id$
+ *
+ *  Copyright (c) 2006-2007, Hannes Ebner
+ *  Licensed under the GNU GPL. For full terms see the file LICENSE.
+ */
+
 package se.kth.nada.kmr.collaborilla.client;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 /**
  * A data set to hold information of a Collaborilla data node.
@@ -14,24 +20,25 @@ import java.util.List;
  * Serializable to make caching to e.g. local storage possible.
  * 
  * @author Hannes Ebner
+ * @version $Id$
  */
 public final class CollaborillaDataSet implements Serializable {
 	
-	private static final long serialVersionUID = 4570510755164149152L;
+	private static final long serialVersionUID = -1923564557152264954L;
 
 	private String identifier = null;
 	
-	private String[] location = null;
+	private Set location = null;
 
-	private String[] alignedLocation = null;
+	private Set alignedLocation = null;
 
 	private String containerRdfInfo = null;
 
 	private String contextRdfInfo = null;
 
-	private String[] uriOriginal = null;
+	private Set uriOriginal = null;
 
-	private String[] uriOther = null;
+	private Set uriOther = null;
 
 	private Date timestampCreated = null;
 
@@ -80,7 +87,7 @@ public final class CollaborillaDataSet implements Serializable {
 		}
 	}
 	
-	private final static String[] collectionToString(Collection coll) {
+	public final static String[] setToStringArray(Set coll) {
 		if (coll == null) {
 			return null;
 		}
@@ -95,13 +102,13 @@ public final class CollaborillaDataSet implements Serializable {
 		return result;
 	}
 	
-	private final static Collection stringArrayToCollection(String[] strArray) {
+	public final static Set stringArrayToSet(String[] strArray) {
 		if (strArray == null) {
 			return null;
 		}
 		
 		int size = strArray.length;
-		List result = new ArrayList(size);
+		Set result = new HashSet(size);
 		
 		for (int i = 0; i < size; i++) {
 			result.add(strArray[i]);
@@ -118,20 +125,20 @@ public final class CollaborillaDataSet implements Serializable {
 		this.identifier = ident;
 	}
 	
-	public Collection getLocation() {
-		return stringArrayToCollection(this.location);
+	public Set getLocation() {
+		return this.location;
 	}
 	
-	public void setLocation(Collection coll) {
-		this.location = collectionToString(coll);
+	public void setLocation(Set coll) {
+		this.location = coll;
 	}
 	
-	public Collection getAlignedLocation() {
-		return stringArrayToCollection(this.alignedLocation);
+	public Set getAlignedLocation() {
+		return this.alignedLocation;
 	}
 	
-	public void setAlignedLocation(Collection coll) {
-		this.alignedLocation = collectionToString(coll);
+	public void setAlignedLocation(Set coll) {
+		this.alignedLocation = coll;
 	}
 	
 	public String getContainerRdfInfo() {
@@ -150,20 +157,20 @@ public final class CollaborillaDataSet implements Serializable {
 		this.contextRdfInfo = rdfInfo;
 	}
 	
-	public Collection getUriOriginal() {
-		return stringArrayToCollection(this.uriOriginal);
+	public Set getUriOriginal() {
+		return this.uriOriginal;
 	}
 	
-	public void setUriOriginal(Collection coll) {
-		this.uriOriginal = collectionToString(coll);
+	public void setUriOriginal(Set coll) {
+		this.uriOriginal = coll;
 	}
 	
-	public Collection getUriOther() {
-		return stringArrayToCollection(this.uriOther);
+	public Set getUriOther() {
+		return this.uriOther;
 	}
 	
-	public void setUriOther(Collection coll) {
-		this.uriOther = collectionToString(coll);
+	public void setUriOther(Set coll) {
+		this.uriOther = coll;
 	}
 	
 	public Date getTimestampCreated() {

@@ -1,32 +1,18 @@
 /*
- $Id: $
- 
- This file is part of the project Collaborilla (http://collaborilla.sf.net)
- Copyright (c) 2006 Hannes Ebner
- 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *  $Id$
+ *
+ *  Copyright (c) 2006-2007, Hannes Ebner
+ *  Licensed under the GNU GPL. For full terms see the file LICENSE.
  */
 
 package se.kth.nada.kmr.collaborilla.client;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
-import se.kth.nada.kmr.collaborilla.ldap.*;
+import se.kth.nada.kmr.collaborilla.ldap.CollaborillaObject;
+import se.kth.nada.kmr.collaborilla.ldap.LDAPAccess;
+import se.kth.nada.kmr.collaborilla.ldap.LDAPStringHelper;
 
 import com.novell.ldap.LDAPException;
 
@@ -36,6 +22,7 @@ import com.novell.ldap.LDAPException;
  * we need for a "simple" usage.
  * 
  * @author Hannes Ebner
+ * @version $Id$
  */
 public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	private CollaborillaObject collab = null;
@@ -213,18 +200,10 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getAlignedLocation()
 	 */
-	public Collection getAlignedLocation() throws CollaborillaException {
+	public Set getAlignedLocation() throws CollaborillaException {
 		try {
 			String uris[] = this.collab.getAlignedLocation();
-			List result = new ArrayList();
-
-			if (uris != null) {
-				for (int i = 0; i < uris.length; i++) {
-					result.add(uris[i]);
-				}
-			}
-
-			return result;
+			return CollaborillaDataSet.stringArrayToSet(uris);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
@@ -237,18 +216,10 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getLocation()
 	 */
-	public Collection getLocation() throws CollaborillaException {
+	public Set getLocation() throws CollaborillaException {
 		try {
 			String uris[] = this.collab.getLocation();
-			List result = new ArrayList();
-
-			if (uris != null) {
-				for (int i = 0; i < uris.length; i++) {
-					result.add(uris[i]);
-				}
-			}
-
-			return result;
+			return CollaborillaDataSet.stringArrayToSet(uris);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
@@ -303,18 +274,10 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getUriOriginal()
 	 */
-	public Collection getUriOriginal() throws CollaborillaException {
+	public Set getUriOriginal() throws CollaborillaException {
 		try {
 			String uris[] = this.collab.getUriOriginal();
-			List result = new ArrayList();
-
-			if (uris != null) {
-				for (int i = 0; i < uris.length; i++) {
-					result.add(uris[i]);
-				}
-			}
-
-			return result;
+			return CollaborillaDataSet.stringArrayToSet(uris);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
@@ -369,18 +332,10 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getUriOther()
 	 */
-	public Collection getUriOther() throws CollaborillaException {
+	public Set getUriOther() throws CollaborillaException {
 		try {
 			String uris[] = this.collab.getUriOther();
-			List result = new ArrayList();
-
-			if (uris != null) {
-				for (int i = 0; i < uris.length; i++) {
-					result.add(uris[i]);
-				}
-			}
-
-			return result;
+			return CollaborillaDataSet.stringArrayToSet(uris);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);

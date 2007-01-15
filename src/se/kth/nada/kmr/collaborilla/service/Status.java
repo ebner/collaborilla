@@ -1,38 +1,26 @@
 /*
- $Id: $
- 
- This file is part of the project Collaborilla (http://collaborilla.sf.net)
- Copyright (c) 2006 Hannes Ebner
- 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *  $Id$
+ *
+ *  Copyright (c) 2006-2007, Hannes Ebner
+ *  Licensed under the GNU GPL. For full terms see the file LICENSE.
  */
 
 package se.kth.nada.kmr.collaborilla.service;
 
 /**
- * Definitions of status messages. (related to HTTP)
+ * Definitions of status codes and messages. The codes are related to HTTP.
  * 
  * @author Hannes Ebner
+ * @version $Id$
  */
-public class CollaborillaServiceStatus {
+public class Status {
+
 	public static final String PROTOCOL_NAME = "COLLAB";
 
 	public static final String PROTOCOL_VERSION = "1.0";
 
 	public static final String PROTOCOL_FOOTPRINT = PROTOCOL_NAME + "/" + PROTOCOL_VERSION;
-	
+
 	/* 1XX: basic errors */
 	public static final int SC_CONNECTION_FAILED = 100;
 
@@ -76,13 +64,13 @@ public class CollaborillaServiceStatus {
 	public static final int SC_SERVER_TIMEOUT = 605;
 
 	public static final int SC_ATTRIBUTE_OR_VALUE_EXISTS = 606;
-	
+
 	public static final int SC_REVISION_NOT_EDITABLE = 607;
 
 	public static final int SC_UNKNOWN = 999;
 
 	/**
-	 * Returns a status message for the given status code.
+	 * Returns a short status message for the given status code.
 	 * 
 	 * @param code
 	 *            Status code

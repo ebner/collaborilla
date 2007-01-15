@@ -1,29 +1,23 @@
 /*
- $Id$
- 
- This file is part of the project Collaborilla (http://collaborilla.sf.net)
- Copyright (c) 2006 Hannes Ebner
- 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *  $Id$
+ *
+ *  Copyright (c) 2006-2007, Hannes Ebner
+ *  Licensed under the GNU GPL. For full terms see the file LICENSE.
  */
 
 package se.kth.nada.kmr.collaborilla.ldap;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Iterator;
+
+import com.novell.ldap.LDAPAttribute;
+import com.novell.ldap.LDAPAttributeSet;
+import com.novell.ldap.LDAPEntry;
+import com.novell.ldap.LDAPException;
+import com.novell.ldap.LDAPModification;
+import com.novell.ldap.LDAPSearchResults;
 import com.novell.ldap.util.Base64;
-import com.novell.ldap.*;
 
 /**
  * Provides methods to access and manipulate LDAP objects. The ObjectClasses and
@@ -33,8 +27,9 @@ import com.novell.ldap.*;
  * @version $Id$
  */
 public class LDAPObject implements Cloneable {
+	
 	/**
-	 * LDAP connection.
+	 * LDAP connection object.
 	 */
 	public LDAPAccess ldapAccess;
 
@@ -109,7 +104,6 @@ public class LDAPObject implements Cloneable {
 	 */
 	public Object clone() throws CloneNotSupportedException {
 		LDAPObject newObject = (LDAPObject) super.clone();
-
 		return newObject;
 	}
 
@@ -123,20 +117,38 @@ public class LDAPObject implements Cloneable {
 	 * Timestamp created
 	 */
 
+	/**
+	 * @return Returns the timestamp of when the entry was created.
+	 * @throws LDAPException
+	 */
 	public Date getTimestampCreated() throws LDAPException {
 		return this.getTimestampCreated(this.baseDN);
 	}
 
+	/**
+	 * @param dn Distinctive Name (DN).
+	 * @return Returns the timestamp of when the entry was created.
+	 * @throws LDAPException
+	 */
 	public Date getTimestampCreated(String dn) throws LDAPException {
 		this.ldapAccess.checkConnection();
 
 		return LDAPStringHelper.parseTimestamp(this.readAttribute(dn, "createTimeStamp")[0]);
 	}
 
+	/**
+	 * @return Returns the timestamp of when the entry was created.
+	 * @throws LDAPException
+	 */
 	public String getTimestampCreatedAsString() throws LDAPException {
 		return this.getTimestampCreatedAsString(this.baseDN);
 	}
 
+	/**
+	 * @param dn Distinctive Name (DN).
+	 * @return Returns the timestamp of when the entry was created.
+	 * @throws LDAPException
+	 */
 	public String getTimestampCreatedAsString(String dn) throws LDAPException {
 		this.ldapAccess.checkConnection();
 
@@ -147,20 +159,38 @@ public class LDAPObject implements Cloneable {
 	 * Timestamp modified
 	 */
 
+	/**
+	 * @return Returns the timestamp of when the entry was last modified.
+	 * @throws LDAPException
+	 */
 	public Date getTimestampModified() throws LDAPException {
 		return this.getTimestampModified(this.baseDN);
 	}
 
+	/**
+	 * @param dn Distinctive Name (DN).
+	 * @return Returns the timestamp of when the entry was last modified.
+	 * @throws LDAPException
+	 */
 	public Date getTimestampModified(String dn) throws LDAPException {
 		this.ldapAccess.checkConnection();
 
 		return LDAPStringHelper.parseTimestamp(this.readAttribute(dn, "modifyTimeStamp")[0]);
 	}
 
+	/**
+	 * @return Returns the timestamp of when the entry was last modified.
+	 * @throws LDAPException
+	 */
 	public String getTimestampModifiedAsString() throws LDAPException {
 		return this.getTimestampModifiedAsString(this.baseDN);
 	}
 
+	/**
+	 * @param dn Distinctive Name (DN).
+	 * @return Returns the timestamp of when the entry was last modified.
+	 * @throws LDAPException
+	 */
 	public String getTimestampModifiedAsString(String dn) throws LDAPException {
 		this.ldapAccess.checkConnection();
 

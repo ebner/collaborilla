@@ -1,26 +1,14 @@
 /*
- $Id: $
- 
- This file is part of the project Collaborilla (http://collaborilla.sf.net)
- Copyright (c) 2006 Hannes Ebner
- 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *  $Id$
+ *
+ *  Copyright (c) 2006-2007, Hannes Ebner
+ *  Licensed under the GNU GPL. For full terms see the file LICENSE.
  */
 
 package se.kth.nada.kmr.collaborilla.ldap;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,9 +21,10 @@ import com.novell.ldap.util.Base64;
  * Provides methods to do basic conversions and manipulations of URI and LDAP
  * Distinctive Name (DN) Strings.
  * <p>
- * All methods can also be accessed via static.
+ * All methods are also statically accessible.
  * 
  * @author Hannes Ebner
+ * @version $Id$
  */
 public class LDAPStringHelper {
 	private String uri;
@@ -211,11 +200,25 @@ public class LDAPStringHelper {
 	 * URI helpers
 	 */
 
+	/**
+	 * Constructs the parent out of a given URI.
+	 * 
+	 * @param uri
+	 *            A valid URI.
+	 * @return Returns a parent URI to the given one. Returns null if the URI is
+	 *         toplevel already, or if the URI is invalid.
+	 */
 	public static String getParentURI(String uri) {
 		String tmp = uri;
 
-		// right now: URI like x:/x -> very bad URI check -> improve TODO
-		if (tmp.length() < 4) {
+		// Perform a check whether this URI is valid: we convert it to a Java
+		// URI and check for an exception.
+		try {
+			new URI(uri);
+		} catch (URISyntaxException e) {
+			// throw new IllegalArgumentException("Given parameter is not a
+			// valid URI.");
+			// We just return null for now
 			return null;
 		}
 
@@ -328,6 +331,13 @@ public class LDAPStringHelper {
 	 * Other helpers
 	 */
 
+	/**
+	 * Encodes a given String. The type of "encoding" is hard-wired in the
+	 * header of this class.
+	 * 
+	 * @param input
+	 * @return
+	 */
 	public static String encode(String input) {
 		switch (ENCODING) {
 		case ENCODING_BASE64:
@@ -339,6 +349,14 @@ public class LDAPStringHelper {
 		}
 	}
 
+	/**
+	 * Decodes a given String to the original representation. The type of
+	 * "encoding" is hard-wired in the header of this class.
+	 * 
+	 * @param input
+	 *            Encoded string.
+	 * @return Decoded string.
+	 */
 	public static String decode(String input) {
 		switch (ENCODING) {
 		case ENCODING_BASE64:
@@ -350,6 +368,13 @@ public class LDAPStringHelper {
 		}
 	}
 
+	/**
+	 * Parses an X.208 formatted timestamp and creates a Date object.
+	 * 
+	 * @param utcTimestamp
+	 *            X.208 formatted timestamp.
+	 * @return Converted Date object.
+	 */
 	public static Date parseTimestamp(String utcTimestamp) {
 		Date date = null;
 

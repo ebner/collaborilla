@@ -1,7 +1,14 @@
+/*
+ *  $Id$
+ *
+ *  Copyright (c) 2006-2007, Hannes Ebner
+ *  Licensed under the GNU GPL. For full terms see the file LICENSE.
+ */
+
 package se.kth.nada.kmr.collaborilla.client;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Wrapper around the interface CollaborillaAccessible.
@@ -11,19 +18,29 @@ import java.util.Date;
  * purpose of buffering is to speed up the data access and make caching through
  * serialization to a local storage possible.
  * 
- * TODO: The getters access already cached data, the same should be introduced
- * for the setters. Perhaps introduce a commit()-method, or set the values directly
- * if the connection is established. If there is not connection, the changes are
- * cached and written at once when we connect or commit.
+ * TODO The getters access already cached data, the same should be introduced
+ * for the setters. Perhaps introduce a commit()-method, or set the values
+ * directly if the connection is established. If there is no connection, the
+ * changes are cached and written at once when we connect or commit.
+ * 
+ * TODO Add modified flag and do refresh automatically if we called set before
+ * refresh/get. Alternatively send the changes to the server AND update the
+ * CollaborillaDataSet structure, so there is no refresh necessary. (The second
+ * approach makes only sense with proper locking on server side.)
  * 
  * @author Hannes Ebner
+ * @version $Id$
  */
 public class BufferedCollaborillaClient implements CollaborillaAccessible {
 
 	private CollaborillaAccessible client = null;
-	
+
 	private CollaborillaDataSet dataset = null;
 
+	/**
+	 * @param client A valid and initialized CollaborillaAccessible object.
+	 * @throws CollaborillaException
+	 */
 	public BufferedCollaborillaClient(CollaborillaAccessible client) throws CollaborillaException {
 		this.client = client;
 		this.dataset = new CollaborillaDataSet();
@@ -34,8 +51,9 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * If the Collaborilla client is online and this method is called, all fields which
-	 * make sense to be buffered are fetched and stored in memory in a data set object.
+	 * If the Collaborilla client is online and this method is called, all
+	 * fields which make sense to be buffered are fetched and stored in memory
+	 * in a data set object.
 	 * 
 	 * @throws CollaborillaException
 	 */
@@ -44,12 +62,15 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 			this.dataset = new CollaborillaDataSet(this);
 		}
 	}
-	
+
+	/* Interface implementation */
+
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getDataSet()
+	 */
 	public CollaborillaDataSet getDataSet() {
 		return this.dataset;
 	}
-	
-	/* Interface implementation */
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addLocation(java.lang.String)
@@ -96,7 +117,7 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getAlignedLocation()
 	 */
-	public Collection getAlignedLocation() throws CollaborillaException {
+	public Set getAlignedLocation() throws CollaborillaException {
 		return this.dataset.getAlignedLocation();
 	}
 
@@ -134,7 +155,7 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	public String getLdif() throws CollaborillaException {
 		return this.client.getLdif();
 	}
-	
+
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getIdentifier()
 	 */
@@ -145,7 +166,7 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getLocation()
 	 */
-	public Collection getLocation() throws CollaborillaException {
+	public Set getLocation() throws CollaborillaException {
 		return this.dataset.getLocation();
 	}
 
@@ -198,14 +219,14 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getUriOriginal()
 	 */
-	public Collection getUriOriginal() throws CollaborillaException {
+	public Set getUriOriginal() throws CollaborillaException {
 		return this.dataset.getUriOriginal();
 	}
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getUriOther()
 	 */
-	public Collection getUriOther() throws CollaborillaException {
+	public Set getUriOther() throws CollaborillaException {
 		return this.dataset.getUriOther();
 	}
 
@@ -215,29 +236,32 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	public boolean isConnected() {
 		return this.client.isConnected();
 	}
-	
-	/* 
+
+	/*
 	 * From here including the following methods we access the client directly,
 	 * without any caching for write-access. This will be probably implemented
 	 * at a later point
 	 */
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyLocation(java.lang.String, java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyLocation(java.lang.String,
+	 *      java.lang.String)
 	 */
 	public void modifyLocation(String oldUrl, String newUrl) throws CollaborillaException {
 		this.client.modifyLocation(oldUrl, newUrl);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyUriOriginal(java.lang.String, java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyUriOriginal(java.lang.String,
+	 *      java.lang.String)
 	 */
 	public void modifyUriOriginal(String oldUri, String newUri) throws CollaborillaException {
 		this.client.modifyUriOriginal(oldUri, newUri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyUriOther(java.lang.String, java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyUriOther(java.lang.String,
+	 *      java.lang.String)
 	 */
 	public void modifyUriOther(String oldUri, String newUri) throws CollaborillaException {
 		this.client.modifyUriOther(oldUri, newUri);
@@ -321,7 +345,8 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setIdentifier(java.lang.String, boolean)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setIdentifier(java.lang.String,
+	 *      boolean)
 	 */
 	public void setIdentifier(String uri, boolean create) throws CollaborillaException {
 		this.client.setIdentifier(uri, create);

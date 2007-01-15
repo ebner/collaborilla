@@ -1,21 +1,8 @@
-/* $Id$ */
-/* 
- This file is part of the project Collaborilla (http://collaborilla.sf.net)
- Copyright (c) 2006 Hannes Ebner
- 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
- 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+/*
+ *  $Id$
+ *
+ *  Copyright (c) 2006-2007, Hannes Ebner
+ *  Licensed under the GNU GPL. For full terms see the file LICENSE.
  */
 
 package se.kth.nada.kmr.collaborilla.service;
@@ -36,14 +23,14 @@ import com.novell.ldap.LDAPException;
 
 /**
  * Implements the thread for the server/client communication in
- * CollaborillaService. Provides access to the LDAP directory through a
- * CollaborillaObject and manages the commands which are sent by the client.
+ * CollaborillaService. Calls CommandHandler to fulfill the requests of the
+ * client.
  * 
  * @author Hannes Ebner
  * @version $Id$
- * @see se.kth.nada.kmr.collaborilla.service.CollaborillaService
  */
-public class CollaborillaServiceCommunication implements Runnable {
+public class ClientConnector implements Runnable {
+
 	private Socket serverSocket;
 
 	private static InfoMessage log = InfoMessage.getInstance();
@@ -72,37 +59,34 @@ public class CollaborillaServiceCommunication implements Runnable {
 	 *            Login DN for the LDAP connection
 	 * @param ldapPassword
 	 *            Password for the LDAP connection
+	 * @param verbose
+	 *            Do verbose logging.
 	 */
-
-	/*
-	 * shared LDAP connection CollaborillaServiceCommunication(Socket server,
-	 * String serverDN, LDAPAccess ldapConnection, boolean verbose)
-	 */
-	CollaborillaServiceCommunication(Socket server, String serverDN, String ldapHostname, String ldapLoginDN,
-			String ldapPassword, boolean verbose) {
+	ClientConnector(Socket server, String serverDN, String ldapHostname, String ldapLoginDN, String ldapPassword,
+			boolean verbose) {
 		this.serverSocket = server;
 		this.serverDN = serverDN;
 		this.verbose = verbose;
 
 		this.clientIP = this.serverSocket.getInetAddress().getHostAddress();
 
-		// non-shared connection
+		// Non-shared connection:
+		// We create a new connection with the LDAP server.
+		// TODO replace this with a connection manager/connection pool.
 		this.ldapConnection = new LDAPAccess(ldapHostname, ldapLoginDN, ldapPassword);
-
-		/*
-		 * shared connection this.ldapConnection = ldapConnection;
-		 */
 
 		incClientCount();
 	}
 
 	/**
-	 * Overrides java.lang.Runnable.run(), necessary for the tread.
+	 * Let's the client connect, receives commands and forwards them to a
+	 * CommandHandler. Sends the response from the CommandHandler back to the
+	 * client.
 	 */
 	public void run() {
 		String request = null;
 		String statusMessage = null;
-		CollaborillaServiceResponse response = null;
+		ResponseMessage response = null;
 		BufferedReader in = null;
 		PrintStream out = null;
 
@@ -117,7 +101,7 @@ public class CollaborillaServiceCommunication implements Runnable {
 			out = new PrintStream(new BufferedOutputStream(serverSocket.getOutputStream()), true);
 
 			// create protocol handler
-			CollaborillaServiceProtocol protocol = new CollaborillaServiceProtocol(ldapConnection, serverDN);
+			CommandHandler protocol = new CommandHandler(ldapConnection, serverDN);
 
 			// connect to the LDAP server
 			ldapConnection.bind();
@@ -129,24 +113,24 @@ public class CollaborillaServiceCommunication implements Runnable {
 				}
 
 				// check whether client wants to quit the connection
-				if (request.equalsIgnoreCase(CollaborillaServiceCommands.CMD_QUIT)) {
-					out.println(CollaborillaServiceStatus.getMessage(CollaborillaServiceStatus.SC_CLIENT_DISCONNECT));
+				if (request.equalsIgnoreCase(ServiceCommands.CMD_QUIT)) {
+					out.println(Status.getMessage(Status.SC_CLIENT_DISCONNECT));
 					break;
 				}
 
 				// parse the request in a seperate method
-				response = protocol.requestDistributor(request);
+				response = protocol.processRequest(request);
 
 				// return the response
-				if (response.responseMessage != null) {
-					for (int i = 0; i < response.responseMessage.length; i++) {
-						if (response.responseMessage[i] != null) {
-							out.println(response.responseMessage[i]);
+				if (response.responseData != null) {
+					for (int i = 0; i < response.responseData.length; i++) {
+						if (response.responseData[i] != null) {
+							out.println(response.responseData[i]);
 						}
 					}
 				}
 
-				statusMessage = CollaborillaServiceStatus.getMessage(response.statusCode);
+				statusMessage = Status.getMessage(response.statusCode);
 
 				// write the status message
 				out.println(statusMessage);
@@ -156,7 +140,7 @@ public class CollaborillaServiceCommunication implements Runnable {
 				}
 			}
 		} catch (SocketTimeoutException ste) {
-			out.println(CollaborillaServiceStatus.getMessage(CollaborillaServiceStatus.SC_CLIENT_TIMEOUT));
+			out.println(Status.getMessage(Status.SC_CLIENT_TIMEOUT));
 			log.writeLog(this.clientIP, "Client timeout exceeded");
 		} catch (IOException e) {
 			log.writeLog(this.clientIP, e.getMessage());
@@ -187,14 +171,23 @@ public class CollaborillaServiceCommunication implements Runnable {
 		}
 	}
 
+	/**
+	 * @return Returns the current amount of connected clients.
+	 */
 	public synchronized static int getClientCount() {
 		return clientCount;
 	}
 
+	/**
+	 * Increases client counter.
+	 */
 	private synchronized static void incClientCount() {
 		clientCount++;
 	}
 
+	/**
+	 * Decreases the client counter.
+	 */
 	private synchronized static void decClientCount() {
 		clientCount--;
 	}
