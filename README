@@ -1,0 +1,209 @@
+----------------------------------------------------------------------
+README                                            Collaborilla project
+----------------------------------------------------------------------
+The collaborative framework Conzilla has been developed to enhance the
+concept browser Conzilla with facilities to enable collaboration.
+Collaborilla is generically designed and may also be used within other
+projects.
+
+Collaborilla    http://collaborilla.sf.net
+Conzilla        http://www.conzilla.org
+----------------------------------------------------------------------
+
+----- Copyright & License --------------------------------------------
+
+Copyright (c) 2006-2007, Hannes Ebner <hebner@nada.kth.se>
+Royal Institute of Technology (KTH), Sweden
+
+Collaborilla is licensed under the GNU GPL.
+For full terms see the file LICENSE.
+
+----- Changelog ------------------------------------------------------
+
+For a detailed changelog see the file CHANGELOG.
+
+----- Sourcecode -----------------------------------------------------
+
+This project's SourceForge.net Subversion repository can be checked
+out anonymously through SVN.
+
+Location of the Subversion repository:
+
+  https://collaborilla.svn.sourceforge.net/svnroot/collaborilla
+
+The repository is structured into
+
+- trunk
+  The most recent development version.
+  
+- tags
+  Mostly releases, tagged with date and version number.
+  
+- branches
+  Currently not used.
+  
+----- Tarballs -------------------------------------------------------
+
+Tarballs including the sourcecode, compiled classes, and JavaDoc
+documentation can be downloaded directly from the project's
+SourceForge page. A tarball contains basically everything needed to
+deploy Collaborilla.
+
+----- Compilation ----------------------------------------------------
+
+The compilation of Collaborilla is not necessary if you downloaded a
+tarball including the binaries. After unpacking the downloaded archive
+you can continue with the next section "Installation".
+
+Prerequisites to build this project are a JDK of at least version
+1.4.2 and the Java based build tool "Ant".
+
+An Ant build script is shipped together with Collaborilla. It is
+called build.xml and located in the root directory.
+
+The most important build targets are:
+  
+- deploy
+  Builds the whole project incl. JavaDoc, a default configuration, and
+  startup scripts. The destination directory is "deploy".
+  
+- release
+  Creates compressed archives (zip, tar/gzip, tar/bzip2) of the
+  compiled project in the "tarballs" directory.
+  
+Before installation the following command has to be called in order to
+build the whole project:
+
+  $ ant deploy
+
+It should build without any errors.
+
+----- Installation ---------------------------------------------------
+
+Collaborilla uses the OpenLDAP software suite and makes use of JLDAP,
+an associated OpenLDAP project which provides LDAP access from within
+Java applications and was contributed by Novell.
+
+STEP 1: Installation of OpenLDAP
+
+Setup and install OpenLDAP on the system which is supposed to hold the
+information directory. Configure a server dn and a username/password
+combination to be used to connect to the right context on the server.
+
+You find detailed information on installing OpenLDAP at its website:
+
+  http://www.openldap.org/doc/admin/
+  
+Alternatively you can also checkout the man page of "slapd.conf", it
+should be on your system.
+
+STEP 2: Customization of OpenLDAP
+
+Collaborilla uses of object classes and attributes which are not
+included in the OpenLDAP server distribution. They have to be defined
+in a schema file and loaded before the server can make use of them.
+
+Collaborilla's schema is specified in the file "collaborilla.schema".
+It should be copied to the OpenLDAP schema directory (on Debian this
+is e.g. "/etc/ldap/schema/"). To include this schema into the
+configuration, the following line has to be included at the top of
+the file "slapd.conf" (in the directory "/etc/ldap"):
+
+  include /etc/ldap/schema/collaborilla.schema
+  
+Restart the LDAP service in order to activate the modification.
+
+STEP 3: Deploy Collaborilla
+
+Take the directory "deploy" and copy it to wherever you like. A good
+location is probably "/opt/collaborilla" or under "/usr/local".
+The configuration file is located in the same directory and will be
+modified in the next step.
+
+Make sure the startup script is referring to the right deployment
+directory. To do this, open the file "collaborilla.sh" and check for
+the variable "DEPLOYDIR". It should point to the directory where you
+deployed Collaborilla to. The startup script will look there for the
+configuration file.
+
+In our case it will look similar to this:
+
+  DEPLOYDIR=/opt/collaborilla/
+
+STEP 4: Configuration
+
+The whole configuration of the service is done through a properties
+file, located in the root directory of the Collaborilla installation.
+
+There you can configure which port the service should listen on,
+connection and logging settings, and, very important, how to connect
+to the LDAP server.
+
+The example settings give you a picture of how it should look like and
+also contain a description of every single setting.
+Since the equals sign "=" has a special role in property files, every
+occurence within variable values has to be escaped with a backslash.
+
+STEP 5: Execution
+
+After the installation and configuration is done, Collaborilla can be
+hooked into the right runlevels in order to start and shutdown it
+automatically. On Debian, the runlevels we will touch are 0, 1, 2,
+and 6.
+
+First, we create a symbolic link to the "init.d" directory:
+
+  # ln -s /opt/collaborilla/collaborilla.sh /etc/init.d/collaborilla
+  
+Then, we can integrate it into the runlevels. We want to start the
+script after OpenLDAP and shut it down before OpenLDAP, that's the
+only requirements we have.
+
+OpenLDAP has priority 80 in runlevels 0, 1, and 6 (the runlevels we
+want Collaborilla not to be started in):
+
+  # ln -s /etc/init.d/collaborilla /etc/rc0.d/K79collaborilla
+  # ln -s /etc/init.d/collaborilla /etc/rc1.d/K79collaborilla
+  # ln -s /etc/init.d/collaborilla /etc/rc6.d/K79collaborilla
+  
+In runlevel 2 (the standard, we want to run our service in there),
+OpenLDAP has priority 19:
+  
+  # ln -s /etc/init.d/collaborilla /etc/rc2.d/S20collaborilla
+
+Done. Collaborilla will from now on start and stop automatically
+together with the system.
+
+If we want to control it manually, we can call the startup link
+directly. Depending on whether we want to start, stop, or restart the
+service we choose the parameter.
+
+  # /etc/init.d/collaborilla {start|stop|restart}
+
+----- Maintenance ----------------------------------------------------
+
+TO BE WRITTEN
+
+- Backup of data
+- Logging
+- ...
+
+----- Client Usage ---------------------------------------------------
+
+The library "collaborilla.jar" contains the server and the client
+part. There is no seperation for now, since the size does not justify
+2 different packages yet. If you want to access the Collaborilla
+service as a client, you will probably start using the an
+implementation of the interface "CollaborillaAccessible".
+Please read the JavaDoc for further information.
+
+The library "jldap.jar" is only necessary if client implementations
+are used which access LDAP directly. These are CollaborillaObject and
+CollaborillaSimpleClient, which is wrapping CollaborillaObject.
+
+----- Literature -----------------------------------------------------
+
+Ebner, H., 2006, Collaborilla - An enhancement to the Conzilla
+  concept browser for enabling collaboration, Master's Thesis at the
+  Department of Computer and Systems Sciences, Royal Institute of
+  Technology (KTH), Stockholm, Sweden

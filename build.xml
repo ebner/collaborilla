@@ -102,6 +102,9 @@
 	</target>
 	
 	<target name="deploy" depends="clean_deploy,init_deploy,javadoc,jar">
+		<copy file="CHANGELOG" todir="${distribution_directory}"/>
+		<copy file="LICENSE" todir="${distribution_directory}"/>
+		<copy file="README" todir="${distribution_directory}"/>
 		<copy todir="${distribution_directory}">
 			<fileset dir="${settings_directory}" includes="**/*"/>
 		</copy>
