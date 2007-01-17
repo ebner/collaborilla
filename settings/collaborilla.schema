@@ -3,7 +3,7 @@ objectIdentifier CollaborillaLDAPAttributeType CollaborillaLDAPRoot:1
 objectIdentifier CollaborillaLDAPObjectClass CollaborillaLDAPRoot:3
 
 attributetype ( CollaborillaLDAPAttributeType:201
-	NAME 'collaborillaUriOriginal'
+	NAME 'collaborillaRequiredContainer'
 	DESC ''
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
@@ -11,7 +11,7 @@ attributetype ( CollaborillaLDAPAttributeType:201
 	)
 
 attributetype ( CollaborillaLDAPAttributeType:202
-	NAME 'collaborillaUriOther'
+	NAME 'collaborillaOptionalContainer'
 	DESC ''
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
@@ -76,8 +76,8 @@ objectClass ( CollaborillaLDAPObjectClass:200
 	STRUCTURAL
 	MUST ( 	cn )
 	MAY ( 	description $
-		collaborillaUriOriginal $
-		collaborillaUriOther $
+		collaborillaRequiredContainer $
+		collaborillaOptionalContainer $
 		collaborillaContextRdfInfo $
 		collaborillaLocation $
 		collaborillaContainerRdfInfo $

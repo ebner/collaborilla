@@ -8,10 +8,11 @@ The Collaborilla bugtracker can be accessed at
 
   http://kmr.nada.kth.se/mantis/
 
------ Collaborilla - 1.0 ---------------------------------------------
+----- Collaborilla 1.0 ---------------------------------------------
 
 First stable version of Collaborilla. Released together with Conzilla 2.1.
 
+- 0000075: [Basic Design] Naming of the URI fields should be changed (hannes)
 - 0000073: [Basic Design] Collections in CollaborillaAccessible should be Sets (hannes)
 - 0000066: [Bug] setContainerRevision() sends the wrong command (hannes)
 - 0000065: [Basic Design] getDataSet() should be part of the CollaborillaAccessible interface (hannes)
@@ -21,6 +22,6 @@ First stable version of Collaborilla. Released together with Conzilla 2.1.
 - 0000059: [Basic Design] Protect "old" revisions from being modified (hannes)
 - 0000054: [Basic Design] Subversion revisions not assigned to information node revisions (hannes)
 
------ Collaborilla - 0.9 ---------------------------------------------
+----- Collaborilla 0.9 ---------------------------------------------
 
 Based on the thesis prototype. (Subversion tag "20060521-thesis")

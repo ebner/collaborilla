@@ -363,9 +363,9 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getUriOriginal()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRequiredContainers()
 	 */
-	public Set getUriOriginal() throws CollaborillaException {
+	public Set getRequiredContainers() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_URI_ORIG);
 
@@ -373,34 +373,34 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addUriOriginal(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addRequiredContainer(java.lang.String)
 	 */
-	public void addUriOriginal(String uri) throws CollaborillaException {
+	public void addRequiredContainer(String uri) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_URI_ORIG + " "
 				+ uri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyUriOriginal(java.lang.String,
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyRequiredContainer(java.lang.String,
 	 *      java.lang.String)
 	 */
-	public void modifyUriOriginal(String oldUri, String newUri) throws CollaborillaException {
+	public void modifyRequiredContainer(String oldUri, String newUri) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_MOD + " " + ServiceCommands.ATTR_URI_ORIG + " "
 				+ oldUri + " " + newUri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeUriOriginal(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeRequiredContainer(java.lang.String)
 	 */
-	public void removeUriOriginal(String uri) throws CollaborillaException {
+	public void removeRequiredContainer(String uri) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_URI_ORIG + " "
 				+ uri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getUriOther()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getOptionalContainers()
 	 */
-	public Set getUriOther() throws CollaborillaException {
+	public Set getOptionalContainers() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_URI_OTHER);
 
@@ -408,26 +408,26 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addUriOther(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addOptionalContainer(java.lang.String)
 	 */
-	public void addUriOther(String uri) throws CollaborillaException {
+	public void addOptionalContainer(String uri) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_URI_OTHER + " "
 				+ uri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyUriOther(java.lang.String,
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyOptionalContainer(java.lang.String,
 	 *      java.lang.String)
 	 */
-	public void modifyUriOther(String oldUri, String newUri) throws CollaborillaException {
+	public void modifyOptionalContainer(String oldUri, String newUri) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_MOD + " " + ServiceCommands.ATTR_URI_OTHER + " "
 				+ oldUri + " " + newUri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeUriOther(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeOptionalContainer(java.lang.String)
 	 */
-	public void removeUriOther(String uri) throws CollaborillaException {
+	public void removeOptionalContainer(String uri) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_URI_OTHER + " "
 				+ uri);
 	}

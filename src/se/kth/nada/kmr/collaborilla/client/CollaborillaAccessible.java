@@ -179,7 +179,7 @@ public interface CollaborillaAccessible {
 	 * @return Set of URIs
 	 * @throws LDAPException
 	 */
-	public abstract Set getUriOriginal() throws CollaborillaException;
+	public abstract Set getRequiredContainers() throws CollaborillaException;
 
 	/**
 	 * Adds a new URI field to the LDAP entry.
@@ -188,7 +188,7 @@ public interface CollaborillaAccessible {
 	 *            URI
 	 * @throws LDAPException
 	 */
-	public abstract void addUriOriginal(String uri) throws CollaborillaException;
+	public abstract void addRequiredContainer(String uri) throws CollaborillaException;
 
 	/**
 	 * Modifies an already existing URI in the LDAP entry.
@@ -199,7 +199,7 @@ public interface CollaborillaAccessible {
 	 *            New URI
 	 * @throws LDAPException
 	 */
-	public abstract void modifyUriOriginal(String oldUri, String newUri) throws CollaborillaException;
+	public abstract void modifyRequiredContainer(String oldUri, String newUri) throws CollaborillaException;
 
 	/**
 	 * Removes a URI from the LDAP entry.
@@ -208,7 +208,7 @@ public interface CollaborillaAccessible {
 	 *            URI to be removed
 	 * @throws LDAPException
 	 */
-	public abstract void removeUriOriginal(String uri) throws CollaborillaException;
+	public abstract void removeRequiredContainer(String uri) throws CollaborillaException;
 
 	/**
 	 * Reads all URIs of the entry and returns a String array.
@@ -216,7 +216,7 @@ public interface CollaborillaAccessible {
 	 * @return Set of URIs
 	 * @throws LDAPException
 	 */
-	public abstract Set getUriOther() throws CollaborillaException;
+	public abstract Set getOptionalContainers() throws CollaborillaException;
 
 	/**
 	 * Adds a new URI field to the LDAP entry.
@@ -225,7 +225,7 @@ public interface CollaborillaAccessible {
 	 *            URI
 	 * @throws LDAPException
 	 */
-	public abstract void addUriOther(String uri) throws CollaborillaException;
+	public abstract void addOptionalContainer(String uri) throws CollaborillaException;
 
 	/**
 	 * Modifies an already existing URI in the LDAP entry.
@@ -236,7 +236,7 @@ public interface CollaborillaAccessible {
 	 *            New URI
 	 * @throws LDAPException
 	 */
-	public abstract void modifyUriOther(String oldUri, String newUri) throws CollaborillaException;
+	public abstract void modifyOptionalContainer(String oldUri, String newUri) throws CollaborillaException;
 
 	/**
 	 * Removes a URI from the LDAP entry.
@@ -245,7 +245,7 @@ public interface CollaborillaAccessible {
 	 *            URI to be removed
 	 * @throws LDAPException
 	 */
-	public abstract void removeUriOther(String uri) throws CollaborillaException;
+	public abstract void removeOptionalContainer(String uri) throws CollaborillaException;
 
 	/**
 	 * Returns the RDF info field.

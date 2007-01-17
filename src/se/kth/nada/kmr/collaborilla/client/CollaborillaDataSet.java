@@ -74,8 +74,8 @@ public final class CollaborillaDataSet implements Serializable {
 			this.setLocation(client.getLocation());
 			this.setTimestampCreated(client.getTimestampCreated());
 			this.setTimestampModified(client.getTimestampModified());
-			this.setUriOriginal(client.getUriOriginal());
-			this.setUriOther(client.getUriOther());
+			this.setUriOriginal(client.getRequiredContainers());
+			this.setUriOther(client.getOptionalContainers());
 			this.setContainerRevision(client.getContainerRevision());
 			this.setDescription(client.getDescription());
 			this.setRevisionNumber(client.getRevisionNumber());

@@ -80,17 +80,17 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addUriOriginal(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addRequiredContainer(java.lang.String)
 	 */
-	public void addUriOriginal(String uri) throws CollaborillaException {
-		this.client.addUriOriginal(uri);
+	public void addRequiredContainer(String uri) throws CollaborillaException {
+		this.client.addRequiredContainer(uri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addUriOther(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addOptionalContainer(java.lang.String)
 	 */
-	public void addUriOther(String uri) throws CollaborillaException {
-		this.client.addUriOther(uri);
+	public void addOptionalContainer(String uri) throws CollaborillaException {
+		this.client.addOptionalContainer(uri);
 	}
 
 	/**
@@ -217,16 +217,16 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getUriOriginal()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRequiredContainers()
 	 */
-	public Set getUriOriginal() throws CollaborillaException {
+	public Set getRequiredContainers() throws CollaborillaException {
 		return this.dataset.getUriOriginal();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getUriOther()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getOptionalContainers()
 	 */
-	public Set getUriOther() throws CollaborillaException {
+	public Set getOptionalContainers() throws CollaborillaException {
 		return this.dataset.getUriOther();
 	}
 
@@ -252,19 +252,19 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyUriOriginal(java.lang.String,
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyRequiredContainer(java.lang.String,
 	 *      java.lang.String)
 	 */
-	public void modifyUriOriginal(String oldUri, String newUri) throws CollaborillaException {
-		this.client.modifyUriOriginal(oldUri, newUri);
+	public void modifyRequiredContainer(String oldUri, String newUri) throws CollaborillaException {
+		this.client.modifyRequiredContainer(oldUri, newUri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyUriOther(java.lang.String,
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyOptionalContainer(java.lang.String,
 	 *      java.lang.String)
 	 */
-	public void modifyUriOther(String oldUri, String newUri) throws CollaborillaException {
-		this.client.modifyUriOther(oldUri, newUri);
+	public void modifyOptionalContainer(String oldUri, String newUri) throws CollaborillaException {
+		this.client.modifyOptionalContainer(oldUri, newUri);
 	}
 
 	/**
@@ -296,17 +296,17 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeUriOriginal(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeRequiredContainer(java.lang.String)
 	 */
-	public void removeUriOriginal(String uri) throws CollaborillaException {
-		this.client.removeUriOriginal(uri);
+	public void removeRequiredContainer(String uri) throws CollaborillaException {
+		this.client.removeRequiredContainer(uri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeUriOther(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeOptionalContainer(java.lang.String)
 	 */
-	public void removeUriOther(String uri) throws CollaborillaException {
-		this.client.removeUriOther(uri);
+	public void removeOptionalContainer(String uri) throws CollaborillaException {
+		this.client.removeOptionalContainer(uri);
 	}
 
 	/**

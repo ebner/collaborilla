@@ -69,9 +69,9 @@ public final class CollaborillaObjectConstants {
 	/*
 	 * Referrer Attributes
 	 */
-	public static final String URIORIG = PREFIX + "UriOriginal";
+	public static final String URIORIG = PREFIX + "RequiredContainer";
 
-	public static final String URIOTHER = PREFIX + "UriOther";
+	public static final String URIOTHER = PREFIX + "OptionalContainer";
 
 	public static final String CONTEXTRDFINFO = PREFIX + "ContextRdfInfo";
 

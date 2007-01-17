@@ -272,9 +272,9 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getUriOriginal()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRequiredContainers()
 	 */
-	public Set getUriOriginal() throws CollaborillaException {
+	public Set getRequiredContainers() throws CollaborillaException {
 		try {
 			String uris[] = this.collab.getUriOriginal();
 			return CollaborillaDataSet.stringArrayToSet(uris);
@@ -288,9 +288,9 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addUriOriginal(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addRequiredContainer(java.lang.String)
 	 */
-	public void addUriOriginal(String uri) throws CollaborillaException {
+	public void addRequiredContainer(String uri) throws CollaborillaException {
 		try {
 			this.collab.addUriOriginal(uri);
 		} catch (LDAPException e) {
@@ -299,10 +299,10 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyUriOriginal(java.lang.String,
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyRequiredContainer(java.lang.String,
 	 *      java.lang.String)
 	 */
-	public void modifyUriOriginal(String oldUri, String newUri) throws CollaborillaException {
+	public void modifyRequiredContainer(String oldUri, String newUri) throws CollaborillaException {
 		try {
 			this.collab.modifyUriOriginal(oldUri, newUri);
 		} catch (LDAPException e) {
@@ -315,9 +315,9 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeUriOriginal(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeRequiredContainer(java.lang.String)
 	 */
-	public void removeUriOriginal(String uri) throws CollaborillaException {
+	public void removeRequiredContainer(String uri) throws CollaborillaException {
 		try {
 			this.collab.removeUriOriginal(uri);
 		} catch (LDAPException e) {
@@ -330,9 +330,9 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getUriOther()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getOptionalContainers()
 	 */
-	public Set getUriOther() throws CollaborillaException {
+	public Set getOptionalContainers() throws CollaborillaException {
 		try {
 			String uris[] = this.collab.getUriOther();
 			return CollaborillaDataSet.stringArrayToSet(uris);
@@ -346,9 +346,9 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addUriOther(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addOptionalContainer(java.lang.String)
 	 */
-	public void addUriOther(String uri) throws CollaborillaException {
+	public void addOptionalContainer(String uri) throws CollaborillaException {
 		try {
 			this.collab.addUriOther(uri);
 		} catch (LDAPException e) {
@@ -357,10 +357,10 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyUriOther(java.lang.String,
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyOptionalContainer(java.lang.String,
 	 *      java.lang.String)
 	 */
-	public void modifyUriOther(String oldUri, String newUri) throws CollaborillaException {
+	public void modifyOptionalContainer(String oldUri, String newUri) throws CollaborillaException {
 		try {
 			this.collab.modifyUriOther(oldUri, newUri);
 		} catch (LDAPException e) {
@@ -373,9 +373,9 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeUriOther(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeOptionalContainer(java.lang.String)
 	 */
-	public void removeUriOther(String uri) throws CollaborillaException {
+	public void removeOptionalContainer(String uri) throws CollaborillaException {
 		try {
 			this.collab.removeUriOther(uri);
 		} catch (LDAPException e) {
