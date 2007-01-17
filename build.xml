@@ -140,7 +140,7 @@
 	
 	<target name="init_tstamp">
 		<tstamp>
-			<format property="touch.time" pattern="yyyyMMddhhmm"/>
+			<format property="touch.time" pattern="yyyyMMddHHmm"/>
 		</tstamp>
 		<echo>Initialized timestamp with touch.time = ${touch.time}</echo>
 		<!--<echo>Initialized timestamp with DSTAMP:${DSTAMP}, TSTAMP:${TSTAMP}, TODAY:${TODAY}</echo>-->
