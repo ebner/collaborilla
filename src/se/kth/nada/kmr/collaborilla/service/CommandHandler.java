@@ -38,19 +38,17 @@ public class CommandHandler {
 			+ "SET REVISION <rev nr>              \n" + "GET REVISIONINFO <rev nr>          \n"
 			+ "ADD REVISION                       \n" + "RST REVISION <rev nr>              \n\n"
 			+ "GET ALIGNEDURL                     \n" + "GET URL                            \n"
-			+ "ADD URL <url>                      \n" + "MOD URL <old url> <new url>        \n"
-			+ "DEL URL <url>                      \n\n" + "GET URIORIG                        \n"
-			+ "ADD URIORIG <uri>                  \n" + "MOD URIORIG <old uri> <new uri>    \n"
-			+ "DEL URIORIG <uri>                  \n\n" + "GET URIOTHER                       \n"
-			+ "ADD URIOTHER <uri>                 \n" + "MOD URIOTHER <old uri> <new uri>   \n"
-			+ "DEL URIOTHER <uri>                 \n\n" + "GET DESC                           \n"
-			+ "SET DESC <description>             \n" + "DEL DESC                           \n\n"
-			+ "GET CONTEXTRDFINFO                 \n" + "SET CONTEXTRDFINFO <rdf data>      \n"
-			+ "DEL CONTEXTRDFINFO                 \n\n" + "GET CONTAINERRDFINFO               \n"
-			+ "SET CONTAINERRDFINFO <rdf data>    \n" + "DEL CONTAINERRDFINFO               \n\n"
-			+ "GET CONTAINERREVISION              \n" + "SET CONTAINERREVISION <rev nr>     \n\n"
-			+ "GET LDIF                           \n\n" + "GET TIMESTAMPCREATED               \n"
-			+ "GET TIMESTAMPMODIFIED              \n";
+			+ "ADD URL <url>                      \n" + "DEL URL <url>                      \n\n"
+			+ "GET REQUIREDCONTAINER              \n" + "ADD REQUIREDCONTAINER <uri>        \n"
+			+ "DEL REQUIREDCONTAINER <uri>        \n\n" + "GET OPTIONALCONTAINER            \n"
+			+ "ADD OPTIONALCONTAINER <uri>        \n" + "DEL OPTIONALCONTAINER <uri>        \n\n"
+			+ "GET DESC                           \n" + "SET DESC <description>             \n"
+			+ "DEL DESC                           \n\n" + "GET CONTEXTRDFINFO               \n"
+			+ "SET CONTEXTRDFINFO <rdf data>      \n" + "DEL CONTEXTRDFINFO                 \n\n"
+			+ "GET CONTAINERRDFINFO               \n" + "SET CONTAINERRDFINFO <rdf data>    \n"
+			+ "DEL CONTAINERRDFINFO               \n\n"	+ "GET CONTAINERREVISION            \n"
+			+ "SET CONTAINERREVISION <rev nr>     \n\n"	+ "GET LDIF                         \n\n"
+			+ "GET TIMESTAMPCREATED               \n" + "GET TIMESTAMPMODIFIED              \n";
 
 	/**
 	 * @param ldapConn LDAPAccess object, contains the connection to specific LDAP server.
@@ -114,12 +112,12 @@ public class CommandHandler {
 
 		/* GET commands */
 		if (command[0].equalsIgnoreCase(ServiceCommands.CMD_GET)) {
-			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_URI_ORIG)) {
-				return this.handleGetUriOriginal();
+			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_REQUIRED_CONTAINER)) {
+				return this.handleGetRequiredContainers();
 			}
 
-			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_URI_OTHER)) {
-				return this.handleGetUriOther();
+			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_OPTIONAL_CONTAINER)) {
+				return this.handleGetOptionalContainers();
 			}
 
 			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_LOCATION)) {
@@ -173,8 +171,7 @@ public class CommandHandler {
 
 		/* SET commands */
 		if (command[0].equalsIgnoreCase(ServiceCommands.CMD_SET)) {
-			/*
-			 * we need more than just word, so we concat again ...not the most
+			/* we need more than just word, so we concat again ...not the most
 			 * intelligent solution though...
 			 */
 			String setParam = new String();
@@ -206,33 +203,18 @@ public class CommandHandler {
 			}
 		}
 
-		/* MOD commands */
-		if (command[0].equalsIgnoreCase(ServiceCommands.CMD_MOD)) {
-			if ((paramCount >= 4) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_URI_ORIG)) {
-				return this.handleModUriOrig(command[2], command[3]);
-			}
-
-			if ((paramCount >= 4) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_URI_OTHER)) {
-				return this.handleModUriOther(command[2], command[3]);
-			}
-
-			if ((paramCount >= 4) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_LOCATION)) {
-				return this.handleModLocation(command[2], command[3]);
-			}
-		}
-
 		/* ADD commands */
 		if (command[0].equalsIgnoreCase(ServiceCommands.CMD_ADD)) {
 			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_REVISION)) {
 				return this.handleAddRevision();
 			}
 
-			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_URI_ORIG)) {
-				return this.handleAddUriOrig(command[2]);
+			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_REQUIRED_CONTAINER)) {
+				return this.handleAddRequiredContainer(command[2]);
 			}
 
-			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_URI_OTHER)) {
-				return this.handleAddUriOther(command[2]);
+			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_OPTIONAL_CONTAINER)) {
+				return this.handleAddOptionalContainer(command[2]);
 			}
 
 			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_LOCATION)) {
@@ -254,12 +236,12 @@ public class CommandHandler {
 				return this.handleDelDescription();
 			}
 
-			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_URI_ORIG)) {
-				return this.handleDelUriOrig(command[2]);
+			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_REQUIRED_CONTAINER)) {
+				return this.handleDelRequiredContainer(command[2]);
 			}
 
-			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_URI_OTHER)) {
-				return this.handleDelUriOther(command[2]);
+			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_OPTIONAL_CONTAINER)) {
+				return this.handleDelOptionalContainer(command[2]);
 			}
 
 			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_LOCATION)) {
@@ -312,11 +294,11 @@ public class CommandHandler {
 		return new ResponseMessage(Status.SC_OK, this.availableCommands);
 	}
 
-	private ResponseMessage handleGetUriOriginal() {
+	private ResponseMessage handleGetRequiredContainers() {
 		String[] uris;
 
 		try {
-			uris = this.collabObject.getUriOriginal();
+			uris = this.collabObject.getRequiredContainers();
 		} catch (LDAPException e) {
 			this.log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
@@ -338,11 +320,11 @@ public class CommandHandler {
 		return new ResponseMessage(Status.SC_OK, result);
 	}
 
-	private ResponseMessage handleGetUriOther() {
+	private ResponseMessage handleGetOptionalContainers() {
 		String[] uris;
 
 		try {
-			uris = this.collabObject.getUriOther();
+			uris = this.collabObject.getOptionalContainers();
 		} catch (LDAPException e) {
 			this.log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
@@ -631,64 +613,6 @@ public class CommandHandler {
 		return new ResponseMessage(Status.SC_OK);
 	}
 
-	private ResponseMessage handleModUriOrig(String oldUri, String newUri) {
-		try {
-			this.collabObject.modifyUriOriginal(oldUri, newUri);
-		} catch (LDAPException e) {
-			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
-				return new ResponseMessage(Status.SC_NO_SUCH_VALUE);
-			}
-			
-			if (e.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
-				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
-			}
-
-			this.log.write(e.toString());
-			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
-		}
-
-		return new ResponseMessage(Status.SC_OK);
-	}
-
-	private ResponseMessage handleModUriOther(String oldUri, String newUri) {
-		try {
-			this.collabObject.modifyUriOther(oldUri, newUri);
-		} catch (LDAPException e) {
-			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
-				return new ResponseMessage(Status.SC_NO_SUCH_VALUE);
-			}
-			
-			if (e.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
-				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
-			}
-
-			this.log.write(e.toString());
-			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
-		}
-
-		return new ResponseMessage(Status.SC_OK);
-	}
-
-	private ResponseMessage handleModLocation(String oldUrl, String newUrl) {
-		try {
-			this.collabObject.modifyLocation(oldUrl, newUrl);
-		} catch (LDAPException e) {
-			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
-				return new ResponseMessage(Status.SC_NO_SUCH_VALUE);
-			}
-			
-			if (e.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
-				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
-			}
-
-
-			this.log.write(e.toString());
-			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
-		}
-
-		return new ResponseMessage(Status.SC_OK);
-	}
-
 	private ResponseMessage handleAddRevision() {
 		try {
 			this.collabObject.createRevision();
@@ -700,9 +624,9 @@ public class CommandHandler {
 		return new ResponseMessage(Status.SC_OK);
 	}
 
-	private ResponseMessage handleAddUriOrig(String uri) {
+	private ResponseMessage handleAddRequiredContainer(String uri) {
 		try {
-			this.collabObject.addUriOriginal(uri);
+			this.collabObject.addRequiredContainer(uri);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.ATTRIBUTE_OR_VALUE_EXISTS) {
 				return new ResponseMessage(Status.SC_ATTRIBUTE_OR_VALUE_EXISTS);
@@ -719,9 +643,9 @@ public class CommandHandler {
 		return new ResponseMessage(Status.SC_OK);
 	}
 
-	private ResponseMessage handleAddUriOther(String uri) {
+	private ResponseMessage handleAddOptionalContainer(String uri) {
 		try {
-			this.collabObject.addUriOther(uri);
+			this.collabObject.addOptionalContainer(uri);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.ATTRIBUTE_OR_VALUE_EXISTS) {
 				return new ResponseMessage(Status.SC_ATTRIBUTE_OR_VALUE_EXISTS);
@@ -795,9 +719,9 @@ public class CommandHandler {
 		return new ResponseMessage(Status.SC_OK);
 	}
 
-	private ResponseMessage handleDelUriOrig(String uri) {
+	private ResponseMessage handleDelRequiredContainer(String uri) {
 		try {
-			this.collabObject.removeUriOriginal(uri);
+			this.collabObject.removeRequiredContainer(uri);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
@@ -814,9 +738,9 @@ public class CommandHandler {
 		return new ResponseMessage(Status.SC_OK);
 	}
 
-	private ResponseMessage handleDelUriOther(String uri) {
+	private ResponseMessage handleDelOptionalContainer(String uri) {
 		try {
-			this.collabObject.removeUriOther(uri);
+			this.collabObject.removeOptionalContainer(uri);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);

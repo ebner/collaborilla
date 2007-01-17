@@ -36,9 +36,9 @@ public final class CollaborillaDataSet implements Serializable {
 
 	private String contextRdfInfo = null;
 
-	private Set uriOriginal = null;
+	private Set requiredContainers = null;
 
-	private Set uriOther = null;
+	private Set optionalContainers = null;
 
 	private Date timestampCreated = null;
 
@@ -74,8 +74,8 @@ public final class CollaborillaDataSet implements Serializable {
 			this.setLocation(client.getLocation());
 			this.setTimestampCreated(client.getTimestampCreated());
 			this.setTimestampModified(client.getTimestampModified());
-			this.setUriOriginal(client.getRequiredContainers());
-			this.setUriOther(client.getOptionalContainers());
+			this.setRequiredContainers(client.getRequiredContainers());
+			this.setOptionalContainers(client.getOptionalContainers());
 			this.setContainerRevision(client.getContainerRevision());
 			this.setDescription(client.getDescription());
 			this.setRevisionNumber(client.getRevisionNumber());
@@ -157,20 +157,20 @@ public final class CollaborillaDataSet implements Serializable {
 		this.contextRdfInfo = rdfInfo;
 	}
 	
-	public Set getUriOriginal() {
-		return this.uriOriginal;
+	public Set getRequiredContainers() {
+		return this.requiredContainers;
 	}
 	
-	public void setUriOriginal(Set coll) {
-		this.uriOriginal = coll;
+	public void setRequiredContainers(Set coll) {
+		this.requiredContainers = coll;
 	}
 	
-	public Set getUriOther() {
-		return this.uriOther;
+	public Set getOptionalContainers() {
+		return this.optionalContainers;
 	}
 	
-	public void setUriOther(Set coll) {
-		this.uriOther = coll;
+	public void setOptionalContainers(Set coll) {
+		this.optionalContainers = coll;
 	}
 	
 	public Date getTimestampCreated() {

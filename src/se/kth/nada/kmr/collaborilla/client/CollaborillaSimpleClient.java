@@ -241,22 +241,6 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyLocation(java.lang.String,
-	 *      java.lang.String)
-	 */
-	public void modifyLocation(String oldUrl, String newUrl) throws CollaborillaException {
-		try {
-			this.collab.modifyLocation(oldUrl, newUrl);
-		} catch (LDAPException e) {
-			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
-				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
-			} else {
-				throw new CollaborillaException(e);
-			}
-		}
-	}
-
-	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeLocation(java.lang.String)
 	 */
 	public void removeLocation(String url) throws CollaborillaException {
@@ -276,7 +260,7 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	 */
 	public Set getRequiredContainers() throws CollaborillaException {
 		try {
-			String uris[] = this.collab.getUriOriginal();
+			String uris[] = this.collab.getRequiredContainers();
 			return CollaborillaDataSet.stringArrayToSet(uris);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
@@ -292,25 +276,9 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	 */
 	public void addRequiredContainer(String uri) throws CollaborillaException {
 		try {
-			this.collab.addUriOriginal(uri);
+			this.collab.addRequiredContainer(uri);
 		} catch (LDAPException e) {
 			throw new CollaborillaException(e);
-		}
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyRequiredContainer(java.lang.String,
-	 *      java.lang.String)
-	 */
-	public void modifyRequiredContainer(String oldUri, String newUri) throws CollaborillaException {
-		try {
-			this.collab.modifyUriOriginal(oldUri, newUri);
-		} catch (LDAPException e) {
-			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
-				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
-			} else {
-				throw new CollaborillaException(e);
-			}
 		}
 	}
 
@@ -319,7 +287,7 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	 */
 	public void removeRequiredContainer(String uri) throws CollaborillaException {
 		try {
-			this.collab.removeUriOriginal(uri);
+			this.collab.removeRequiredContainer(uri);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
@@ -334,7 +302,7 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	 */
 	public Set getOptionalContainers() throws CollaborillaException {
 		try {
-			String uris[] = this.collab.getUriOther();
+			String uris[] = this.collab.getOptionalContainers();
 			return CollaborillaDataSet.stringArrayToSet(uris);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
@@ -350,25 +318,9 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	 */
 	public void addOptionalContainer(String uri) throws CollaborillaException {
 		try {
-			this.collab.addUriOther(uri);
+			this.collab.addOptionalContainer(uri);
 		} catch (LDAPException e) {
 			throw new CollaborillaException(e);
-		}
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyOptionalContainer(java.lang.String,
-	 *      java.lang.String)
-	 */
-	public void modifyOptionalContainer(String oldUri, String newUri) throws CollaborillaException {
-		try {
-			this.collab.modifyUriOther(oldUri, newUri);
-		} catch (LDAPException e) {
-			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
-				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
-			} else {
-				throw new CollaborillaException(e);
-			}
 		}
 	}
 
@@ -377,7 +329,7 @@ public class CollaborillaSimpleClient implements CollaborillaAccessible {
 	 */
 	public void removeOptionalContainer(String uri) throws CollaborillaException {
 		try {
-			this.collab.removeUriOther(uri);
+			this.collab.removeOptionalContainer(uri);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);

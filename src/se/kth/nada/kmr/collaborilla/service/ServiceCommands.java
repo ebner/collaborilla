@@ -23,8 +23,6 @@ public class ServiceCommands {
 
 	public static final String CMD_DEL = "DEL";
 
-	public static final String CMD_MOD = "MOD";
-
 	public static final String CMD_GET = "GET";
 
 	public static final String CMD_SET = "SET";
@@ -35,9 +33,9 @@ public class ServiceCommands {
 
 	public static final String CMD_QUIT = "QUIT";
 
-	public static final String ATTR_URI_ORIG = "URIORIG";
+	public static final String ATTR_REQUIRED_CONTAINER = "REQUIREDCONTAINER";
 
-	public static final String ATTR_URI_OTHER = "URIOTHER";
+	public static final String ATTR_OPTIONAL_CONTAINER = "OPTIONALCONTAINER";
 
 	public static final String ATTR_CONTEXT_RDFINFO = "CONTEXTRDFINFO";
 

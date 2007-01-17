@@ -458,7 +458,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	}
 
 	/*
-	 * URI (Original)
+	 * Required Containers (URI)
 	 * 
 	 * 
 	 */
@@ -469,8 +469,8 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 * @return Array of URIs
 	 * @throws LDAPException
 	 */
-	public String[] getUriOriginal() throws LDAPException {
-		return this.readAttribute(CollaborillaObjectConstants.URIORIG);
+	public String[] getRequiredContainers() throws LDAPException {
+		return this.readAttribute(CollaborillaObjectConstants.REQUIREDCONTAINER);
 	}
 
 	/**
@@ -480,9 +480,9 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 *            URI
 	 * @throws LDAPException
 	 */
-	public void addUriOriginal(String uri) throws LDAPException {
+	public void addRequiredContainer(String uri) throws LDAPException {
 		this.handleWriteAttempt();
-		this.addAttribute(CollaborillaObjectConstants.URIORIG, uri);
+		this.addAttribute(CollaborillaObjectConstants.REQUIREDCONTAINER, uri);
 	}
 
 	/**
@@ -494,9 +494,9 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 *            New URI
 	 * @throws LDAPException
 	 */
-	public void modifyUriOriginal(String oldUri, String newUri) throws LDAPException {
+	public void modifyRequiredContainer(String oldUri, String newUri) throws LDAPException {
 		this.handleWriteAttempt();
-		this.modifyAttribute(CollaborillaObjectConstants.URIORIG, oldUri, newUri);
+		this.modifyAttribute(CollaborillaObjectConstants.REQUIREDCONTAINER, oldUri, newUri);
 	}
 
 	/**
@@ -506,13 +506,13 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 *            URI to be removed
 	 * @throws LDAPException
 	 */
-	public void removeUriOriginal(String uri) throws LDAPException {
+	public void removeRequiredContainer(String uri) throws LDAPException {
 		this.handleWriteAttempt();
-		this.removeAttribute(CollaborillaObjectConstants.URIORIG, uri);
+		this.removeAttribute(CollaborillaObjectConstants.REQUIREDCONTAINER, uri);
 	}
 
 	/*
-	 * URI (Other)
+	 * Optional Containers (URI)
 	 * 
 	 * 
 	 */
@@ -523,8 +523,8 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 * @return Array of URIs
 	 * @throws LDAPException
 	 */
-	public String[] getUriOther() throws LDAPException {
-		return this.readAttribute(CollaborillaObjectConstants.URIOTHER);
+	public String[] getOptionalContainers() throws LDAPException {
+		return this.readAttribute(CollaborillaObjectConstants.OPTIONALCONTAINER);
 	}
 
 	/**
@@ -534,9 +534,9 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 *            URI
 	 * @throws LDAPException
 	 */
-	public void addUriOther(String uri) throws LDAPException {
+	public void addOptionalContainer(String uri) throws LDAPException {
 		this.handleWriteAttempt();
-		this.addAttribute(CollaborillaObjectConstants.URIOTHER, uri);
+		this.addAttribute(CollaborillaObjectConstants.OPTIONALCONTAINER, uri);
 	}
 
 	/**
@@ -548,9 +548,9 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 *            New URI
 	 * @throws LDAPException
 	 */
-	public void modifyUriOther(String oldUri, String newUri) throws LDAPException {
+	public void modifyOptionalContainer(String oldUri, String newUri) throws LDAPException {
 		this.handleWriteAttempt();
-		this.modifyAttribute(CollaborillaObjectConstants.URIOTHER, oldUri, newUri);
+		this.modifyAttribute(CollaborillaObjectConstants.OPTIONALCONTAINER, oldUri, newUri);
 	}
 
 	/**
@@ -560,9 +560,9 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 *            URI to be removed
 	 * @throws LDAPException
 	 */
-	public void removeUriOther(String uri) throws LDAPException {
+	public void removeOptionalContainer(String uri) throws LDAPException {
 		this.handleWriteAttempt();
-		this.removeAttribute(CollaborillaObjectConstants.URIOTHER, uri);
+		this.removeAttribute(CollaborillaObjectConstants.OPTIONALCONTAINER, uri);
 	}
 
 	/*

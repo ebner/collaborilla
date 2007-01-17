@@ -346,15 +346,6 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyLocation(java.lang.String,
-	 *      java.lang.String)
-	 */
-	public void modifyLocation(String oldUrl, String newUrl) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_MOD + " " + ServiceCommands.ATTR_LOCATION + " "
-				+ oldUrl + " " + newUrl);
-	}
-
-	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeLocation(java.lang.String)
 	 */
 	public void removeLocation(String url) throws CollaborillaException {
@@ -367,7 +358,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	 */
 	public Set getRequiredContainers() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
-				+ ServiceCommands.ATTR_URI_ORIG);
+				+ ServiceCommands.ATTR_REQUIRED_CONTAINER);
 
 		return CollaborillaDataSet.stringArrayToSet(resp.responseData);
 	}
@@ -376,24 +367,15 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addRequiredContainer(java.lang.String)
 	 */
 	public void addRequiredContainer(String uri) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_URI_ORIG + " "
+		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_REQUIRED_CONTAINER + " "
 				+ uri);
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyRequiredContainer(java.lang.String,
-	 *      java.lang.String)
-	 */
-	public void modifyRequiredContainer(String oldUri, String newUri) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_MOD + " " + ServiceCommands.ATTR_URI_ORIG + " "
-				+ oldUri + " " + newUri);
 	}
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeRequiredContainer(java.lang.String)
 	 */
 	public void removeRequiredContainer(String uri) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_URI_ORIG + " "
+		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_REQUIRED_CONTAINER + " "
 				+ uri);
 	}
 
@@ -402,7 +384,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	 */
 	public Set getOptionalContainers() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
-				+ ServiceCommands.ATTR_URI_OTHER);
+				+ ServiceCommands.ATTR_OPTIONAL_CONTAINER);
 
 		return CollaborillaDataSet.stringArrayToSet(resp.responseData);
 	}
@@ -411,24 +393,15 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addOptionalContainer(java.lang.String)
 	 */
 	public void addOptionalContainer(String uri) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_URI_OTHER + " "
+		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_OPTIONAL_CONTAINER + " "
 				+ uri);
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyOptionalContainer(java.lang.String,
-	 *      java.lang.String)
-	 */
-	public void modifyOptionalContainer(String oldUri, String newUri) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_MOD + " " + ServiceCommands.ATTR_URI_OTHER + " "
-				+ oldUri + " " + newUri);
 	}
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeOptionalContainer(java.lang.String)
 	 */
 	public void removeOptionalContainer(String uri) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_URI_OTHER + " "
+		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_OPTIONAL_CONTAINER + " "
 				+ uri);
 	}
 

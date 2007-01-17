@@ -220,14 +220,14 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRequiredContainers()
 	 */
 	public Set getRequiredContainers() throws CollaborillaException {
-		return this.dataset.getUriOriginal();
+		return this.dataset.getRequiredContainers();
 	}
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getOptionalContainers()
 	 */
 	public Set getOptionalContainers() throws CollaborillaException {
-		return this.dataset.getUriOther();
+		return this.dataset.getOptionalContainers();
 	}
 
 	/**
@@ -242,30 +242,6 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	 * without any caching for write-access. This will be probably implemented
 	 * at a later point
 	 */
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyLocation(java.lang.String,
-	 *      java.lang.String)
-	 */
-	public void modifyLocation(String oldUrl, String newUrl) throws CollaborillaException {
-		this.client.modifyLocation(oldUrl, newUrl);
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyRequiredContainer(java.lang.String,
-	 *      java.lang.String)
-	 */
-	public void modifyRequiredContainer(String oldUri, String newUri) throws CollaborillaException {
-		this.client.modifyRequiredContainer(oldUri, newUri);
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#modifyOptionalContainer(java.lang.String,
-	 *      java.lang.String)
-	 */
-	public void modifyOptionalContainer(String oldUri, String newUri) throws CollaborillaException {
-		this.client.modifyOptionalContainer(oldUri, newUri);
-	}
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeContainerRdfInfo()

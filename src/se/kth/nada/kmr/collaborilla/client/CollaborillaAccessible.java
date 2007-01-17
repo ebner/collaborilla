@@ -154,17 +154,6 @@ public interface CollaborillaAccessible {
 	public abstract void addLocation(String url) throws CollaborillaException;
 
 	/**
-	 * Modifies an already existing URL in the LDAP entry.
-	 * 
-	 * @param oldUrl
-	 *            URL to be modified
-	 * @param newUrl
-	 *            New URL
-	 * @throws LDAPException
-	 */
-	public abstract void modifyLocation(String oldUrl, String newUrl) throws CollaborillaException;
-
-	/**
 	 * Removes a URL from the LDAP entry.
 	 * 
 	 * @param url
@@ -191,17 +180,6 @@ public interface CollaborillaAccessible {
 	public abstract void addRequiredContainer(String uri) throws CollaborillaException;
 
 	/**
-	 * Modifies an already existing URI in the LDAP entry.
-	 * 
-	 * @param oldUri
-	 *            URI to be modified
-	 * @param newUri
-	 *            New URI
-	 * @throws LDAPException
-	 */
-	public abstract void modifyRequiredContainer(String oldUri, String newUri) throws CollaborillaException;
-
-	/**
 	 * Removes a URI from the LDAP entry.
 	 * 
 	 * @param uri
@@ -226,17 +204,6 @@ public interface CollaborillaAccessible {
 	 * @throws LDAPException
 	 */
 	public abstract void addOptionalContainer(String uri) throws CollaborillaException;
-
-	/**
-	 * Modifies an already existing URI in the LDAP entry.
-	 * 
-	 * @param oldUri
-	 *            URI to be modified
-	 * @param newUri
-	 *            New URI
-	 * @throws LDAPException
-	 */
-	public abstract void modifyOptionalContainer(String oldUri, String newUri) throws CollaborillaException;
 
 	/**
 	 * Removes a URI from the LDAP entry.
