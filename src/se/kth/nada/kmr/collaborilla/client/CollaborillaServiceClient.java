@@ -33,7 +33,7 @@ import se.kth.nada.kmr.collaborilla.service.Status;
  * @author Hannes Ebner
  * @version $Id$
  */
-public final class CollaborillaServiceClient implements CollaborillaAccessible {
+public final class CollaborillaServiceClient implements CollaborillaClient {
 	
 	private String serverHost;
 	
@@ -164,7 +164,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	 */
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#connect()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#connect()
 	 */
 	public void connect() throws CollaborillaException {
 		try {
@@ -187,7 +187,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#disconnect()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#disconnect()
 	 */
 	public void disconnect() throws CollaborillaException {
 		try {
@@ -212,7 +212,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#isConnected()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#isConnected()
 	 */
 	public boolean isConnected() {
 		if (this.socket == null) {
@@ -222,7 +222,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setIdentifier(String,
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setIdentifier(String,
 	 *      boolean)
 	 */
 	public void setIdentifier(String uri, boolean create) throws CollaborillaException {
@@ -237,21 +237,21 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getDataSet()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getDataSet()
 	 */
 	public CollaborillaDataSet getDataSet() throws CollaborillaException {
 		return new CollaborillaDataSet(this);
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getIdentifier()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getIdentifier()
 	 */
 	public String getIdentifier() {
 		return this.identifier;
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRevisionNumber()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getRevisionNumber()
 	 */
 	public int getRevisionNumber() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
@@ -261,7 +261,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setRevisionNumber(int)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setRevisionNumber(int)
 	 */
 	public void setRevisionNumber(int rev) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_REVISION + " "
@@ -269,7 +269,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRevisionCount()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getRevisionCount()
 	 */
 	public int getRevisionCount() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
@@ -279,14 +279,14 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRevisionInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getRevisionInfo()
 	 */
 	public String getRevisionInfo() throws CollaborillaException {
 		return this.getRevisionInfo(0);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRevisionInfo(int)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getRevisionInfo(int)
 	 */
 	public String getRevisionInfo(int rev) throws CollaborillaException {
 		String revisionInfo = new String();
@@ -302,14 +302,14 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#createRevision()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#createRevision()
 	 */
 	public void createRevision() throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_REVISION);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#restoreRevision(int)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#restoreRevision(int)
 	 */
 	public void restoreRevision(int rev) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_RESTORE + " " + ServiceCommands.ATTR_REVISION
@@ -317,7 +317,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getAlignedLocations()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getAlignedLocations()
 	 */
 	public Set getAlignedLocations() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
@@ -327,7 +327,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getLocations()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getLocations()
 	 */
 	public Set getLocations() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
@@ -337,7 +337,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setLocations(java.util.Set)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setLocations(java.util.Set)
 	 */
 	public void setLocations(Set locations) throws CollaborillaException {
 		this.clearLocations();
@@ -348,7 +348,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearLocations()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#clearLocations()
 	 */
 	public void clearLocations() throws CollaborillaException {
 		Set oldLocations = this.getLocations();
@@ -359,7 +359,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addLocation(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#addLocation(java.lang.String)
 	 */
 	public void addLocation(String url) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_LOCATION + " "
@@ -367,7 +367,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeLocation(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeLocation(java.lang.String)
 	 */
 	public void removeLocation(String url) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_LOCATION + " "
@@ -375,7 +375,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRequiredContainers()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getRequiredContainers()
 	 */
 	public Set getRequiredContainers() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
@@ -385,7 +385,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setRequiredContainers(java.util.Set)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setRequiredContainers(java.util.Set)
 	 */
 	public void setRequiredContainers(Set containers) throws CollaborillaException {
 		this.clearRequiredContainers();
@@ -396,7 +396,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearRequiredContainers()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#clearRequiredContainers()
 	 */
 	public void clearRequiredContainers() throws CollaborillaException {
 		Set oldContainers = this.getRequiredContainers();
@@ -407,7 +407,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addRequiredContainer(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#addRequiredContainer(java.lang.String)
 	 */
 	public void addRequiredContainer(String uri) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_REQUIRED_CONTAINER + " "
@@ -415,7 +415,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeRequiredContainer(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeRequiredContainer(java.lang.String)
 	 */
 	public void removeRequiredContainer(String uri) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_REQUIRED_CONTAINER + " "
@@ -423,7 +423,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getOptionalContainers()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getOptionalContainers()
 	 */
 	public Set getOptionalContainers() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
@@ -433,7 +433,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setOptionalContainers(java.util.Set)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setOptionalContainers(java.util.Set)
 	 */
 	public void setOptionalContainers(Set containers) throws CollaborillaException {
 		this.clearOptionalContainers();
@@ -444,7 +444,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearOptionalContainers()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#clearOptionalContainers()
 	 */
 	public void clearOptionalContainers() throws CollaborillaException {
 		Set oldContainers = this.getOptionalContainers();
@@ -455,7 +455,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addOptionalContainer(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#addOptionalContainer(java.lang.String)
 	 */
 	public void addOptionalContainer(String uri) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_OPTIONAL_CONTAINER + " "
@@ -463,7 +463,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeOptionalContainer(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeOptionalContainer(java.lang.String)
 	 */
 	public void removeOptionalContainer(String uri) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_OPTIONAL_CONTAINER + " "
@@ -471,7 +471,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getContextRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getContextRdfInfo()
 	 */
 	public String getContextRdfInfo() throws CollaborillaException {
 		String rdfInfo = new String();
@@ -487,7 +487,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setContextRdfInfo(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setContextRdfInfo(java.lang.String)
 	 */
 	public void setContextRdfInfo(String rdfInfo) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_CONTEXT_RDFINFO
@@ -495,14 +495,14 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearContextRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeContextRdfInfo()
 	 */
-	public void clearContextRdfInfo() throws CollaborillaException {
+	public void removeContextRdfInfo() throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_CONTEXT_RDFINFO);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getContainerRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getContainerRdfInfo()
 	 */
 	public String getContainerRdfInfo() throws CollaborillaException {
 		String rdfInfo = new String();
@@ -518,7 +518,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setContainerRdfInfo(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setContainerRdfInfo(java.lang.String)
 	 */
 	public void setContainerRdfInfo(String rdfInfo) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_CONTAINER_RDFINFO
@@ -526,15 +526,15 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearContainerRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeContainerRdfInfo()
 	 */
-	public void clearContainerRdfInfo() throws CollaborillaException {
+	public void removeContainerRdfInfo() throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " "
 						+ ServiceCommands.ATTR_CONTAINER_RDFINFO);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getContainerRevision()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getContainerRevision()
 	 */
 	public String getContainerRevision() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
@@ -544,7 +544,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setContainerRevision(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setContainerRevision(java.lang.String)
 	 */
 	public void setContainerRevision(String containerRevision) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_CONTAINER_REVISION
@@ -552,7 +552,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getDescription()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getDescription()
 	 */
 	public String getDescription() throws CollaborillaException {
 		String desc = new String();
@@ -568,7 +568,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setDescription(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setDescription(java.lang.String)
 	 */
 	public void setDescription(String desc) throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_DESCRIPTION + " "
@@ -576,14 +576,14 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearDescription()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeDescription()
 	 */
-	public void clearDescription() throws CollaborillaException {
+	public void removeDescription() throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_DESCRIPTION);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getLdif()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getLdif()
 	 */
 	public String getLdif() throws CollaborillaException {
 		String ldif = new String();
@@ -603,7 +603,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getTimestampCreated()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getTimestampCreated()
 	 */
 	public Date getTimestampCreated() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
@@ -613,7 +613,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getTimestampCreated()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getTimestampCreated()
 	 */
 	public Date getTimestampModified() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "

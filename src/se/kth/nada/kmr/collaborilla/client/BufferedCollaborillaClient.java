@@ -31,9 +31,9 @@ import java.util.Set;
  * @author Hannes Ebner
  * @version $Id$
  */
-public class BufferedCollaborillaClient implements CollaborillaAccessible {
+public class BufferedCollaborillaClient implements CollaborillaClient {
 
-	private CollaborillaAccessible client = null;
+	private CollaborillaClient client = null;
 
 	private CollaborillaDataSet dataset = null;
 
@@ -41,7 +41,7 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	 * @param client A valid and initialized CollaborillaAccessible object.
 	 * @throws CollaborillaException
 	 */
-	public BufferedCollaborillaClient(CollaborillaAccessible client) throws CollaborillaException {
+	public BufferedCollaborillaClient(CollaborillaClient client) throws CollaborillaException {
 		this.client = client;
 		this.dataset = new CollaborillaDataSet();
 
@@ -66,112 +66,112 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	/* Interface implementation */
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getDataSet()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getDataSet()
 	 */
 	public CollaborillaDataSet getDataSet() {
 		return this.dataset;
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addLocation(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#addLocation(java.lang.String)
 	 */
 	public void addLocation(String url) throws CollaborillaException {
 		this.client.addLocation(url);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addRequiredContainer(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#addRequiredContainer(java.lang.String)
 	 */
 	public void addRequiredContainer(String uri) throws CollaborillaException {
 		this.client.addRequiredContainer(uri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addOptionalContainer(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#addOptionalContainer(java.lang.String)
 	 */
 	public void addOptionalContainer(String uri) throws CollaborillaException {
 		this.client.addOptionalContainer(uri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#connect()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#connect()
 	 */
 	public void connect() throws CollaborillaException {
 		this.client.connect();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#createRevision()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#createRevision()
 	 */
 	public void createRevision() throws CollaborillaException {
 		this.client.createRevision();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#disconnect()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#disconnect()
 	 */
 	public void disconnect() throws CollaborillaException {
 		this.client.disconnect();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getAlignedLocations()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getAlignedLocations()
 	 */
 	public Set getAlignedLocations() throws CollaborillaException {
 		return this.dataset.getAlignedLocation();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getContainerRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getContainerRdfInfo()
 	 */
 	public String getContainerRdfInfo() throws CollaborillaException {
 		return this.dataset.getContainerRdfInfo();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getContainerRevision()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getContainerRevision()
 	 */
 	public String getContainerRevision() throws CollaborillaException {
 		return this.dataset.getContainerRevision();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getContextRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getContextRdfInfo()
 	 */
 	public String getContextRdfInfo() throws CollaborillaException {
 		return this.dataset.getContextRdfInfo();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getDescription()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getDescription()
 	 */
 	public String getDescription() throws CollaborillaException {
 		return this.dataset.getDescription();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getLdif()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getLdif()
 	 */
 	public String getLdif() throws CollaborillaException {
 		return this.client.getLdif();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getIdentifier()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getIdentifier()
 	 */
 	public String getIdentifier() throws CollaborillaException {
 		return this.dataset.getIdentifier();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getLocations()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getLocations()
 	 */
 	public Set getLocations() throws CollaborillaException {
 		return this.dataset.getLocation();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRevisionCount()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getRevisionCount()
 	 */
 	public int getRevisionCount() throws CollaborillaException {
 		// we don't buffer information of other revisions,
@@ -180,14 +180,14 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRevisionInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getRevisionInfo()
 	 */
 	public String getRevisionInfo() throws CollaborillaException {
 		return this.dataset.getRevisionInfo();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRevisionInfo(int)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getRevisionInfo(int)
 	 */
 	public String getRevisionInfo(int rev) throws CollaborillaException {
 		// we don't buffer information of other revisions,
@@ -196,42 +196,42 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRevisionNumber()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getRevisionNumber()
 	 */
 	public int getRevisionNumber() throws CollaborillaException {
 		return this.dataset.getRevisionNumber();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getTimestampCreated()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getTimestampCreated()
 	 */
 	public Date getTimestampCreated() throws CollaborillaException {
 		return this.dataset.getTimestampCreated();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getTimestampModified()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getTimestampModified()
 	 */
 	public Date getTimestampModified() throws CollaborillaException {
 		return this.dataset.getTimestampModified();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getRequiredContainers()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getRequiredContainers()
 	 */
 	public Set getRequiredContainers() throws CollaborillaException {
 		return this.dataset.getRequiredContainers();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getOptionalContainers()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#getOptionalContainers()
 	 */
 	public Set getOptionalContainers() throws CollaborillaException {
 		return this.dataset.getOptionalContainers();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#isConnected()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#isConnected()
 	 */
 	public boolean isConnected() {
 		return this.client.isConnected();
@@ -244,84 +244,84 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	 */
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearContainerRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeContainerRdfInfo()
 	 */
-	public void clearContainerRdfInfo() throws CollaborillaException {
-		this.client.clearContainerRdfInfo();
+	public void removeContainerRdfInfo() throws CollaborillaException {
+		this.client.removeContainerRdfInfo();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearContextRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeContextRdfInfo()
 	 */
-	public void clearContextRdfInfo() throws CollaborillaException {
-		this.client.clearContextRdfInfo();
+	public void removeContextRdfInfo() throws CollaborillaException {
+		this.client.removeContextRdfInfo();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearDescription()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeDescription()
 	 */
-	public void clearDescription() throws CollaborillaException {
-		this.client.clearDescription();
+	public void removeDescription() throws CollaborillaException {
+		this.client.removeDescription();
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeLocation(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeLocation(java.lang.String)
 	 */
 	public void removeLocation(String url) throws CollaborillaException {
 		this.client.removeLocation(url);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeRequiredContainer(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeRequiredContainer(java.lang.String)
 	 */
 	public void removeRequiredContainer(String uri) throws CollaborillaException {
 		this.client.removeRequiredContainer(uri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeOptionalContainer(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#removeOptionalContainer(java.lang.String)
 	 */
 	public void removeOptionalContainer(String uri) throws CollaborillaException {
 		this.client.removeOptionalContainer(uri);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#restoreRevision(int)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#restoreRevision(int)
 	 */
 	public void restoreRevision(int rev) throws CollaborillaException {
 		this.client.restoreRevision(rev);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setContainerRdfInfo(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setContainerRdfInfo(java.lang.String)
 	 */
 	public void setContainerRdfInfo(String rdfLocationInfo) throws CollaborillaException {
 		this.client.setContainerRdfInfo(rdfLocationInfo);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setContainerRevision(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setContainerRevision(java.lang.String)
 	 */
 	public void setContainerRevision(String containerRevision) throws CollaborillaException {
 		this.client.setContainerRevision(containerRevision);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setContextRdfInfo(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setContextRdfInfo(java.lang.String)
 	 */
 	public void setContextRdfInfo(String rdfInfo) throws CollaborillaException {
 		this.client.setContextRdfInfo(rdfInfo);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setDescription(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setDescription(java.lang.String)
 	 */
 	public void setDescription(String desc) throws CollaborillaException {
 		this.client.setDescription(desc);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setIdentifier(java.lang.String,
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setIdentifier(java.lang.String,
 	 *      boolean)
 	 */
 	public void setIdentifier(String uri, boolean create) throws CollaborillaException {
@@ -330,49 +330,49 @@ public class BufferedCollaborillaClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setRevisionNumber(int)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setRevisionNumber(int)
 	 */
 	public void setRevisionNumber(int rev) throws CollaborillaException {
 		this.client.setRevisionNumber(rev);
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setLocations(java.util.Set)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setLocations(java.util.Set)
 	 */
 	public void setLocations(Set locations) throws CollaborillaException {
 		this.client.setLocations(locations);
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setRequiredContainers(java.util.Set)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setRequiredContainers(java.util.Set)
 	 */
 	public void setRequiredContainers(Set containers) throws CollaborillaException {
 		this.client.setRequiredContainers(containers);
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setOptionalContainers(java.util.Set)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#setOptionalContainers(java.util.Set)
 	 */
 	public void setOptionalContainers(Set containers) throws CollaborillaException {
 		this.client.setOptionalContainers(containers);
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearLocations()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#clearLocations()
 	 */
 	public void clearLocations() throws CollaborillaException {
 		this.client.clearLocations();
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearRequiredContainers()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#clearRequiredContainers()
 	 */
 	public void clearRequiredContainers() throws CollaborillaException {
 		this.client.clearRequiredContainers();
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearOptionalContainers()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaClient#clearOptionalContainers()
 	 */
 	public void clearOptionalContainers() throws CollaborillaException {
 		this.client.clearOptionalContainers();

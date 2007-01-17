@@ -17,7 +17,7 @@ import java.util.Set;
  * @author Hannes Ebner
  * @version $Id$
  */
-public interface CollaborillaAccessible {
+public interface CollaborillaClient {
 
 	/**
 	 * Connects to the service.
@@ -168,7 +168,7 @@ public interface CollaborillaAccessible {
 	void clearLocations() throws CollaborillaException;
 	
 	/**
-	 * Adds a new URL field to the LDAP entry.
+	 * Adds a new location to the LDAP entry.
 	 * 
 	 * @param url
 	 *            URL
@@ -177,7 +177,7 @@ public interface CollaborillaAccessible {
 	void addLocation(String url) throws CollaborillaException;
 
 	/**
-	 * Removes a URL from the LDAP entry.
+	 * Removes a location from the LDAP entry.
 	 * 
 	 * @param url
 	 *            URL to be removed
@@ -186,7 +186,7 @@ public interface CollaborillaAccessible {
 	void removeLocation(String url) throws CollaborillaException;
 
 	/**
-	 * Reads all URIs of the entry and returns a String array.
+	 * Reads all URIs of the entry and returns a Set.
 	 * 
 	 * @return Set of URI Strings.
 	 * @throws CollaborillaException
@@ -289,7 +289,7 @@ public interface CollaborillaAccessible {
 	 * 
 	 * @throws CollaborillaException
 	 */
-	void clearContextRdfInfo() throws CollaborillaException;
+	void removeContextRdfInfo() throws CollaborillaException;
 
 	/**
 	 * Returns the RDF location info field.
@@ -313,7 +313,7 @@ public interface CollaborillaAccessible {
 	 * 
 	 * @throws CollaborillaException
 	 */
-	void clearContainerRdfInfo() throws CollaborillaException;
+	void removeContainerRdfInfo() throws CollaborillaException;
 
 	/**
 	 * Returns the revision of the container in the RCS.
@@ -355,7 +355,7 @@ public interface CollaborillaAccessible {
 	 * 
 	 * @throws CollaborillaException
 	 */
-	void clearDescription() throws CollaborillaException;
+	void removeDescription() throws CollaborillaException;
 
 	/**
 	 * Returns the entry and its attributes in LDIF format. Can be used to
