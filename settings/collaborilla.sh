@@ -6,6 +6,7 @@
 #!/bin/sh
 
 DEPLOYDIR=/opt/collaborilla
+LOGFILE=/var/log/collaborilla.log
 PIDFILE=/var/run/collaborilla.pid
 
 NAME=CollaborillaService
@@ -34,7 +35,7 @@ case "$1" in
 		java -cp lib/jldap.jar:collaborilla.jar \
 			se.kth.nada.kmr.collaborilla.service.CollaborillaService \
 			--config=$CONFIGFILE \
-			>>collaborilla.log 2>&1 &
+			>>$LOGFILE 2>&1 &
 		echo $! >$PIDFILE
 		echo "done."
 		;;

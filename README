@@ -15,8 +15,15 @@ Conzilla        http://www.conzilla.org
 Copyright (c) 2006-2007, Hannes Ebner <hebner@nada.kth.se>
 Royal Institute of Technology (KTH), Sweden
 
-Collaborilla is licensed under the GNU GPL.
-For full terms see the file LICENSE.
+Collaborilla is licensed under the GNU GPL. For full terms see the
+file LICENSE.
+
+Collaborilla makes use of JLDAP (LDAP Classes for Java), which
+provides functionality to write applications that access, manage, and
+update information stored in LDAP-aware directories. These classes are
+based on the IETF LDAP Java API.
+JLDAP is licenced under the "OpenLDAP Public License". For full terms
+see the file LICENSE_OPENLDAP.
 
 ----- Changelog ------------------------------------------------------
 
@@ -89,6 +96,8 @@ STEP 1: Installation of OpenLDAP
 Setup and install OpenLDAP on the system which is supposed to hold the
 information directory. Configure a server dn and a username/password
 combination to be used to connect to the right context on the server.
+The usage of BDB (instead of e.g. LDBM) is highly recommended, as this
+allows for doing backups without destroying the data integrity.
 
 You find detailed information on installing OpenLDAP at its website:
 
@@ -129,6 +138,8 @@ configuration file.
 In our case it will look similar to this:
 
   DEPLOYDIR=/opt/collaborilla/
+  
+Please make sure to adapt the variables LOGFILE and PIDFILE as well.
 
 STEP 4: Configuration
 
@@ -182,11 +193,30 @@ service we choose the parameter.
 
 ----- Maintenance ----------------------------------------------------
 
-TO BE WRITTEN
+Logging
 
-- Backup of data
-- Logging
-- ...
+The Collaborilla service logs all connections from clients. In verbose
+mode it even logs all requests from each client. The location of the
+log file is configured in the startup script. See also the section
+"Installation" further up in this file.
+
+Backup
+
+To backup the data from the information directory it is necessary to
+work on the level of OpenLDAP, as this is our backend.
+If you used a backend which supports hot-backups (like e.g. BDB), the
+simplest way of dumping the whole information directory is using the
+command-line utility slapcat:
+
+  # slapcat -l <backup-file.ldif>
+  
+This way all data is presented in LDIF. Alternatively, it is possible
+to shut down slapd, backup its data files, and bring it up again.
+
+Please see the OpenLDAP documentation for more details on this and
+more advanced features like e.g. live replication of the directory:
+
+  http://www.openldap.org/doc/admin/
 
 ----- Client Usage ---------------------------------------------------
 
@@ -203,7 +233,12 @@ CollaborillaSimpleClient, which is wrapping CollaborillaObject.
 
 ----- Literature -----------------------------------------------------
 
-Ebner, H., 2006, Collaborilla - An enhancement to the Conzilla
+Ebner, H., (2006), Collaborilla - An enhancement to the Conzilla
   concept browser for enabling collaboration, Master's Thesis at the
   Department of Computer and Systems Sciences, Royal Institute of
   Technology (KTH), Stockholm, Sweden
+  
+Ebner, H., Palmér, M., Naeve, A., (2006), Collaborative Construction
+  of Artifacts, Proceedings of the 4th Conference on Professional
+  Knowledge Management, Workshop Collaborative Knowledge Management
+  (CoKM2007), Potsdam, Germany, 28-30 March 2007.
