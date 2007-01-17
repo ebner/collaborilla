@@ -68,10 +68,10 @@ public final class CollaborillaDataSet implements Serializable {
 	public CollaborillaDataSet(CollaborillaAccessible client) throws CollaborillaException {
 		try {
 			this.setIdentifier(client.getIdentifier());
-			this.setAlignedLocation(client.getAlignedLocation());
+			this.setAlignedLocation(client.getAlignedLocations());
 			this.setContainerRdfInfo(client.getContainerRdfInfo());
 			this.setContextRdfInfo(client.getContextRdfInfo());
-			this.setLocation(client.getLocation());
+			this.setLocation(client.getLocations());
 			this.setTimestampCreated(client.getTimestampCreated());
 			this.setTimestampModified(client.getTimestampModified());
 			this.setRequiredContainers(client.getRequiredContainers());

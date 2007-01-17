@@ -18,12 +18,13 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import se.kth.nada.kmr.collaborilla.ldap.LDAPStringHelper;
-import se.kth.nada.kmr.collaborilla.service.ServiceCommands;
 import se.kth.nada.kmr.collaborilla.service.ResponseMessage;
+import se.kth.nada.kmr.collaborilla.service.ServiceCommands;
 import se.kth.nada.kmr.collaborilla.service.Status;
 
 /**
@@ -34,19 +35,19 @@ import se.kth.nada.kmr.collaborilla.service.Status;
  */
 public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	
-	private String serverHost = null;
+	private String serverHost;
 	
 	private int serverPort = -1;
 
-	private String identifier = null;
+	private String identifier;
 	
 	private int responseTimeOut = -1;
 
-	private Socket socket = null;
+	private Socket socket;
 
-	private PrintWriter out = null;
+	private PrintWriter out;
 
-	private BufferedReader in = null;
+	private BufferedReader in;
 
 	/**
 	 * Initializes the object. No timeout for responses from the server.
@@ -73,8 +74,7 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	 *            Response timeout in seconds
 	 */
 	public CollaborillaServiceClient(String host, int port, int timeout) {
-		this.serverHost = host;
-		this.serverPort = port;
+		this(host, port);
 		this.responseTimeOut = timeout;
 	}
 
@@ -218,7 +218,6 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 		if (this.socket == null) {
 			return false;
 		}
-
 		return this.socket.isConnected();
 	}
 
@@ -318,9 +317,9 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getAlignedLocation()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getAlignedLocations()
 	 */
-	public Set getAlignedLocation() throws CollaborillaException {
+	public Set getAlignedLocations() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_ALIGNEDLOCATION);
 
@@ -328,15 +327,37 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getLocation()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#getLocations()
 	 */
-	public Set getLocation() throws CollaborillaException {
+	public Set getLocations() throws CollaborillaException {
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_LOCATION);
 		
 		return CollaborillaDataSet.stringArrayToSet(resp.responseData);
 	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setLocations(java.util.Set)
+	 */
+	public void setLocations(Set locations) throws CollaborillaException {
+		this.clearLocations();
+		Iterator locIt = locations.iterator();
+		while (locIt.hasNext()) {
+			this.addLocation((String)locIt.next());
+		}
+	}
 
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearLocations()
+	 */
+	public void clearLocations() throws CollaborillaException {
+		Set oldLocations = this.getLocations();
+		Iterator oldLocIt = oldLocations.iterator();
+		while (oldLocIt.hasNext()) {
+			this.removeLocation((String)oldLocIt.next());
+		}
+	}
+	
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#addLocation(java.lang.String)
 	 */
@@ -361,6 +382,28 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 				+ ServiceCommands.ATTR_REQUIRED_CONTAINER);
 
 		return CollaborillaDataSet.stringArrayToSet(resp.responseData);
+	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setRequiredContainers(java.util.Set)
+	 */
+	public void setRequiredContainers(Set containers) throws CollaborillaException {
+		this.clearRequiredContainers();
+		Iterator contIt = containers.iterator();
+		while (contIt.hasNext()) {
+			this.addRequiredContainer((String)contIt.next());
+		}
+	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearRequiredContainers()
+	 */
+	public void clearRequiredContainers() throws CollaborillaException {
+		Set oldContainers = this.getRequiredContainers();
+		Iterator oldContIt = oldContainers.iterator();
+		while (oldContIt.hasNext()) {
+			this.removeRequiredContainer((String)oldContIt.next());
+		}
 	}
 
 	/**
@@ -387,6 +430,28 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 				+ ServiceCommands.ATTR_OPTIONAL_CONTAINER);
 
 		return CollaborillaDataSet.stringArrayToSet(resp.responseData);
+	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#setOptionalContainers(java.util.Set)
+	 */
+	public void setOptionalContainers(Set containers) throws CollaborillaException {
+		this.clearOptionalContainers();
+		Iterator contIt = containers.iterator();
+		while (contIt.hasNext()) {
+			this.addOptionalContainer((String)contIt.next());
+		}
+	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearOptionalContainers()
+	 */
+	public void clearOptionalContainers() throws CollaborillaException {
+		Set oldContainers = this.getOptionalContainers();
+		Iterator oldContIt = oldContainers.iterator();
+		while (oldContIt.hasNext()) {
+			this.removeOptionalContainer((String)oldContIt.next());
+		}
 	}
 
 	/**
@@ -430,9 +495,9 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeContextRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearContextRdfInfo()
 	 */
-	public void removeContextRdfInfo() throws CollaborillaException {
+	public void clearContextRdfInfo() throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_CONTEXT_RDFINFO);
 	}
 
@@ -461,9 +526,9 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeContainerRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearContainerRdfInfo()
 	 */
-	public void removeContainerRdfInfo() throws CollaborillaException {
+	public void clearContainerRdfInfo() throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " "
 						+ ServiceCommands.ATTR_CONTAINER_RDFINFO);
 	}
@@ -511,9 +576,9 @@ public final class CollaborillaServiceClient implements CollaborillaAccessible {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#removeDescription()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaAccessible#clearDescription()
 	 */
-	public void removeDescription() throws CollaborillaException {
+	public void clearDescription() throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_DESCRIPTION);
 	}
 

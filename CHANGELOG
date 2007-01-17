@@ -12,6 +12,8 @@ The Collaborilla bugtracker can be accessed at
 
 First stable version of Collaborilla. Released together with Conzilla 2.1.
 
+- 0000077: [Basic Design] Rework client interface: e.g. set() and clear() methods for dealing with Sets (hannes)
+- 0000076: [Basic Design] Remove methods and server commands for "modify" (hannes)
 - 0000075: [Basic Design] Naming of the URI fields should be changed (hannes)
 - 0000073: [Basic Design] Collections in CollaborillaAccessible should be Sets (hannes)
 - 0000066: [Bug] setContainerRevision() sends the wrong command (hannes)
