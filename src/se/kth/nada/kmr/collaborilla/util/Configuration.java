@@ -86,7 +86,7 @@ public class Configuration {
 
 		if (this.xmlFormat) {
 			// just >= JDK1.5
-			this.properties.loadFromXML(inFile);
+			//this.properties.loadFromXML(inFile);
 		} else {
 			this.properties.load(inFile);
 		}
@@ -104,7 +104,7 @@ public class Configuration {
 
 		if (this.xmlFormat) {
 			// just >= JDK1.5
-			this.properties.storeToXML(outFile, this.comment);
+			//this.properties.storeToXML(outFile, this.comment);
 		} else {
 			this.properties.store(outFile, this.comment);
 		}
