@@ -12,7 +12,7 @@ The Collaborilla bugtracker can be accessed at
 
 First stable version of Collaborilla. Released together with Conzilla 2.1.
 
-- 0000078: [Basic Design] Rename client interface to "CollaborillaClient" (hannes)
+- 0000078: [Basic Design] Rename client interface to "CollaborillaStatefulClient" (hannes)
 - 0000077: [Basic Design] Rework client interface: e.g. set() and clear() methods for dealing with Sets (hannes)
 - 0000076: [Basic Design] Remove methods and server commands for "modify" (hannes)
 - 0000075: [Basic Design] Naming of the URI fields should be changed (hannes)
