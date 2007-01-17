@@ -17,7 +17,7 @@ import java.util.Set;
  * @author Hannes Ebner
  * @version $Id$
  */
-public interface CollaborillaClient {
+public interface CollaborillaStatefulClient {
 
 	/**
 	 * Connects to the service.

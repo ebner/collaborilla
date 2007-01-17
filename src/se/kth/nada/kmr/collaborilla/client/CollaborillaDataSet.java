@@ -65,7 +65,7 @@ public final class CollaborillaDataSet implements Serializable {
 	 * @param client An instance of CollaborillaAccessible
 	 * @throws CollaborillaException
 	 */
-	public CollaborillaDataSet(CollaborillaClient client) throws CollaborillaException {
+	public CollaborillaDataSet(CollaborillaStatefulClient client) throws CollaborillaException {
 		try {
 			this.setIdentifier(client.getIdentifier());
 			this.setAlignedLocation(client.getAlignedLocations());
