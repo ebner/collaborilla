@@ -1,25 +1,34 @@
 # $Id$
 
 # CollaborillaService start script
-# Hannes Ebner, 2007
+# (c) 2007, Hannes Ebner <hebner@nada.kth.se>
 
 #!/bin/sh
 
-DEPLOYDIR=/opt/collaborilla
 LOGFILE=/var/log/collaborilla.log
 PIDFILE=/var/run/collaborilla.pid
 
 NAME=CollaborillaService
 CONFIGFILE=collaborilla.properties
 
-if [ ! -d $DEPLOYDIR ]
-then
-	echo -e "Unable to start $NAME: directory $DEPLOYDIR does not exist!\n"
-	echo "Aborting."
-	exit 1
-fi
+PRG=$0
 
-pushd $DEPLOYDIR >/dev/null 2>&1
+while [ -h "$PRG" ]
+do
+	ls=`ls -ld "$PRG"`
+	link=`expr "$ls" : '^.*-> \(.*\)$' 2>/dev/null`
+	
+	if [ expr "$link" : '^/' 2> /dev/null >/dev/null ]
+	then
+		PRG="$link"
+	else
+		PRG="`dirname "$PRG"`/$link"
+	fi
+done
+
+PROGDIR=`dirname "$PRG"`
+
+pushd $PROGDIR >/dev/null 2>&1
 
 case "$1" in
 	start)
@@ -68,4 +77,4 @@ case "$1" in
 		;;
 esac
 
-popd $DEPLOYDIR >/dev/null 2>&1
+popd >/dev/null 2>&1

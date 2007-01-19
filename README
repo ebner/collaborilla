@@ -13,6 +13,7 @@ Conzilla        http://www.conzilla.org
 ----- Copyright & License --------------------------------------------
 
 Copyright (c) 2006-2007, Hannes Ebner <hebner@nada.kth.se>
+Knowledge Management Research Group (http://kmr.nada.kth.se)
 Royal Institute of Technology (KTH), Sweden
 
 Collaborilla is licensed under the GNU GPL. For full terms see the
@@ -21,9 +22,8 @@ file LICENSE.
 Collaborilla makes use of JLDAP (LDAP Classes for Java), which
 provides functionality to write applications that access, manage, and
 update information stored in LDAP-aware directories. These classes are
-based on the IETF LDAP Java API.
-JLDAP is licenced under the "OpenLDAP Public License". For full terms
-see the file LICENSE_OPENLDAP.
+based on the IETF LDAP Java API. JLDAP is licenced under the "OpenLDAP
+Public License". For full terms see the file LICENSE_OPENLDAP.
 
 ----- Changelog ------------------------------------------------------
 
@@ -129,17 +129,8 @@ location is probably "/opt/collaborilla" or under "/usr/local".
 The configuration file is located in the same directory and will be
 modified in the next step.
 
-Make sure the startup script is referring to the right deployment
-directory. To do this, open the file "collaborilla.sh" and check for
-the variable "DEPLOYDIR". It should point to the directory where you
-deployed Collaborilla to. The startup script will look there for the
-configuration file.
-
-In our case it will look similar to this:
-
-  DEPLOYDIR=/opt/collaborilla/
-  
-Please make sure to adapt the variables LOGFILE and PIDFILE as well.
+Please make sure to adapt the variables LOGFILE and PIDFILE inside
+the startup script!
 
 STEP 4: Configuration
 
@@ -223,9 +214,9 @@ more advanced features like e.g. live replication of the directory:
 The library "collaborilla.jar" contains the server and the client
 part. There is no seperation for now, since the size does not justify
 2 different packages yet. If you want to access the Collaborilla
-service as a client, you will probably start using the an
-implementation of the interface "CollaborillaAccessible".
-Please read the JavaDoc for further information.
+service as a client, you will probably start using an implementation
+of the interface "CollaborillaAccessible". Please read the JavaDoc for
+further information.
 
 The library "jldap.jar" is only necessary if client implementations
 are used which access LDAP directly. These are CollaborillaObject and
