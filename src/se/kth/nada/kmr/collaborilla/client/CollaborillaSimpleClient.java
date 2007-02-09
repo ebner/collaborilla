@@ -175,12 +175,15 @@ public class CollaborillaSimpleClient implements CollaborillaStatefulClient {
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#createRevision()
 	 */
-	public void createRevision() throws CollaborillaException {
+	public int createRevision() throws CollaborillaException {
+		int oldRevision = 0;
 		try {
+			oldRevision = this.collab.getRevisionCount();
 			this.collab.createRevision();
 		} catch (LDAPException e) {
 			throw new CollaborillaException(e);
 		}
+		return oldRevision;
 	}
 
 	/**

@@ -117,9 +117,11 @@ public interface CollaborillaStatefulClient {
 	 * Sets the current revision to the most recent entry and copies all data
 	 * into a new revision. Performs a setRevision(0).
 	 * 
+	 * @return Returns the number of the revision which has been outdated by
+	 *         this command. The value will be: number_of_the_new_revison - 1.
 	 * @throws CollaborillaException
 	 */
-	void createRevision() throws CollaborillaException;
+	int createRevision() throws CollaborillaException;
 
 	/**
 	 * Restores a revision and makes it the most recent revision.

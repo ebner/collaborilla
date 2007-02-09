@@ -103,8 +103,8 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#createRevision()
 	 */
-	public void createRevision() throws CollaborillaException {
-		this.client.createRevision();
+	public int createRevision() throws CollaborillaException {
+		return this.client.createRevision();
 	}
 
 	/**

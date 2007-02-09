@@ -304,8 +304,10 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#createRevision()
 	 */
-	public void createRevision() throws CollaborillaException {
+	public int createRevision() throws CollaborillaException {
+		int oldRevision = this.getRevisionCount();
 		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_REVISION);
+		return oldRevision;
 	}
 
 	/**
