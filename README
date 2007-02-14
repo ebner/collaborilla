@@ -12,7 +12,7 @@ Conzilla        http://www.conzilla.org
 
 ----- Copyright & License --------------------------------------------
 
-Copyright (c) 2006-2007, Hannes Ebner <hebner@nada.kth.se>
+Copyright (c) 2006-2007
 Knowledge Management Research Group (http://kmr.nada.kth.se)
 Royal Institute of Technology (KTH), Sweden
 
@@ -24,6 +24,10 @@ provides functionality to write applications that access, manage, and
 update information stored in LDAP-aware directories. These classes are
 based on the IETF LDAP Java API. JLDAP is licenced under the "OpenLDAP
 Public License". For full terms see the file LICENSE_OPENLDAP.
+
+----- Author ---------------------------------------------------------
+
+Hannes Ebner <hebner@nada.kth.se>
 
 ----- Changelog ------------------------------------------------------
 

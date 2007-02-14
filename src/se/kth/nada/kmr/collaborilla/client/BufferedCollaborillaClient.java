@@ -1,7 +1,6 @@
-/*
- *  $Id$
+/*  $Id$
  *
- *  Copyright (c) 2006-2007, Hannes Ebner
+ *  Copyright (c) 2006, KMR group at KTH (Royal Institute of Technology)
  *  Licensed under the GNU GPL. For full terms see the file LICENSE.
  */
 
