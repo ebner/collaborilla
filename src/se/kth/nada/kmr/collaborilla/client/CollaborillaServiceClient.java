@@ -17,6 +17,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -352,7 +353,14 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#clearLocations()
 	 */
 	public void clearLocations() throws CollaborillaException {
-		Set oldLocations = this.getLocations();
+		Set oldLocations = new HashSet();
+		try {
+			oldLocations = this.getLocations();
+		} catch (CollaborillaException ce) {
+			if (ce.getResultCode() != CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE) {
+				throw ce;
+			}
+		}
 		Iterator oldLocIt = oldLocations.iterator();
 		while (oldLocIt.hasNext()) {
 			this.removeLocation((String)oldLocIt.next());
@@ -400,7 +408,14 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#clearRequiredContainers()
 	 */
 	public void clearRequiredContainers() throws CollaborillaException {
-		Set oldContainers = this.getRequiredContainers();
+		Set oldContainers = new HashSet();
+		try {
+			oldContainers = this.getRequiredContainers();
+		} catch (CollaborillaException ce) {
+			if (ce.getResultCode() != CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE) {
+				throw ce;
+			}
+		}
 		Iterator oldContIt = oldContainers.iterator();
 		while (oldContIt.hasNext()) {
 			this.removeRequiredContainer((String)oldContIt.next());
@@ -448,7 +463,14 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#clearOptionalContainers()
 	 */
 	public void clearOptionalContainers() throws CollaborillaException {
-		Set oldContainers = this.getOptionalContainers();
+		Set oldContainers = new HashSet();
+		try {
+			oldContainers = this.getOptionalContainers();
+		} catch (CollaborillaException ce) {
+			if (ce.getResultCode() != CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE) {
+				throw ce;
+			}
+		}
 		Iterator oldContIt = oldContainers.iterator();
 		while (oldContIt.hasNext()) {
 			this.removeOptionalContainer((String)oldContIt.next());

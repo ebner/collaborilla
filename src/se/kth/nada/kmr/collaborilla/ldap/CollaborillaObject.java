@@ -173,7 +173,6 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	/**
 	 * Sets the URI of the LDAP entry and rebuilds the Base DN.
 	 * 
-	 * @see #updateBaseDN()
 	 * @param uri
 	 *            URI
 	 */
@@ -204,7 +203,6 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 * will be rebuilt and all operations will be performed at the revision with
 	 * the number of the parameter.
 	 * 
-	 * @see #updateBaseDN()
 	 * @param rev
 	 *            Revision number.&nbsp;Should be 0 to return to the most recent
 	 *            LDAP entry.
