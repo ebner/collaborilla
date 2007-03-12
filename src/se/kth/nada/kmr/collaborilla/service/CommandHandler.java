@@ -42,12 +42,11 @@ public class CommandHandler {
 			+ "DEL REQUIREDCONTAINER <uri>        \n\n" + "GET OPTIONALCONTAINER            \n"
 			+ "ADD OPTIONALCONTAINER <uri>        \n" + "DEL OPTIONALCONTAINER <uri>        \n\n"
 			+ "GET DESC                           \n" + "SET DESC <description>             \n"
-			+ "DEL DESC                           \n\n" + "GET CONTEXTRDFINFO               \n"
-			+ "SET CONTEXTRDFINFO <rdf data>      \n" + "DEL CONTEXTRDFINFO                 \n\n"
-			+ "GET CONTAINERRDFINFO               \n" + "SET CONTAINERRDFINFO <rdf data>    \n"
-			+ "DEL CONTAINERRDFINFO               \n\n"	+ "GET CONTAINERREVISION            \n"
-			+ "SET CONTAINERREVISION <rev nr>     \n\n"	+ "GET LDIF                         \n\n"
-			+ "GET TIMESTAMPCREATED               \n" + "GET TIMESTAMPMODIFIED              \n";
+			+ "DEL DESC                           \n\n" + "GET METADATA                     \n"
+			+ "SET METADATA <rdf data>      	  \n" + "DEL METADATA                       \n\n"
+			+ "GET CONTAINERREVISION              \n" + "SET CONTAINERREVISION <rev nr>     \n\n"
+			+ "GET LDIF                           \n\n"	+ "GET TIMESTAMPCREATED             \n"
+			+ "GET TIMESTAMPMODIFIED              \n";
 
 	/**
 	 * @param ldapConn LDAPAccess object, contains the connection to specific LDAP server.
@@ -135,12 +134,8 @@ public class CommandHandler {
 				return this.handleGetDescription();
 			}
 
-			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_CONTEXT_RDFINFO)) {
-				return this.handleGetContextRdfInfo();
-			}
-
-			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_CONTAINER_RDFINFO)) {
-				return this.handleGetContainerRdfInfo();
+			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_METADATA)) {
+				return this.handleGetMetaData();
 			}
 
 			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_REVISION_INFO)) {
@@ -189,12 +184,8 @@ public class CommandHandler {
 				return this.handleSetDescription(setParam);
 			}
 
-			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_CONTEXT_RDFINFO)) {
-				return this.handleSetContextRdfInfo(setParam);
-			}
-
-			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_CONTAINER_RDFINFO)) {
-				return this.handleSetContainerRdfInfo(setParam);
+			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_METADATA)) {
+				return this.handleSetMetaData(setParam);
 			}
 
 			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_CONTAINER_REVISION)) {
@@ -223,12 +214,8 @@ public class CommandHandler {
 
 		/* DEL commands */
 		if (command[0].equalsIgnoreCase(ServiceCommands.CMD_DEL)) {
-			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_CONTEXT_RDFINFO)) {
-				return this.handleDelContextRdfInfo();
-			}
-
-			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_CONTAINER_RDFINFO)) {
-				return this.handleDelContainerRdfInfo();
+			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_METADATA)) {
+				return this.handleDelMetaData();
 			}
 
 			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_DESCRIPTION)) {
@@ -431,29 +418,12 @@ public class CommandHandler {
 		return new ResponseMessage(Status.SC_OK, result);
 	}
 
-	private ResponseMessage handleGetContextRdfInfo() {
+	private ResponseMessage handleGetMetaData() {
 		String result;
 
 		try {
 			result = this.collabObject.getContextRdfInfo();
 		} catch (LDAPException e) {
-			this.log.write(e.toString());
-			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
-		}
-
-		if (result == null) {
-			return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
-		}
-
-		return new ResponseMessage(Status.SC_OK, result);
-	}
-
-	private ResponseMessage handleGetContainerRdfInfo() {
-		String result;
-
-		try {
-			result = this.collabObject.getContainerRdfInfo();
-		} catch (Exception e) {
 			this.log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
@@ -567,24 +537,9 @@ public class CommandHandler {
 		return new ResponseMessage(Status.SC_OK);
 	}
 
-	private ResponseMessage handleSetContextRdfInfo(String rdfInfo) {
+	private ResponseMessage handleSetMetaData(String rdfInfo) {
 		try {
 			this.collabObject.setContextRdfInfo(rdfInfo);
-		} catch (LDAPException e) {
-			if (e.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
-				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
-			}
-
-			this.log.write(e.toString());
-			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
-		}
-
-		return new ResponseMessage(Status.SC_OK);
-	}
-
-	private ResponseMessage handleSetContainerRdfInfo(String rdfLocationInfo) {
-		try {
-			this.collabObject.setContainerRdfInfo(rdfLocationInfo);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
@@ -756,28 +711,9 @@ public class CommandHandler {
 		return new ResponseMessage(Status.SC_OK);
 	}
 
-	private ResponseMessage handleDelContextRdfInfo() {
+	private ResponseMessage handleDelMetaData() {
 		try {
 			this.collabObject.removeContextRdfInfo();
-		} catch (LDAPException e) {
-			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
-				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
-			}
-			
-			if (e.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
-				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
-			}
-
-			this.log.write(e.toString());
-			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
-		}
-
-		return new ResponseMessage(Status.SC_OK);
-	}
-
-	private ResponseMessage handleDelContainerRdfInfo() {
-		try {
-			this.collabObject.removeContainerRdfInfo();
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);

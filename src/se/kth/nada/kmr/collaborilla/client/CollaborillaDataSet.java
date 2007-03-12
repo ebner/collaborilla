@@ -25,31 +25,29 @@ public final class CollaborillaDataSet implements Serializable {
 	
 	private static final long serialVersionUID = -1923564557152264954L;
 
-	private String identifier = null;
+	private String identifier;
 	
-	private Set location = null;
+	private Set location;
 
-	private Set alignedLocation = null;
+	private Set alignedLocation;
 
-	private String containerRdfInfo = null;
+	private String metaData;
 
-	private String contextRdfInfo = null;
+	private Set requiredContainers;
 
-	private Set requiredContainers = null;
+	private Set optionalContainers;
 
-	private Set optionalContainers = null;
+	private Date timestampCreated;
 
-	private Date timestampCreated = null;
+	private Date timestampModified;
 
-	private Date timestampModified = null;
+	private String containerRevision;
 
-	private String containerRevision = null;
-
-	private String description = null;
+	private String description;
 
 	private int revisionNumber = -1;
 
-	private String revisionInfo = null;
+	private String revisionInfo;
 	
 	/**
 	 * This constructor doesn't do much. It just makes creation of the object possible,
@@ -68,8 +66,7 @@ public final class CollaborillaDataSet implements Serializable {
 		try {
 			this.setIdentifier(client.getIdentifier());
 			this.setAlignedLocation(client.getAlignedLocations());
-			this.setContainerRdfInfo(client.getContainerRdfInfo());
-			this.setContextRdfInfo(client.getContextRdfInfo());
+			this.setMetaData(client.getMetaData());
 			this.setLocation(client.getLocations());
 			this.setTimestampCreated(client.getTimestampCreated());
 			this.setTimestampModified(client.getTimestampModified());
@@ -140,20 +137,12 @@ public final class CollaborillaDataSet implements Serializable {
 		this.alignedLocation = coll;
 	}
 	
-	public String getContainerRdfInfo() {
-		return this.containerRdfInfo;
+	public String getMetaData() {
+		return this.metaData;
 	}
 	
-	public void setContainerRdfInfo(String rdfInfo) {
-		this.containerRdfInfo = rdfInfo;
-	}
-	
-	public String getContextRdfInfo() {
-		return this.contextRdfInfo;
-	}
-	
-	public void setContextRdfInfo(String rdfInfo) {
-		this.contextRdfInfo = rdfInfo;
+	public void setMetaData(String metaData) {
+		this.metaData = metaData;
 	}
 	
 	public Set getRequiredContainers() {

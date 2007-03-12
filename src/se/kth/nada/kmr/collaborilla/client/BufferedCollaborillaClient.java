@@ -32,9 +32,9 @@ import java.util.Set;
  */
 public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 
-	private CollaborillaStatefulClient client = null;
+	private CollaborillaStatefulClient client;
 
-	private CollaborillaDataSet dataset = null;
+	private CollaborillaDataSet dataset;
 
 	/**
 	 * @param client A valid and initialized CollaborillaAccessible object.
@@ -121,13 +121,6 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getContainerRdfInfo()
-	 */
-	public String getContainerRdfInfo() throws CollaborillaException {
-		return this.dataset.getContainerRdfInfo();
-	}
-
-	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getContainerRevision()
 	 */
 	public String getContainerRevision() throws CollaborillaException {
@@ -135,10 +128,10 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getContextRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getMetaData()
 	 */
-	public String getContextRdfInfo() throws CollaborillaException {
-		return this.dataset.getContextRdfInfo();
+	public String getMetaData() throws CollaborillaException {
+		return this.dataset.getMetaData();
 	}
 
 	/**
@@ -243,17 +236,10 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	 */
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeContainerRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeMetaData()
 	 */
-	public void removeContainerRdfInfo() throws CollaborillaException {
-		this.client.removeContainerRdfInfo();
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeContextRdfInfo()
-	 */
-	public void removeContextRdfInfo() throws CollaborillaException {
-		this.client.removeContextRdfInfo();
+	public void removeMetaData() throws CollaborillaException {
+		this.client.removeMetaData();
 	}
 
 	/**
@@ -292,13 +278,6 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setContainerRdfInfo(java.lang.String)
-	 */
-	public void setContainerRdfInfo(String rdfLocationInfo) throws CollaborillaException {
-		this.client.setContainerRdfInfo(rdfLocationInfo);
-	}
-
-	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setContainerRevision(java.lang.String)
 	 */
 	public void setContainerRevision(String containerRevision) throws CollaborillaException {
@@ -306,10 +285,10 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setContextRdfInfo(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setMetaData(java.lang.String)
 	 */
-	public void setContextRdfInfo(String rdfInfo) throws CollaborillaException {
-		this.client.setContextRdfInfo(rdfInfo);
+	public void setMetaData(String rdfInfo) throws CollaborillaException {
+		this.client.setMetaData(rdfInfo);
 	}
 
 	/**

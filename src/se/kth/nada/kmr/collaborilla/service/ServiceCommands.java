@@ -36,13 +36,11 @@ public class ServiceCommands {
 
 	public static final String ATTR_OPTIONAL_CONTAINER = "OPTIONALCONTAINER";
 
-	public static final String ATTR_CONTEXT_RDFINFO = "CONTEXTRDFINFO";
+	public static final String ATTR_METADATA = "METADATA";
 
 	public static final String ATTR_LOCATION = "URL";
 
 	public static final String ATTR_ALIGNEDLOCATION = "ALIGNEDURL";
-
-	public static final String ATTR_CONTAINER_RDFINFO = "CONTAINERRDFINFO";
 
 	public static final String ATTR_CONTAINER_REVISION = "CONTAINERREVISION";
 
@@ -59,5 +57,5 @@ public class ServiceCommands {
 	public static final String ATTR_INTERNAL_TIMESTAMP_CREATED = "TIMESTAMPCREATED";
 
 	public static final String ATTR_INTERNAL_TIMESTAMP_MODIFIED = "TIMESTAMPMODIFIED";
-	
+
 }

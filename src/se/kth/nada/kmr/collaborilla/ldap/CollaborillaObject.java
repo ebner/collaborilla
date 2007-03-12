@@ -573,8 +573,8 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 * @throws LDAPException
 	 */
 	public String getContextRdfInfo() throws LDAPException {
-		if (this.attributeExists(CollaborillaObjectConstants.CONTEXTRDFINFO)) {
-			return this.readAttribute(CollaborillaObjectConstants.CONTEXTRDFINFO)[0];
+		if (this.attributeExists(CollaborillaObjectConstants.METADATA)) {
+			return this.readAttribute(CollaborillaObjectConstants.METADATA)[0];
 		} else {
 			return null;
 		}
@@ -590,10 +590,10 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	public void setContextRdfInfo(String rdfInfo) throws LDAPException {
 		this.handleWriteAttempt();
 
-		if (this.attributeExists(CollaborillaObjectConstants.CONTEXTRDFINFO)) {
-			this.resetAttribute(CollaborillaObjectConstants.CONTEXTRDFINFO, rdfInfo);
+		if (this.attributeExists(CollaborillaObjectConstants.METADATA)) {
+			this.resetAttribute(CollaborillaObjectConstants.METADATA, rdfInfo);
 		} else {
-			this.addAttribute(CollaborillaObjectConstants.CONTEXTRDFINFO, rdfInfo);
+			this.addAttribute(CollaborillaObjectConstants.METADATA, rdfInfo);
 		}
 	}
 
@@ -605,8 +605,8 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	public void removeContextRdfInfo() throws LDAPException {
 		this.handleWriteAttempt();
 
-		if (this.attributeExists(CollaborillaObjectConstants.CONTEXTRDFINFO)) {
-			this.removeAttribute(CollaborillaObjectConstants.CONTEXTRDFINFO, this.getContextRdfInfo());
+		if (this.attributeExists(CollaborillaObjectConstants.METADATA)) {
+			this.removeAttribute(CollaborillaObjectConstants.METADATA, this.getContextRdfInfo());
 		}
 	}
 

@@ -66,18 +66,25 @@ public final class CollaborillaObjectConstants {
 	public static final String URI = PREFIX + "URI";
 	
 	/**
+	 * Tells the type of the entry (e.g. container, contextmap, agent, etc.).
+	 */
+	public static final String TYPE = PREFIX + "ObjectType";
+	
+	/**
 	 * Attribute inherited from LDAP ObjectClass "top": description.
 	 */
 	public static final String DESCRIPTION = "description";
 
+	public static final String METADATA = PREFIX + "MetaData";
+	
+	public static final String DELETED = PREFIX + "ObjectDeleted";
+	
 	/*
 	 * Referrer Attributes
 	 */
 	public static final String REQUIREDCONTAINER = PREFIX + "RequiredContainer";
 
 	public static final String OPTIONALCONTAINER = PREFIX + "OptionalContainer";
-
-	public static final String CONTEXTRDFINFO = PREFIX + "ContextRdfInfo";
 
 	/*
 	 * Resolver Attributes
@@ -88,10 +95,4 @@ public final class CollaborillaObjectConstants {
 
 	public static final String CONTAINERREVISION = PREFIX + "ContainerRevision";
 
-	/*
-	 * Not used / deprecated
-	 */
-	public static final String TYPE = PREFIX + "ObjectType";
-
-	public static final String DELETED = PREFIX + "ObjectDeleted";
 }

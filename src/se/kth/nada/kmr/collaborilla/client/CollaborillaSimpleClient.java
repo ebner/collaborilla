@@ -409,9 +409,9 @@ public class CollaborillaSimpleClient implements CollaborillaStatefulClient {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getContextRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getMetaData()
 	 */
-	public String getContextRdfInfo() throws CollaborillaException {
+	public String getMetaData() throws CollaborillaException {
 		try {
 			return LDAPStringHelper.decode(this.collab.getContextRdfInfo());
 		} catch (LDAPException e) {
@@ -424,9 +424,9 @@ public class CollaborillaSimpleClient implements CollaborillaStatefulClient {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setContextRdfInfo(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setMetaData(java.lang.String)
 	 */
-	public void setContextRdfInfo(String rdfInfo) throws CollaborillaException {
+	public void setMetaData(String rdfInfo) throws CollaborillaException {
 		try {
 			this.collab.setContextRdfInfo(LDAPStringHelper.encode(rdfInfo));
 		} catch (LDAPException e) {
@@ -435,52 +435,11 @@ public class CollaborillaSimpleClient implements CollaborillaStatefulClient {
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeContextRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeMetaData()
 	 */
-	public void removeContextRdfInfo() throws CollaborillaException {
+	public void removeMetaData() throws CollaborillaException {
 		try {
 			this.collab.removeContextRdfInfo();
-		} catch (LDAPException e) {
-			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
-				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
-			} else {
-				throw new CollaborillaException(e);
-			}
-		}
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getContainerRdfInfo()
-	 */
-	public String getContainerRdfInfo() throws CollaborillaException {
-		try {
-			return LDAPStringHelper.decode(this.collab.getContainerRdfInfo());
-		} catch (LDAPException e) {
-			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
-				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
-			} else {
-				throw new CollaborillaException(e);
-			}
-		}
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setContainerRdfInfo(java.lang.String)
-	 */
-	public void setContainerRdfInfo(String rdfInfo) throws CollaborillaException {
-		try {
-			this.collab.setContainerRdfInfo(LDAPStringHelper.encode(rdfInfo));
-		} catch (LDAPException e) {
-			throw new CollaborillaException(e);
-		}
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeContainerRdfInfo()
-	 */
-	public void removeContainerRdfInfo() throws CollaborillaException {
-		try {
-			this.collab.removeContainerRdfInfo();
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);

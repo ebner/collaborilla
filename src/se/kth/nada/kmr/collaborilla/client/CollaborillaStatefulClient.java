@@ -16,7 +16,7 @@ import java.util.Set;
  * @author Hannes Ebner
  * @version $Id$
  */
-public interface CollaborillaStatefulClient {
+public interface CollaborillaStatefulClient extends EntryTypes {
 
 	/**
 	 * Connects to the service.
@@ -269,52 +269,28 @@ public interface CollaborillaStatefulClient {
 	void removeOptionalContainer(String uri) throws CollaborillaException;
 
 	/**
-	 * Returns the RDF info field.
+	 * Returns the meta data field.
 	 * 
-	 * @return RDF info field
+	 * @return Meta data field
 	 * @throws CollaborillaException
 	 */
-	String getContextRdfInfo() throws CollaborillaException;
+	String getMetaData() throws CollaborillaException;
 
 	/**
-	 * Sets the RDF info field.
+	 * Sets the meta data field.
 	 * 
-	 * @param rdfInfo
-	 *            RDF info
+	 * @param metaData
+	 *            Meta data, e.g. RDF information.
 	 * @throws CollaborillaException
 	 */
-	void setContextRdfInfo(String rdfInfo) throws CollaborillaException;
+	void setMetaData(String metaData) throws CollaborillaException;
 
 	/**
-	 * Removes an eventually existing RDF info field.
+	 * Removes an eventually existing meta data field.
 	 * 
 	 * @throws CollaborillaException
 	 */
-	void removeContextRdfInfo() throws CollaborillaException;
-
-	/**
-	 * Returns the RDF location info field.
-	 * 
-	 * @return RDF location info field
-	 * @throws CollaborillaException
-	 */
-	String getContainerRdfInfo() throws CollaborillaException;
-
-	/**
-	 * Sets the RDF location info field.
-	 * 
-	 * @param rdfLocationInfo
-	 *            RDF location info
-	 * @throws CollaborillaException
-	 */
-	void setContainerRdfInfo(String rdfLocationInfo) throws CollaborillaException;
-
-	/**
-	 * Removes an eventually existing RDF location info field.
-	 * 
-	 * @throws CollaborillaException
-	 */
-	void removeContainerRdfInfo() throws CollaborillaException;
+	void removeMetaData() throws CollaborillaException;
 
 	/**
 	 * Returns the revision of the container in the RCS.

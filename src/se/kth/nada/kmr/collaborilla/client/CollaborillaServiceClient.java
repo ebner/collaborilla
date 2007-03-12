@@ -494,66 +494,34 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getContextRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getMetaData()
 	 */
-	public String getContextRdfInfo() throws CollaborillaException {
-		String rdfInfo = new String();
+	public String getMetaData() throws CollaborillaException {
+		String metaData = new String();
 
 		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
-				+ ServiceCommands.ATTR_CONTEXT_RDFINFO);
+				+ ServiceCommands.ATTR_METADATA);
 
 		for (int i = 0; i < resp.responseData.length; i++) {
-			rdfInfo += resp.responseData[i];
+			metaData += resp.responseData[i];
 		}
 
-		return LDAPStringHelper.decode(rdfInfo);
+		return LDAPStringHelper.decode(metaData);
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setContextRdfInfo(java.lang.String)
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setMetaData(java.lang.String)
 	 */
-	public void setContextRdfInfo(String rdfInfo) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_CONTEXT_RDFINFO
-				+ " " + LDAPStringHelper.encode(rdfInfo));
+	public void setMetaData(String metaData) throws CollaborillaException {
+		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_METADATA
+				+ " " + LDAPStringHelper.encode(metaData));
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeContextRdfInfo()
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeMetaData()
 	 */
-	public void removeContextRdfInfo() throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_CONTEXT_RDFINFO);
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getContainerRdfInfo()
-	 */
-	public String getContainerRdfInfo() throws CollaborillaException {
-		String rdfInfo = new String();
-
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
-				+ ServiceCommands.ATTR_CONTAINER_RDFINFO);
-
-		for (int i = 0; i < resp.responseData.length; i++) {
-			rdfInfo += resp.responseData[i];
-		}
-
-		return LDAPStringHelper.decode(rdfInfo);
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setContainerRdfInfo(java.lang.String)
-	 */
-	public void setContainerRdfInfo(String rdfInfo) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_CONTAINER_RDFINFO
-				+ " " + LDAPStringHelper.encode(rdfInfo));
-	}
-
-	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeContainerRdfInfo()
-	 */
-	public void removeContainerRdfInfo() throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_DEL + " "
-						+ ServiceCommands.ATTR_CONTAINER_RDFINFO);
+	public void removeMetaData() throws CollaborillaException {
+		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_METADATA);
 	}
 
 	/**
