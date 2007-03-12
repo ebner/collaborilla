@@ -152,6 +152,11 @@ occurence within variable values has to be escaped with a backslash.
 
 STEP 5: Execution
 
+Before we proceed, we check whether the variable "DEPLOYDIR" in the
+script collaborilla.sh is pointing to the right directory. It is
+supposed to contain the absolute path to directory where Collaborilla
+has been installed in.
+
 After the installation and configuration is done, Collaborilla can be
 hooked into the right runlevels in order to start and shutdown it
 automatically. On Debian, the runlevels we will touch are 0, 1, 2,
@@ -233,7 +238,7 @@ Ebner, H., (2006), Collaborilla - An enhancement to the Conzilla
   Department of Computer and Systems Sciences, Royal Institute of
   Technology (KTH), Stockholm, Sweden
   
-Ebner, H., Palmér, M., Naeve, A., (2006), Collaborative Construction
+Ebner, H., PalmÃ©r, M., Naeve, A., (2006), Collaborative Construction
   of Artifacts, Proceedings of the 4th Conference on Professional
   Knowledge Management, Workshop Collaborative Knowledge Management
   (CoKM2007), Potsdam, Germany, 28-30 March 2007.

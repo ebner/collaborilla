@@ -3,32 +3,16 @@
 # CollaborillaService start script
 # (c) 2007, Hannes Ebner <hebner@nada.kth.se>
 
-#!/bin/sh
+#!/bin/bash
 
+DEPLOYDIR=/opt/collaborilla
 LOGFILE=/var/log/collaborilla.log
 PIDFILE=/var/run/collaborilla.pid
 
 NAME=CollaborillaService
 CONFIGFILE=collaborilla.properties
 
-PRG=$0
-
-while [ -h "$PRG" ]
-do
-	ls=`ls -ld "$PRG"`
-	link=`expr "$ls" : '^.*-> \(.*\)$' 2>/dev/null`
-	
-	if [ expr "$link" : '^/' 2> /dev/null >/dev/null ]
-	then
-		PRG="$link"
-	else
-		PRG="`dirname "$PRG"`/$link"
-	fi
-done
-
-PROGDIR=`dirname "$PRG"`
-
-pushd $PROGDIR >/dev/null 2>&1
+pushd $DEPLOYDIR >/dev/null 2>&1
 
 case "$1" in
 	start)
@@ -36,7 +20,7 @@ case "$1" in
 		
 		if [ -f $PIDFILE ]
 		then
-			echo -e "PID file found: $PIDFILE. Is another instance of Collaborilla running?\n"
+			echo -e "\n\nPID file found: $PIDFILE. Is another instance of Collaborilla running?"
 			echo "Aborting."
 			exit 1
 		fi
