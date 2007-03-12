@@ -61,6 +61,11 @@ public final class CollaborillaObjectConstants {
 	public static final String ID = "cn";
 
 	/**
+	 * Identifier (URI) of the entry.
+	 */
+	public static final String URI = PREFIX + "URI";
+	
+	/**
 	 * Attribute inherited from LDAP ObjectClass "top": description.
 	 */
 	public static final String DESCRIPTION = "description";

@@ -58,6 +58,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 				this.createEntryWithContainer(LDAPStringHelper.dnToParentDN(this.baseDN),
 						CollaborillaObjectConstants.OBJECTCLASS, CollaborillaObjectConstants.INFONODETYPE,
 						CollaborillaObjectConstants.INFONODE);
+				this.addAttribute(CollaborillaObjectConstants.URI, uri);
 			} else {
 				throw new LDAPException("NO SUCH OBJECT", LDAPException.NO_SUCH_OBJECT, LDAPException
 						.resultCodeToString(LDAPException.NO_SUCH_OBJECT), this.baseDN);
@@ -79,7 +80,6 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 */
 	public Object clone() throws CloneNotSupportedException {
 		CollaborillaObject newObject = (CollaborillaObject) super.clone();
-
 		return newObject;
 	}
 
@@ -144,11 +144,9 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 * @return true or false
 	 */
 	public boolean isEditable() {
-
 		if (this.getRevision() == 0) {
 			return true;
 		}
-
 		return false;
 	}
 
