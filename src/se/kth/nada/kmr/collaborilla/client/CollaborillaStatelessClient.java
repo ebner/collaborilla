@@ -16,7 +16,7 @@ import java.net.URI;
  * @author Hannes Ebner
  * @version $Id$
  */
-public interface CollaborillaStatelessClient extends EntryTypes {
+public interface CollaborillaStatelessClient {
 
 	/**
 	 * @param uri

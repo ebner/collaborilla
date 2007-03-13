@@ -21,7 +21,7 @@ import java.util.Set;
  * @author Hannes Ebner
  * @version $Id$
  */
-public final class CollaborillaDataSet implements Serializable {
+public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	
 	private static final long serialVersionUID = -1923564557152264954L;
 
