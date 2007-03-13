@@ -53,6 +53,8 @@ public class ServiceCommands {
 	public static final String ATTR_REVISION_INFO = "REVISIONINFO";
 
 	public static final String ATTR_REVISION_COUNT = "REVISIONCOUNT";
+	
+	public static final String ATTR_TYPE = "TYPE";
 
 	public static final String ATTR_INTERNAL_TIMESTAMP_CREATED = "TIMESTAMPCREATED";
 

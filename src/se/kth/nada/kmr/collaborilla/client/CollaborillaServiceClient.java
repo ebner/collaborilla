@@ -572,6 +572,37 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	public void removeDescription() throws CollaborillaException {
 		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_DESCRIPTION);
 	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getType()
+	 */
+	public String getType() throws CollaborillaException {
+		String type = new String();
+
+		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+				+ ServiceCommands.ATTR_TYPE);
+
+		for (int i = 0; i < resp.responseData.length; i++) {
+			type += resp.responseData[i];
+		}
+
+		return LDAPStringHelper.decode(type);
+	}
+
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setType(java.lang.String)
+	 */
+	public void setType(String type) throws CollaborillaException {
+		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_TYPE + " "
+				+ LDAPStringHelper.encode(type));
+	}
+
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeType()
+	 */
+	public void removeType() throws CollaborillaException {
+		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_TYPE);
+	}
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getLdif()

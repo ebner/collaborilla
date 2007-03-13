@@ -47,14 +47,14 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	CollaborillaDataSet getDataSet() throws CollaborillaException;
 
 	/**
-	 * Gets the URI of the currently accessed LDAP entry.
+	 * Gets the URI of the currently accessed entry.
 	 * 
 	 * @throws CollaborillaException
 	 */
 	String getIdentifier() throws CollaborillaException;
 
 	/**
-	 * Sets the URI of the LDAP entry and rebuilds the Base DN.
+	 * Sets the URI of the entry and rebuilds the Base DN.
 	 * 
 	 * @param uri
 	 *            URI
@@ -86,7 +86,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	void setRevisionNumber(int rev) throws CollaborillaException;
 
 	/**
-	 * Returns the number of revisions in the LDAP directory.
+	 * Returns the number of revisions in the directory.
 	 * 
 	 * @return Number of available revisions
 	 * @throws CollaborillaException
@@ -169,7 +169,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	void clearLocations() throws CollaborillaException;
 	
 	/**
-	 * Adds a new location to the LDAP entry.
+	 * Adds a new location to the entry.
 	 * 
 	 * @param url
 	 *            URL
@@ -178,7 +178,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	void addLocation(String url) throws CollaborillaException;
 
 	/**
-	 * Removes a location from the LDAP entry.
+	 * Removes a location from the entry.
 	 * 
 	 * @param url
 	 *            URL to be removed
@@ -210,7 +210,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	void clearRequiredContainers() throws CollaborillaException;
 	
 	/**
-	 * Adds a new URI field to the LDAP entry.
+	 * Adds a new URI field to the entry.
 	 * 
 	 * @param uri
 	 *            URI
@@ -219,7 +219,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	void addRequiredContainer(String uri) throws CollaborillaException;
 
 	/**
-	 * Removes a URI from the LDAP entry.
+	 * Removes a URI from the entry.
 	 * 
 	 * @param uri
 	 *            URI to be removed
@@ -251,7 +251,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	void clearOptionalContainers() throws CollaborillaException;
 	
 	/**
-	 * Adds a new URI field to the LDAP entry.
+	 * Adds a new URI field to the entry.
 	 * 
 	 * @param uri
 	 *            URI
@@ -260,7 +260,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	void addOptionalContainer(String uri) throws CollaborillaException;
 
 	/**
-	 * Removes a URI from the LDAP entry.
+	 * Removes a URI from the entry.
 	 * 
 	 * @param uri
 	 *            URI to be removed
@@ -291,6 +291,29 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	 * @throws CollaborillaException
 	 */
 	void removeMetaData() throws CollaborillaException;
+	
+	/**
+	 * Returns the type of the entry.
+	 * 
+	 * @return A value of TYPE_*.
+	 * @throws CollaborillaException
+	 */
+	String getType() throws CollaborillaException;
+	
+	/**
+	 * Sets the type of the entry.
+	 * 
+	 * @param type A value of TYPE_*.
+	 * @throws CollaborillaException
+	 */
+	void setType(String type) throws CollaborillaException;
+	
+	/**
+	 * Removes an eventually existing type field.
+	 * 
+	 * @throws CollaborillaException
+	 */
+	void removeType() throws CollaborillaException;
 
 	/**
 	 * Returns the revision of the container in the RCS.
@@ -311,7 +334,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	void setContainerRevision(String containerRevision) throws CollaborillaException;
 
 	/**
-	 * Returns the description field of the LDAP entry.
+	 * Returns the description field of the entry.
 	 * 
 	 * @return Description
 	 * @throws CollaborillaException
@@ -319,7 +342,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	String getDescription() throws CollaborillaException;
 
 	/**
-	 * Sets the description field of the LDAP entry.
+	 * Sets the description field of the entry.
 	 * 
 	 * @param desc
 	 *            Description
@@ -328,7 +351,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	void setDescription(String desc) throws CollaborillaException;
 
 	/**
-	 * Removes the description field of the LDAP entry.
+	 * Removes the description field of the entry.
 	 * 
 	 * @throws CollaborillaException
 	 */
@@ -344,7 +367,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	String getLdif() throws CollaborillaException;
 
 	/**
-	 * Returns the date and time of the creation of the LDAP entry.
+	 * Returns the date and time of the creation of the entry.
 	 * 
 	 * @return Timestamp
 	 * @throws CollaborillaException
@@ -352,7 +375,7 @@ public interface CollaborillaStatefulClient extends EntryTypes {
 	Date getTimestampCreated() throws CollaborillaException;
 
 	/**
-	 * Returns the date and time of the last modification of the LDAP entry.
+	 * Returns the date and time of the last modification of the entry.
 	 * 
 	 * @return Timestamp
 	 * @throws CollaborillaException

@@ -140,6 +140,13 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	public String getDescription() throws CollaborillaException {
 		return this.dataset.getDescription();
 	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getType()
+	 */
+	public String getType() throws CollaborillaException {
+		return this.dataset.getType();
+	}
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getLdif()
@@ -250,6 +257,13 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	}
 
 	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeType()
+	 */
+	public void removeType() throws CollaborillaException {
+		this.client.removeType();
+	}
+
+	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeLocation(java.lang.String)
 	 */
 	public void removeLocation(String url) throws CollaborillaException {
@@ -296,6 +310,13 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	 */
 	public void setDescription(String desc) throws CollaborillaException {
 		this.client.setDescription(desc);
+	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setType(java.lang.String)
+	 */
+	public void setType(String type) throws CollaborillaException {
+		this.client.setType(type);
 	}
 
 	/**

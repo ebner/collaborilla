@@ -25,6 +25,7 @@ import com.novell.ldap.LDAPException;
  * @version $Id$
  */
 public class CollaborillaSimpleClient implements CollaborillaStatefulClient {
+	
 	private CollaborillaObject collab = null;
 
 	private LDAPAccess ldapConn = null;
@@ -413,7 +414,7 @@ public class CollaborillaSimpleClient implements CollaborillaStatefulClient {
 	 */
 	public String getMetaData() throws CollaborillaException {
 		try {
-			return LDAPStringHelper.decode(this.collab.getContextRdfInfo());
+			return LDAPStringHelper.decode(this.collab.getMetaData());
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
@@ -428,7 +429,7 @@ public class CollaborillaSimpleClient implements CollaborillaStatefulClient {
 	 */
 	public void setMetaData(String rdfInfo) throws CollaborillaException {
 		try {
-			this.collab.setContextRdfInfo(LDAPStringHelper.encode(rdfInfo));
+			this.collab.setMetaData(LDAPStringHelper.encode(rdfInfo));
 		} catch (LDAPException e) {
 			throw new CollaborillaException(e);
 		}
@@ -439,7 +440,7 @@ public class CollaborillaSimpleClient implements CollaborillaStatefulClient {
 	 */
 	public void removeMetaData() throws CollaborillaException {
 		try {
-			this.collab.removeContextRdfInfo();
+			this.collab.removeMetaData();
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
@@ -469,7 +470,7 @@ public class CollaborillaSimpleClient implements CollaborillaStatefulClient {
 	 */
 	public void setContainerRevision(String containerRevision) throws CollaborillaException {
 		try {
-			this.collab.setContainerRdfInfo(containerRevision);
+			this.collab.setContainerRevision(containerRevision);
 		} catch (LDAPException e) {
 			throw new CollaborillaException(e);
 		}
@@ -507,6 +508,47 @@ public class CollaborillaSimpleClient implements CollaborillaStatefulClient {
 	public void removeDescription() throws CollaborillaException {
 		try {
 			this.collab.removeDescription();
+		} catch (LDAPException e) {
+			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
+				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
+			} else {
+				throw new CollaborillaException(e);
+			}
+		}
+	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getType()
+	 */
+	public String getType() throws CollaborillaException {
+		try {
+			return LDAPStringHelper.decode(this.collab.getType());
+		} catch (LDAPException e) {
+			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
+				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);
+			} else {
+				throw new CollaborillaException(e);
+			}
+		}
+	}
+
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setType(java.lang.String)
+	 */
+	public void setType(String type) throws CollaborillaException {
+		try {
+			this.collab.setType(LDAPStringHelper.encode(type));
+		} catch (LDAPException e) {
+			throw new CollaborillaException(e);
+		}
+	}
+
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeType()
+	 */
+	public void removeType() throws CollaborillaException {
+		try {
+			this.collab.removeType();
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				throw new CollaborillaException(CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE);

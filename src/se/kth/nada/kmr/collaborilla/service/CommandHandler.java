@@ -44,6 +44,8 @@ public class CommandHandler {
 			+ "GET DESC                           \n" + "SET DESC <description>             \n"
 			+ "DEL DESC                           \n\n" + "GET METADATA                     \n"
 			+ "SET METADATA <rdf data>      	  \n" + "DEL METADATA                       \n\n"
+			+ "GET TYPE                           \n" + "SET TYPE <type>                    \n"
+			+ "DEL TYPE                           \n\n"
 			+ "GET CONTAINERREVISION              \n" + "SET CONTAINERREVISION <rev nr>     \n\n"
 			+ "GET LDIF                           \n\n"	+ "GET TIMESTAMPCREATED             \n"
 			+ "GET TIMESTAMPMODIFIED              \n";
@@ -133,6 +135,10 @@ public class CommandHandler {
 			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_DESCRIPTION)) {
 				return this.handleGetDescription();
 			}
+			
+			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_TYPE)) {
+				return this.handleGetType();
+			}
 
 			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_METADATA)) {
 				return this.handleGetMetaData();
@@ -183,6 +189,10 @@ public class CommandHandler {
 			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_DESCRIPTION)) {
 				return this.handleSetDescription(setParam);
 			}
+			
+			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_TYPE)) {
+				return this.handleSetType(setParam);
+			}
 
 			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_METADATA)) {
 				return this.handleSetMetaData(setParam);
@@ -220,6 +230,10 @@ public class CommandHandler {
 
 			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_DESCRIPTION)) {
 				return this.handleDelDescription();
+			}
+			
+			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_TYPE)) {
+				return this.handleDelType();
 			}
 
 			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.ATTR_REQUIRED_CONTAINER)) {
@@ -404,6 +418,23 @@ public class CommandHandler {
 
 		return new ResponseMessage(Status.SC_OK, result);
 	}
+	
+	private ResponseMessage handleGetType() {
+		String result;
+
+		try {
+			result = this.collabObject.getType();
+		} catch (Exception e) {
+			this.log.write(e.toString());
+			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
+		}
+
+		if (result == null) {
+			return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
+		}
+
+		return new ResponseMessage(Status.SC_OK, result);
+	}
 
 	private ResponseMessage handleGetLdif() {
 		String result;
@@ -422,7 +453,7 @@ public class CommandHandler {
 		String result;
 
 		try {
-			result = this.collabObject.getContextRdfInfo();
+			result = this.collabObject.getMetaData();
 		} catch (LDAPException e) {
 			this.log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
@@ -536,10 +567,25 @@ public class CommandHandler {
 
 		return new ResponseMessage(Status.SC_OK);
 	}
+	
+	private ResponseMessage handleSetType(String type) {
+		try {
+			this.collabObject.setType(type);
+		} catch (LDAPException le) {
+			if (le.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
+				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
+			}
+
+			this.log.write(le.toString());
+			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
+		}
+
+		return new ResponseMessage(Status.SC_OK);
+	}
 
 	private ResponseMessage handleSetMetaData(String rdfInfo) {
 		try {
-			this.collabObject.setContextRdfInfo(rdfInfo);
+			this.collabObject.setMetaData(rdfInfo);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
@@ -713,7 +759,7 @@ public class CommandHandler {
 
 	private ResponseMessage handleDelMetaData() {
 		try {
-			this.collabObject.removeContextRdfInfo();
+			this.collabObject.removeMetaData();
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
@@ -733,6 +779,25 @@ public class CommandHandler {
 	private ResponseMessage handleDelDescription() {
 		try {
 			this.collabObject.removeDescription();
+		} catch (LDAPException e) {
+			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
+				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
+			}
+			
+			if (e.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
+				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
+			}
+
+			this.log.write(e.toString());
+			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
+		}
+
+		return new ResponseMessage(Status.SC_OK);
+	}
+	
+	private ResponseMessage handleDelType() {
+		try {
+			this.collabObject.removeType();
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);

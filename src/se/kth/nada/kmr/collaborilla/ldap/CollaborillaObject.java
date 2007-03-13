@@ -561,7 +561,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	}
 
 	/*
-	 * RDF info
+	 * Meta Data / RDF info
 	 * 
 	 * 
 	 */
@@ -572,7 +572,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 * @return RDF info field
 	 * @throws LDAPException
 	 */
-	public String getContextRdfInfo() throws LDAPException {
+	public String getMetaData() throws LDAPException {
 		if (this.attributeExists(CollaborillaObjectConstants.METADATA)) {
 			return this.readAttribute(CollaborillaObjectConstants.METADATA)[0];
 		} else {
@@ -587,7 +587,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 *            RDF info
 	 * @throws LDAPException
 	 */
-	public void setContextRdfInfo(String rdfInfo) throws LDAPException {
+	public void setMetaData(String rdfInfo) throws LDAPException {
 		this.handleWriteAttempt();
 
 		if (this.attributeExists(CollaborillaObjectConstants.METADATA)) {
@@ -602,55 +602,11 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	 * 
 	 * @throws LDAPException
 	 */
-	public void removeContextRdfInfo() throws LDAPException {
+	public void removeMetaData() throws LDAPException {
 		this.handleWriteAttempt();
 
 		if (this.attributeExists(CollaborillaObjectConstants.METADATA)) {
-			this.removeAttribute(CollaborillaObjectConstants.METADATA, this.getContextRdfInfo());
-		}
-	}
-
-	/**
-	 * Returns the RDF location info field.
-	 * 
-	 * @return RDF location info field
-	 * @throws LDAPException
-	 */
-	public String getContainerRdfInfo() throws LDAPException {
-		if (this.attributeExists(CollaborillaObjectConstants.CONTAINERRDFINFO)) {
-			return this.readAttribute(CollaborillaObjectConstants.CONTAINERRDFINFO)[0];
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * Sets the RDF location info field.
-	 * 
-	 * @param rdfLocationInfo
-	 *            RDF location info
-	 * @throws LDAPException
-	 */
-	public void setContainerRdfInfo(String rdfLocationInfo) throws LDAPException {
-		this.handleWriteAttempt();
-
-		if (this.attributeExists(CollaborillaObjectConstants.CONTAINERRDFINFO)) {
-			this.resetAttribute(CollaborillaObjectConstants.CONTAINERRDFINFO, rdfLocationInfo);
-		} else {
-			this.addAttribute(CollaborillaObjectConstants.CONTAINERRDFINFO, rdfLocationInfo);
-		}
-	}
-
-	/**
-	 * Removes an eventually existing RDF location info field.
-	 * 
-	 * @throws LDAPException
-	 */
-	public void removeContainerRdfInfo() throws LDAPException {
-		this.handleWriteAttempt();
-
-		if (this.attributeExists(CollaborillaObjectConstants.CONTAINERRDFINFO)) {
-			this.removeAttribute(CollaborillaObjectConstants.CONTAINERRDFINFO, this.getContainerRdfInfo());
+			this.removeAttribute(CollaborillaObjectConstants.METADATA, this.getMetaData());
 		}
 	}
 
@@ -704,6 +660,56 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 		}
 	}
 
+	/*
+	 * TYPE
+	 * 
+	 * 
+	 */
+
+	/**
+	 * Returns the type field of the LDAP entry.
+	 * 
+	 * @return Description
+	 * @throws LDAPException
+	 */
+	public String getType() throws LDAPException {
+		if (this.attributeExists(CollaborillaObjectConstants.TYPE)) {
+			return this.readAttribute(CollaborillaObjectConstants.TYPE)[0];
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Sets the type field of the LDAP entry.
+	 * 
+	 * @param desc
+	 *            Description
+	 * @throws LDAPException
+	 */
+	public void setType(String type) throws LDAPException {
+		this.handleWriteAttempt();
+
+		if (this.attributeExists(CollaborillaObjectConstants.TYPE)) {
+			this.resetAttribute(CollaborillaObjectConstants.TYPE, type);
+		} else {
+			this.addAttribute(CollaborillaObjectConstants.TYPE, type);
+		}
+	}
+
+	/**
+	 * Removes the type field of the LDAP entry.
+	 * 
+	 * @throws LDAPException
+	 */
+	public void removeType() throws LDAPException {
+		this.handleWriteAttempt();
+
+		if (this.attributeExists(CollaborillaObjectConstants.TYPE)) {
+			this.removeAttribute(CollaborillaObjectConstants.TYPE, this.getType());
+		}
+	}
+	
 	/*
 	 * LDIF
 	 * 

@@ -44,6 +44,8 @@ public final class CollaborillaDataSet implements Serializable {
 	private String containerRevision;
 
 	private String description;
+	
+	private String type;
 
 	private int revisionNumber = -1;
 
@@ -57,9 +59,9 @@ public final class CollaborillaDataSet implements Serializable {
 	}
 	
 	/**
-	 * By calling this constructor all fields are fetched automatically.
+	 * By calling this constructor all fields are fetched automatically via a stateful client.
 	 * 
-	 * @param client An instance of CollaborillaAccessible
+	 * @param client An instance of CollaborillaStatefulClient
 	 * @throws CollaborillaException
 	 */
 	public CollaborillaDataSet(CollaborillaStatefulClient client) throws CollaborillaException {
@@ -74,6 +76,7 @@ public final class CollaborillaDataSet implements Serializable {
 			this.setOptionalContainers(client.getOptionalContainers());
 			this.setContainerRevision(client.getContainerRevision());
 			this.setDescription(client.getDescription());
+			this.setType(client.getType());
 			this.setRevisionNumber(client.getRevisionNumber());
 			this.setRevisionInfo(client.getRevisionInfo());
 		} catch (CollaborillaException ce) {
@@ -81,6 +84,16 @@ public final class CollaborillaDataSet implements Serializable {
 				throw ce;
 			}
 		}
+	}
+	
+	/**
+	 * By calling this constructor all fields are fetched automatically via a stateless client.
+	 * 
+	 * @param client An instance of CollaborillaStatelessClient
+	 * @throws CollaborillaException
+	 */
+	public CollaborillaDataSet(CollaborillaStatelessClient client) throws CollaborillaException {
+		// TODO
 	}
 	
 	public final static String[] setToStringArray(Set coll) {
@@ -207,6 +220,14 @@ public final class CollaborillaDataSet implements Serializable {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getType() {
+		return this.type;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }
