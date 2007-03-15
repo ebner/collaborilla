@@ -19,7 +19,7 @@ attributetype ( CollaborillaLDAPAttributeType:202
 	)
 
 attributetype ( CollaborillaLDAPAttributeType:203
-	NAME 'collaborillaContextRdfInfo'
+	NAME 'collaborillaMetaData'
 	DESC ''
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
@@ -35,17 +35,8 @@ attributetype ( CollaborillaLDAPAttributeType:204
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{4096}
 	)
 
-attributetype ( CollaborillaLDAPAttributeType:205
-	NAME 'collaborillaContainerRdfInfo'
-	DESC ''
-	EQUALITY caseIgnoreMatch
-	SUBSTR caseIgnoreSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{65536}
-	SINGLE-VALUE
-	)
-
 attributetype ( CollaborillaLDAPAttributeType:206
-	NAME 'collaborillaObjectType'
+	NAME 'collaborillaEntryType'
 	DESC ''
 	EQUALITY caseIgnoreMatch
 	SUBSTR caseIgnoreSubstringsMatch
@@ -54,7 +45,7 @@ attributetype ( CollaborillaLDAPAttributeType:206
 	)
 
 attributetype ( CollaborillaLDAPAttributeType:207
-	NAME 'collaborillaObjectDeleted'
+	NAME 'collaborillaEntryDeleted'
 	DESC ''
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
@@ -88,10 +79,9 @@ objectClass ( CollaborillaLDAPObjectClass:200
 		collaborillaURI $
 		collaborillaRequiredContainer $
 		collaborillaOptionalContainer $
-		collaborillaContextRdfInfo $
+		collaborillaMetaData $
 		collaborillaLocation $
-		collaborillaContainerRdfInfo $
 		collaborillaContainerRevision $
-		collaborillaObjectType $
-		collaborillaObjectDeleted )
+		collaborillaEntryType $
+		collaborillaEntryDeleted )
 	)

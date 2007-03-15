@@ -68,7 +68,7 @@ public final class CollaborillaObjectConstants {
 	/**
 	 * Tells the type of the entry (e.g. container, contextmap, agent, etc.).
 	 */
-	public static final String TYPE = PREFIX + "ObjectType";
+	public static final String TYPE = PREFIX + "EntryType";
 	
 	/**
 	 * Attribute inherited from LDAP ObjectClass "top": description.
@@ -77,7 +77,7 @@ public final class CollaborillaObjectConstants {
 
 	public static final String METADATA = PREFIX + "MetaData";
 	
-	public static final String DELETED = PREFIX + "ObjectDeleted";
+	public static final String DELETED = PREFIX + "EntryDeleted";
 	
 	/*
 	 * Referrer Attributes

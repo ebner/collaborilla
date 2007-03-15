@@ -15,8 +15,6 @@ import se.kth.nada.kmr.collaborilla.service.Status;
  * @version $Id$
  */
 public class CollaborillaException extends Exception {
-	
-	private static final long serialVersionUID = 990737578487684483L;
 
 	public static final class ErrorCode extends Status {
 	}
@@ -98,7 +96,7 @@ public class CollaborillaException extends Exception {
 			break;
 		default:
 			status = "Unknown error.";
-			break;
+		break;
 		}
 
 		return status;
