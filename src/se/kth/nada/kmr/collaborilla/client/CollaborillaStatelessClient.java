@@ -9,7 +9,7 @@ package se.kth.nada.kmr.collaborilla.client;
 import java.net.URI;
 
 /**
- * Collaborilla client interface for stateless clients. ReST oriented.
+ * Collaborilla client interface for stateless clients.
  * 
  * @author Hannes Ebner
  * @version $Id$
