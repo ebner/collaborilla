@@ -11,11 +11,13 @@ package se.kth.nada.kmr.collaborilla.client;
  * @version $Id$
  */
 public interface EntryTypes {
+	
+	public static String TYPE_AGENT = "AGENT";
+	
+	public static String TYPE_CONCEPT = "CONCEPT";
 
 	public static String TYPE_CONTAINER = "CONTAINER";
 	
 	public static String TYPE_CONTEXTMAP = "CONTEXTMAP";
-	
-	public static String TYPE_AGENT = "AGENT";
 
 }
