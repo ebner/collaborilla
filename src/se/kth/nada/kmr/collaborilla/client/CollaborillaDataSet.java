@@ -27,9 +27,9 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 
 	private String identifier;
 	
-	private Set location;
+	private Set locations;
 
-	private Set alignedLocation;
+	private Set alignedLocations;
 
 	private String metaData;
 
@@ -67,9 +67,9 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	public CollaborillaDataSet(CollaborillaStatefulClient client) throws CollaborillaException {
 		try {
 			this.setIdentifier(client.getIdentifier());
-			this.setAlignedLocation(client.getAlignedLocations());
+			this.setAlignedLocations(client.getAlignedLocations());
 			this.setMetaData(client.getMetaData());
-			this.setLocation(client.getLocations());
+			this.setLocations(client.getLocations());
 			this.setTimestampCreated(client.getTimestampCreated());
 			this.setTimestampModified(client.getTimestampModified());
 			this.setRequiredContainers(client.getRequiredContainers());
@@ -134,20 +134,20 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 		this.identifier = ident;
 	}
 	
-	public Set getLocation() {
-		return this.location;
+	public Set getLocations() {
+		return this.locations;
 	}
 	
-	public void setLocation(Set coll) {
-		this.location = coll;
+	public void setLocations(Set coll) {
+		this.locations = coll;
 	}
 	
-	public Set getAlignedLocation() {
-		return this.alignedLocation;
+	public Set getAlignedLocations() {
+		return this.alignedLocations;
 	}
 	
-	public void setAlignedLocation(Set coll) {
-		this.alignedLocation = coll;
+	public void setAlignedLocations(Set coll) {
+		this.alignedLocations = coll;
 	}
 	
 	public String getMetaData() {

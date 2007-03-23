@@ -86,6 +86,7 @@
 	<target name ="jar" depends="compilation" description="Create a JAR">
 		<jar destfile="${distribution_directory}/${ant.project.name}.jar">
 			<fileset dir="${build_directory}"/>
+			<fileset dir="${source_directory}"/>
 			<manifest>
 				<attribute name="Built-By" value="${user.name}"/>
 				<attribute name="Main-Class" value="${main_class}"/>
@@ -157,7 +158,7 @@
 		</delete>
 		<zip destfile="${tarballs_directory}/${ant.project.name}-${touch.time}.zip">
 			<zipfileset dir="${distribution_directory}" prefix="" includes="**/*"/>
-			<!--<zipfileset dir="${source_directory}" prefix="${source_string}"/>-->			
+			<!--<zipfileset dir="${source_directory}" prefix="${source_string}"/>-->
 			<!--<zipfileset dir="${library_directory}" prefix="${library_string}" includes="${dependency_jars}"/>-->
 			<!--<zipfileset dir="." includes="README*.txt"/>-->
 			<!--<zipfileset dir="." includes="ReleaseNotes.txt"/>-->

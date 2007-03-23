@@ -20,6 +20,7 @@ import com.novell.ldap.LDAPConnection;
  * @see LDAPObject
  */
 public class CollaborillaObject extends LDAPObject implements Cloneable {
+	
 	private int revision = 0;
 
 	private String serverDN;
@@ -683,7 +684,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 	/**
 	 * Sets the type field of the LDAP entry.
 	 * 
-	 * @param desc
+	 * @param type
 	 *            Description
 	 * @throws LDAPException
 	 */

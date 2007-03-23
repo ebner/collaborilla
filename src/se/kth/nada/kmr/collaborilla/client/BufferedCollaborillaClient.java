@@ -117,7 +117,7 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getAlignedLocations()
 	 */
 	public Set getAlignedLocations() throws CollaborillaException {
-		return this.dataset.getAlignedLocation();
+		return this.dataset.getAlignedLocations();
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getLocations()
 	 */
 	public Set getLocations() throws CollaborillaException {
-		return this.dataset.getLocation();
+		return this.dataset.getLocations();
 	}
 
 	/**
