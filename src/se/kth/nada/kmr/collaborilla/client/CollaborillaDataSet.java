@@ -8,6 +8,8 @@ package se.kth.nada.kmr.collaborilla.client;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -184,26 +186,28 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 //		setModifiedLocally(false);
 //	}
 		
-	/**
-	 * By calling this constructor all fields are fetched automatically via a stateless client.
-	 * 
-	 * @param client An instance of CollaborillaStatelessClient
-	 * @throws CollaborillaException
-	 */
-	public CollaborillaDataSet(CollaborillaStatelessClient client) throws CollaborillaException {
-		// TODO
-	}
+//	/**
+//	 * By calling this constructor all fields are fetched automatically via a stateless client.
+//	 * 
+//	 * @param client An instance of CollaborillaStatelessClient
+//	 * @throws CollaborillaException
+//	 */
+//	public CollaborillaDataSet(CollaborillaStatelessClient client) throws CollaborillaException {
+//
+//	}
 	
 	/**
-	 * Decodes a String (an encoded CollaborillaDataSet) into a CollaborillaDataSet object. 
+	 * Decodes a String (an encoded CollaborillaDataSet) into a
+	 * CollaborillaDataSet object.
 	 * 
-	 * @param xml The CollaborillaDataSet encoded as XML String.
+	 * @param xml
+	 *            The CollaborillaDataSet encoded as XML String.
 	 * @return A decoded CollaborillaDataSet object.
 	 */
 	public static CollaborillaDataSet decodeXML(String xml) {
 		InputStream stream = null;
 		try {
-			stream = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+			stream = new BufferedInputStream(new ByteArrayInputStream(xml.getBytes("UTF-8")));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -212,14 +216,14 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 		input.close();
 		return result;
 	}
-	
+
 	/**
 	 * @return Returns this object encoded as an XML String.
 	 */
 	public String toXML() {
 		String result = null;
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		XMLEncoder output = new XMLEncoder(stream);
+		XMLEncoder output = new XMLEncoder(new BufferedOutputStream(stream));
 		output.writeObject(this);
 		output.flush();
 		output.close();
@@ -229,33 +233,47 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 		}
 		return result;
 	}
-	
+
+	/**
+	 * Converts a Set to an array of Strings.
+	 * 
+	 * @param coll
+	 *            Set to convert.
+	 * @return Array of Strings.
+	 */
 	public final static String[] setToStringArray(Set coll) {
 		if (coll == null) {
 			return null;
 		}
-		
+
 		String[] result = new String[coll.size()];
 		int i = 0;
 		for (Iterator it = coll.iterator(); it.hasNext(); i++) {
-			result[i] = (String)it.next();
+			result[i] = (String) it.next();
 		}
-		
+
 		return result;
 	}
-	
+
+	/**
+	 * Converts an array of String to a Set.
+	 * 
+	 * @param strArray
+	 *            String array to convert.
+	 * @return Set of Strings
+	 */
 	public final static Set stringArrayToSet(String[] strArray) {
 		if (strArray == null) {
 			return null;
 		}
-		
+
 		int size = strArray.length;
 		Set result = new HashSet(size);
-		
+
 		for (int i = 0; i < size; i++) {
 			result.add(strArray[i]);
 		}
-		
+
 		return result;
 	}
 	
