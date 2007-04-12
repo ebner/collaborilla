@@ -8,6 +8,7 @@ package se.kth.nada.kmr.collaborilla.service;
 
 import java.util.StringTokenizer;
 
+import se.kth.nada.kmr.collaborilla.client.CollaborillaDataSet;
 import se.kth.nada.kmr.collaborilla.ldap.CollaborillaObject;
 import se.kth.nada.kmr.collaborilla.ldap.LDAPAccess;
 import se.kth.nada.kmr.collaborilla.util.InfoMessage;
@@ -48,7 +49,7 @@ public class CommandHandler {
 			+ "DEL TYPE                           \n\n"
 			+ "GET CONTAINERREVISION              \n" + "SET CONTAINERREVISION <rev nr>     \n\n"
 			+ "GET LDIF                           \n\n"	+ "GET TIMESTAMPCREATED             \n"
-			+ "GET TIMESTAMPMODIFIED              \n";
+			+ "GET TIMESTAMPMODIFIED              \n\n" + "GET DATASET";
 
 	/**
 	 * @param ldapConn LDAPAccess object, contains the connection to specific LDAP server.
@@ -166,6 +167,10 @@ public class CommandHandler {
 
 			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_INTERNAL_TIMESTAMP_MODIFIED)) {
 				return this.handleGetTimestampModified();
+			}
+			
+			if (command[1].equalsIgnoreCase(ServiceCommands.ATTR_DATASET)) {
+				return this.handleGetDataSet();
 			}
 		}
 
@@ -446,6 +451,20 @@ public class CommandHandler {
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
+		return new ResponseMessage(Status.SC_OK, result);
+	}
+	
+	private ResponseMessage handleGetDataSet() {
+		String result;
+		
+		try {
+			CollaborillaDataSet dataSet = this.collabObject.getDataSet();
+			result = dataSet.toXML();
+		} catch (LDAPException e) {
+			this.log.write(e.toString());
+			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
+		}
+		
 		return new ResponseMessage(Status.SC_OK, result);
 	}
 

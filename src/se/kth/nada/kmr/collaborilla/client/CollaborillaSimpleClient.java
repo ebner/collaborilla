@@ -106,7 +106,9 @@ public class CollaborillaSimpleClient implements CollaborillaStatefulClient {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getDataSet()
 	 */
 	public CollaborillaDataSet getDataSet() throws CollaborillaException {
-		return new CollaborillaDataSet(this);
+		// TODO
+		throw new UnsupportedOperationException();
+		//return new CollaborillaDataSet(this);
 	}
 
 	/**

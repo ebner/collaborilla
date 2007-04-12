@@ -6,8 +6,10 @@
 
 package se.kth.nada.kmr.collaborilla.ldap;
 
-import com.novell.ldap.LDAPException;
+import se.kth.nada.kmr.collaborilla.client.CollaborillaDataSet;
+
 import com.novell.ldap.LDAPConnection;
+import com.novell.ldap.LDAPException;
 
 /**
  * Provides methods to directly access and manipulate entries and fields needed
@@ -764,5 +766,114 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 			this.addAttribute(CollaborillaObjectConstants.CONTAINERREVISION, containerRevision);
 		}
 	}
+	
+	/*
+	 * DATASET
+	 * 
+	 * 
+	 */
 
+	/**
+	 * Fetches all fields from the directory and returns a full dataset.
+	 * 
+	 * @return Returns a CollaborillaDataSet
+	 * @throws LDAPException
+	 */
+	public CollaborillaDataSet getDataSet() throws LDAPException {
+		CollaborillaDataSet data = new CollaborillaDataSet();
+		
+		try {
+			data.setAlignedLocations(CollaborillaDataSet.stringArrayToSet(getAlignedLocation()));
+		} catch (LDAPException e) {
+			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
+				throw e;
+			}
+		}
+		
+		try {
+			data.setContainerRevision(getContainerRevision());
+		} catch (LDAPException e) {
+			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
+				throw e;
+			}
+		}
+		
+		try {
+			data.setDescription(getDescription());
+		} catch (LDAPException e) {
+			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
+				throw e;
+			}
+		}
+		
+		data.setIdentifier(getAccessUri());
+		
+		try {
+			data.setLocations(CollaborillaDataSet.stringArrayToSet(getLocation()));
+		} catch (LDAPException e) {
+			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
+				throw e;
+			}
+		}
+		
+		try {
+			data.setMetaData(LDAPStringHelper.decode(getMetaData()));
+		} catch (LDAPException e) {
+			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
+				throw e;
+			}
+		}
+		
+		try {
+			data.setOptionalContainers(CollaborillaDataSet.stringArrayToSet(getOptionalContainers()));
+		} catch (LDAPException e) {
+			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
+				throw e;
+			}
+		}
+		
+		try {
+			data.setRequiredContainers(CollaborillaDataSet.stringArrayToSet(getRequiredContainers()));
+		} catch (LDAPException e) {
+			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
+				throw e;
+			}
+		}
+		
+		try {
+			data.setRevisionInfo(getRevisionInfo());
+		} catch (LDAPException e) {
+			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
+				throw e;
+			}
+		}
+		
+		data.setRevisionNumber(getRevision());
+		
+		try {
+			data.setTimestampCreated(getTimestampCreated());
+		} catch (LDAPException e) {
+			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
+				throw e;
+			}
+		}
+		
+		try {
+			data.setTimestampModified(getTimestampModified());
+		} catch (LDAPException e) {
+			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
+				throw e;
+			}
+		}
+		
+		try {
+			data.setType(getType());
+		} catch (LDAPException e) {
+			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
+				throw e;
+			}
+		}
+		
+		return data;
+	}
 }

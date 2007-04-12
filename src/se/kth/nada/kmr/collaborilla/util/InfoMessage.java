@@ -15,7 +15,7 @@ import java.util.Date;
  * TODO Right now this class is a Singleton, but should be extended to a
  * Factory later (when we implement more than just one destination).
  * 
- * TODO Use log4j?
+ * TODO Use log4j
  * 
  * @author Hannes Ebner
  * @version $Id$
@@ -128,7 +128,7 @@ public class InfoMessage {
 	 * @return Current Date/Time
 	 */
 	public static String getCurrentDateTime() {
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss zzz").format(new Date());
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS zzz").format(new Date());
 	}
 
 	/**

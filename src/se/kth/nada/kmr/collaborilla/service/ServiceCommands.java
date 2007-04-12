@@ -59,5 +59,7 @@ public class ServiceCommands {
 	public static final String ATTR_INTERNAL_TIMESTAMP_CREATED = "TIMESTAMPCREATED";
 
 	public static final String ATTR_INTERNAL_TIMESTAMP_MODIFIED = "TIMESTAMPMODIFIED";
+	
+	public static final String ATTR_DATASET = "DATASET";
 
 }

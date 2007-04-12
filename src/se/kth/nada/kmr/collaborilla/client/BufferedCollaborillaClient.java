@@ -58,7 +58,8 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	 */
 	public void refresh() throws CollaborillaException {
 		if (this.isConnected()) {
-			this.dataset = new CollaborillaDataSet(this);
+			//this.dataset = new CollaborillaDataSet(this);
+			dataset = client.getDataSet();
 		}
 	}
 

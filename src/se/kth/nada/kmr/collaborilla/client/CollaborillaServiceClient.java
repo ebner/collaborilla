@@ -237,13 +237,6 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	}
 	
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getDataSet()
-	 */
-	public CollaborillaDataSet getDataSet() throws CollaborillaException {
-		return new CollaborillaDataSet(this);
-	}
-	
-	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getIdentifier()
 	 */
 	public String getIdentifier() {
@@ -622,6 +615,26 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 		}
 
 		return ldif;
+	}
+	
+	/**
+	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getDataSet()
+	 */
+	public CollaborillaDataSet getDataSet() throws CollaborillaException {
+		String xml = new String();
+
+		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+				+ ServiceCommands.ATTR_DATASET);
+
+		for (int i = 0; i < resp.responseData.length; i++) {
+			xml += resp.responseData[i];
+
+			if (i < (resp.responseData.length - 1)) {
+				xml += "\n";
+			}
+		}
+
+		return CollaborillaDataSet.decodeXML(xml);
 	}
 
 	/**

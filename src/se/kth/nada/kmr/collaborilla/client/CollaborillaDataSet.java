@@ -6,7 +6,13 @@
 
 package se.kth.nada.kmr.collaborilla.client;
 
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -64,120 +70,120 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	public CollaborillaDataSet() {
 	}
 	
-	/**
-	 * By calling this constructor all fields are fetched automatically via a stateful client.
-	 * 
-	 * @param client An instance of CollaborillaStatefulClient
-	 * @throws CollaborillaException
-	 */
-	public CollaborillaDataSet(CollaborillaStatefulClient client) throws CollaborillaException {
-		try {
-			setIdentifier(client.getIdentifier());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
+//	/**
+//	 * By calling this constructor all fields are fetched automatically via a stateful client.
+//	 * 
+//	 * @param client An instance of CollaborillaStatefulClient
+//	 * @throws CollaborillaException
+//	 */
+//	public CollaborillaDataSet(CollaborillaStatefulClient client) throws CollaborillaException {
+//		try {
+//			setIdentifier(client.getIdentifier());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setAlignedLocations(client.getAlignedLocations());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setMetaData(client.getMetaData());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setLocations(client.getLocations());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setTimestampCreated(client.getTimestampCreated());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setTimestampModified(client.getTimestampModified());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setRequiredContainers(client.getRequiredContainers());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setOptionalContainers(client.getOptionalContainers());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setContainerRevision(client.getContainerRevision());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setDescription(client.getDescription());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setType(client.getType());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setRevisionNumber(client.getRevisionNumber());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//		
+//		try {
+//			setRevisionInfo(client.getRevisionInfo());
+//		} catch (CollaborillaException ce) {
+//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+//				throw ce;
+//			}
+//		}
+//
+//		setModifiedLocally(false);
+//	}
 		
-		try {
-			setAlignedLocations(client.getAlignedLocations());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		try {
-			setMetaData(client.getMetaData());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		try {
-			setLocations(client.getLocations());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		try {
-			setTimestampCreated(client.getTimestampCreated());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		try {
-			setTimestampModified(client.getTimestampModified());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		try {
-			setRequiredContainers(client.getRequiredContainers());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		try {
-			setOptionalContainers(client.getOptionalContainers());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		try {
-			setContainerRevision(client.getContainerRevision());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		try {
-			setDescription(client.getDescription());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		try {
-			setType(client.getType());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		try {
-			setRevisionNumber(client.getRevisionNumber());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		try {
-			setRevisionInfo(client.getRevisionInfo());
-		} catch (CollaborillaException ce) {
-			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-				throw ce;
-			}
-		}
-		
-		setModifiedLocally(false);
-	}
-	
 	/**
 	 * By calling this constructor all fields are fetched automatically via a stateless client.
 	 * 
@@ -186,6 +192,42 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	 */
 	public CollaborillaDataSet(CollaborillaStatelessClient client) throws CollaborillaException {
 		// TODO
+	}
+	
+	/**
+	 * Decodes a String (an encoded CollaborillaDataSet) into a CollaborillaDataSet object. 
+	 * 
+	 * @param xml The CollaborillaDataSet encoded as XML String.
+	 * @return A decoded CollaborillaDataSet object.
+	 */
+	public static CollaborillaDataSet decodeXML(String xml) {
+		InputStream stream = null;
+		try {
+			stream = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		XMLDecoder input = new XMLDecoder(stream);
+		CollaborillaDataSet result = (CollaborillaDataSet) input.readObject();
+		input.close();
+		return result;
+	}
+	
+	/**
+	 * @return Returns this object encoded as an XML String.
+	 */
+	public String toXML() {
+		String result = null;
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		XMLEncoder output = new XMLEncoder(stream);
+		output.writeObject(this);
+		output.flush();
+		output.close();
+		try {
+			result = stream.toString("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+		}
+		return result;
 	}
 	
 	public final static String[] setToStringArray(Set coll) {
