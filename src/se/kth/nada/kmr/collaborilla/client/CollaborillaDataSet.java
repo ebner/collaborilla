@@ -52,6 +52,12 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	private String revisionInfo;
 	
 	/**
+	 * Is used to determine whether a dataset (e.g. metadata) has been modified
+	 * locally without publishing it (yet).
+	 */
+	private boolean modifiedLocally;
+	
+	/**
 	 * This constructor doesn't do much. It just makes creation of the object possible,
 	 * the fields can be set afterwards.
 	 */
@@ -66,24 +72,110 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	 */
 	public CollaborillaDataSet(CollaborillaStatefulClient client) throws CollaborillaException {
 		try {
-			this.setIdentifier(client.getIdentifier());
-			this.setAlignedLocations(client.getAlignedLocations());
-			this.setMetaData(client.getMetaData());
-			this.setLocations(client.getLocations());
-			this.setTimestampCreated(client.getTimestampCreated());
-			this.setTimestampModified(client.getTimestampModified());
-			this.setRequiredContainers(client.getRequiredContainers());
-			this.setOptionalContainers(client.getOptionalContainers());
-			this.setContainerRevision(client.getContainerRevision());
-			this.setDescription(client.getDescription());
-			this.setType(client.getType());
-			this.setRevisionNumber(client.getRevisionNumber());
-			this.setRevisionInfo(client.getRevisionInfo());
+			setIdentifier(client.getIdentifier());
 		} catch (CollaborillaException ce) {
 			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
 				throw ce;
 			}
 		}
+		
+		try {
+			setAlignedLocations(client.getAlignedLocations());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		try {
+			setMetaData(client.getMetaData());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		try {
+			setLocations(client.getLocations());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		try {
+			setTimestampCreated(client.getTimestampCreated());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		try {
+			setTimestampModified(client.getTimestampModified());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		try {
+			setRequiredContainers(client.getRequiredContainers());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		try {
+			setOptionalContainers(client.getOptionalContainers());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		try {
+			setContainerRevision(client.getContainerRevision());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		try {
+			setDescription(client.getDescription());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		try {
+			setType(client.getType());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		try {
+			setRevisionNumber(client.getRevisionNumber());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		try {
+			setRevisionInfo(client.getRevisionInfo());
+		} catch (CollaborillaException ce) {
+			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
+				throw ce;
+			}
+		}
+		
+		setModifiedLocally(false);
 	}
 	
 	/**
@@ -103,7 +195,6 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 		
 		String[] result = new String[coll.size()];
 		int i = 0;
-		
 		for (Iterator it = coll.iterator(); it.hasNext(); i++) {
 			result[i] = (String)it.next();
 		}
@@ -228,6 +319,14 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public boolean isModifiedLocally() {
+		return modifiedLocally;
+	}
+
+	public void setModifiedLocally(boolean modified) {
+		this.modifiedLocally = modified;
 	}
 
 }
