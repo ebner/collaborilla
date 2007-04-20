@@ -7,14 +7,16 @@
 package se.kth.nada.kmr.collaborilla.client;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashSet;
@@ -26,6 +28,7 @@ import se.kth.nada.kmr.collaborilla.ldap.LDAPStringHelper;
 import se.kth.nada.kmr.collaborilla.service.ResponseMessage;
 import se.kth.nada.kmr.collaborilla.service.ServiceCommands;
 import se.kth.nada.kmr.collaborilla.service.Status;
+import se.kth.nada.kmr.collaborilla.util.Configuration;
 
 /**
  * Client class to communicate with CollaborillaService.
@@ -45,7 +48,9 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 
 	private Socket socket;
 
-	private PrintWriter out;
+	private OutputStreamWriter writer;
+	
+	private BufferedWriter out;
 
 	private BufferedReader in;
 
@@ -84,21 +89,22 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 		ResponseMessage answer = null;
 
 		try {
-			this.out.println(request);
+			out.write(request + Configuration.LINEFEED);
+			out.flush();
 
-			while ((tmp = this.in.readLine()) != null) {
+			while ((tmp = in.readLine()) != null) {
 				if (result.length() > 0) {
-					result += "\n";
+					result += Configuration.LINEFEED;
 				}
 
 				result += tmp;
 
-				if (this.isStatusLine(tmp)) {
+				if (isStatusLine(tmp)) {
 					break;
 				}
 			}
 
-			answer = this.parseResponse(result);
+			answer = parseResponse(result);
 		} catch (SocketTimeoutException ste) {
 			throw new CollaborillaException(Status.SC_SERVER_TIMEOUT);
 		} catch (IOException ioe) {
@@ -114,7 +120,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 		ResponseMessage result = new ResponseMessage();
 		String statusMessage = null;
 
-		StringTokenizer responseTokens = new StringTokenizer(response, "\n");
+		StringTokenizer responseTokens = new StringTokenizer(response, Configuration.LINEFEED);
 		int responseLines = responseTokens.countTokens();
 
 		if (responseLines == 0) {
@@ -126,7 +132,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 		int i = 0;
 		while (responseTokens.hasMoreTokens()) {
 			String nextLine = responseTokens.nextToken();
-			if (this.isStatusLine(nextLine)) {
+			if (isStatusLine(nextLine)) {
 				statusMessage = nextLine;
 			} else {
 				result.responseData[i++] = nextLine;
@@ -157,6 +163,14 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 			throw new CollaborillaException(Status.SC_UNKNOWN);
 		}
 	}
+	
+	private String encodeURI(String uri) {
+		try {
+			return URLEncoder.encode(uri, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return uri;
+		}
+	}
 
 	/*
 	 * Interface implementation
@@ -168,20 +182,21 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 */
 	public void connect() throws CollaborillaException {
 		try {
-			this.socket = new Socket(this.serverHost, this.serverPort);
+			socket = new Socket(serverHost, serverPort);
 
-			if (this.responseTimeOut != -1) {
-				this.socket.setSoTimeout(this.responseTimeOut * 1000);
+			if (responseTimeOut != -1) {
+				socket.setSoTimeout(this.responseTimeOut * 1000);
 			}
 
-			this.out = new PrintWriter(new BufferedOutputStream(this.socket.getOutputStream()), true);
-			this.in = new BufferedReader(new InputStreamReader(new BufferedInputStream(this.socket.getInputStream())));
+			writer = new OutputStreamWriter(socket.getOutputStream(), "UTF-8");
+			out = new BufferedWriter(writer);
+			in = new BufferedReader(new InputStreamReader(new BufferedInputStream(socket.getInputStream())));
 		} catch (UnknownHostException e) {
 			throw new CollaborillaException(e);
 		} catch (ConnectException ce) {
 			throw new CollaborillaException(CollaborillaException.ErrorCode.SC_CONNECTION_FAILED, ce);
 		} catch (IOException ioe) {
-			this.disconnect();
+			disconnect();
 			throw new CollaborillaException(ioe);
 		}
 	}
@@ -191,20 +206,20 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 */
 	public void disconnect() throws CollaborillaException {
 		try {
-			if (this.isConnected()) {
-				this.sendRequest(ServiceCommands.CMD_QUIT);
+			if (isConnected()) {
+				sendRequest(ServiceCommands.CMD_QUIT);
 			}
 
-			if (this.out != null) {
-				this.out.close();
+			if (out != null) {
+				out.close();
 			}
 
-			if (this.in != null) {
-				this.in.close();
+			if (in != null) {
+				in.close();
 			}
 
-			if (this.socket != null) {
-				this.socket.close();
+			if (socket != null) {
+				socket.close();
 			}
 		} catch (Exception e) {
 			throw new CollaborillaException(e);
@@ -215,10 +230,10 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#isConnected()
 	 */
 	public boolean isConnected() {
-		if (this.socket == null) {
+		if (socket == null) {
 			return false;
 		}
-		return this.socket.isConnected();
+		return socket.isConnected();
 	}
 
 	/**
@@ -227,27 +242,27 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 */
 	public void setIdentifier(String uri, boolean create) throws CollaborillaException {
 		if (create) {
-			this.sendRequest(ServiceCommands.CMD_URI + " " + ServiceCommands.CMD_URI_NEW + " "
+			sendRequest(ServiceCommands.CMD_URI + " " + ServiceCommands.CMD_URI_NEW + " "
 					+ uri);
 		} else {
-			this.sendRequest(ServiceCommands.CMD_URI + " " + uri);
+			sendRequest(ServiceCommands.CMD_URI + " " + uri);
 		}
 		
-		this.identifier = uri;
+		identifier = uri;
 	}
 	
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getIdentifier()
 	 */
 	public String getIdentifier() {
-		return this.identifier;
+		return identifier;
 	}
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getRevisionNumber()
 	 */
 	public int getRevisionNumber() throws CollaborillaException {
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_REVISION);
 
 		return Integer.parseInt(resp.responseData[0]);
@@ -257,7 +272,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setRevisionNumber(int)
 	 */
 	public void setRevisionNumber(int rev) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_REVISION + " "
+		sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_REVISION + " "
 				+ rev);
 	}
 
@@ -265,7 +280,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getRevisionCount()
 	 */
 	public int getRevisionCount() throws CollaborillaException {
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_REVISION_COUNT);
 
 		return Integer.parseInt(resp.responseData[0]);
@@ -275,7 +290,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getRevisionInfo()
 	 */
 	public String getRevisionInfo() throws CollaborillaException {
-		return this.getRevisionInfo(0);
+		return getRevisionInfo(0);
 	}
 
 	/**
@@ -284,7 +299,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	public String getRevisionInfo(int rev) throws CollaborillaException {
 		String revisionInfo = new String();
 
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_REVISION_INFO + " " + rev);
 
 		for (int i = 0; i < resp.responseData.length; i++) {
@@ -298,8 +313,8 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#createRevision()
 	 */
 	public int createRevision() throws CollaborillaException {
-		int oldRevision = this.getRevisionCount();
-		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_REVISION);
+		int oldRevision = getRevisionCount();
+		sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_REVISION);
 		return oldRevision;
 	}
 
@@ -307,7 +322,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#restoreRevision(int)
 	 */
 	public void restoreRevision(int rev) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_RESTORE + " " + ServiceCommands.ATTR_REVISION
+		sendRequest(ServiceCommands.CMD_RESTORE + " " + ServiceCommands.ATTR_REVISION
 				+ " " + rev);
 	}
 
@@ -315,7 +330,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getAlignedLocations()
 	 */
 	public Set getAlignedLocations() throws CollaborillaException {
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_ALIGNEDLOCATION);
 
 		return CollaborillaDataSet.stringArrayToSet(resp.responseData);
@@ -325,7 +340,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getLocations()
 	 */
 	public Set getLocations() throws CollaborillaException {
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_LOCATION);
 		
 		return CollaborillaDataSet.stringArrayToSet(resp.responseData);
@@ -335,10 +350,10 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setLocations(java.util.Set)
 	 */
 	public void setLocations(Set locations) throws CollaborillaException {
-		this.clearLocations();
+		clearLocations();
 		Iterator locIt = locations.iterator();
 		while (locIt.hasNext()) {
-			this.addLocation((String)locIt.next());
+			addLocation((String)locIt.next());
 		}
 	}
 
@@ -348,7 +363,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	public void clearLocations() throws CollaborillaException {
 		Set oldLocations = new HashSet();
 		try {
-			oldLocations = this.getLocations();
+			oldLocations = getLocations();
 		} catch (CollaborillaException ce) {
 			if (ce.getResultCode() != CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE) {
 				throw ce;
@@ -356,7 +371,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 		}
 		Iterator oldLocIt = oldLocations.iterator();
 		while (oldLocIt.hasNext()) {
-			this.removeLocation((String)oldLocIt.next());
+			removeLocation((String)oldLocIt.next());
 		}
 	}
 	
@@ -364,7 +379,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#addLocation(java.lang.String)
 	 */
 	public void addLocation(String url) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_LOCATION + " "
+		sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_LOCATION + " "
 				+ url);
 	}
 
@@ -372,7 +387,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeLocation(java.lang.String)
 	 */
 	public void removeLocation(String url) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_LOCATION + " "
+		sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_LOCATION + " "
 				+ url);
 	}
 
@@ -380,7 +395,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getRequiredContainers()
 	 */
 	public Set getRequiredContainers() throws CollaborillaException {
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_REQUIRED_CONTAINER);
 
 		return CollaborillaDataSet.stringArrayToSet(resp.responseData);
@@ -390,10 +405,10 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setRequiredContainers(java.util.Set)
 	 */
 	public void setRequiredContainers(Set containers) throws CollaborillaException {
-		this.clearRequiredContainers();
+		clearRequiredContainers();
 		Iterator contIt = containers.iterator();
 		while (contIt.hasNext()) {
-			this.addRequiredContainer((String)contIt.next());
+			addRequiredContainer((String)contIt.next());
 		}
 	}
 	
@@ -411,7 +426,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 		}
 		Iterator oldContIt = oldContainers.iterator();
 		while (oldContIt.hasNext()) {
-			this.removeRequiredContainer((String)oldContIt.next());
+			removeRequiredContainer((String)oldContIt.next());
 		}
 	}
 
@@ -419,7 +434,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#addRequiredContainer(java.lang.String)
 	 */
 	public void addRequiredContainer(String uri) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_REQUIRED_CONTAINER + " "
+		sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_REQUIRED_CONTAINER + " "
 				+ uri);
 	}
 
@@ -427,7 +442,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeRequiredContainer(java.lang.String)
 	 */
 	public void removeRequiredContainer(String uri) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_REQUIRED_CONTAINER + " "
+		sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_REQUIRED_CONTAINER + " "
 				+ uri);
 	}
 
@@ -435,7 +450,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getOptionalContainers()
 	 */
 	public Set getOptionalContainers() throws CollaborillaException {
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_OPTIONAL_CONTAINER);
 
 		return CollaborillaDataSet.stringArrayToSet(resp.responseData);
@@ -445,10 +460,10 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setOptionalContainers(java.util.Set)
 	 */
 	public void setOptionalContainers(Set containers) throws CollaborillaException {
-		this.clearOptionalContainers();
+		clearOptionalContainers();
 		Iterator contIt = containers.iterator();
 		while (contIt.hasNext()) {
-			this.addOptionalContainer((String)contIt.next());
+			addOptionalContainer((String)contIt.next());
 		}
 	}
 	
@@ -458,7 +473,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	public void clearOptionalContainers() throws CollaborillaException {
 		Set oldContainers = new HashSet();
 		try {
-			oldContainers = this.getOptionalContainers();
+			oldContainers = getOptionalContainers();
 		} catch (CollaborillaException ce) {
 			if (ce.getResultCode() != CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE) {
 				throw ce;
@@ -466,7 +481,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 		}
 		Iterator oldContIt = oldContainers.iterator();
 		while (oldContIt.hasNext()) {
-			this.removeOptionalContainer((String)oldContIt.next());
+			removeOptionalContainer((String)oldContIt.next());
 		}
 	}
 
@@ -474,7 +489,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#addOptionalContainer(java.lang.String)
 	 */
 	public void addOptionalContainer(String uri) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_OPTIONAL_CONTAINER + " "
+		sendRequest(ServiceCommands.CMD_ADD + " " + ServiceCommands.ATTR_OPTIONAL_CONTAINER + " "
 				+ uri);
 	}
 
@@ -482,7 +497,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeOptionalContainer(java.lang.String)
 	 */
 	public void removeOptionalContainer(String uri) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_OPTIONAL_CONTAINER + " "
+		sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_OPTIONAL_CONTAINER + " "
 				+ uri);
 	}
 
@@ -492,7 +507,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	public String getMetaData() throws CollaborillaException {
 		String metaData = new String();
 
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_METADATA);
 
 		for (int i = 0; i < resp.responseData.length; i++) {
@@ -506,7 +521,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setMetaData(java.lang.String)
 	 */
 	public void setMetaData(String metaData) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_METADATA
+		sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_METADATA
 				+ " " + LDAPStringHelper.encode(metaData));
 	}
 
@@ -514,14 +529,14 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeMetaData()
 	 */
 	public void removeMetaData() throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_METADATA);
+		sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_METADATA);
 	}
 
 	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getContainerRevision()
 	 */
 	public String getContainerRevision() throws CollaborillaException {
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_CONTAINER_REVISION);
 
 		return resp.responseData[0];
@@ -531,7 +546,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setContainerRevision(java.lang.String)
 	 */
 	public void setContainerRevision(String containerRevision) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_CONTAINER_REVISION
+		sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_CONTAINER_REVISION
 				+ " " + containerRevision);
 	}
 
@@ -541,7 +556,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	public String getDescription() throws CollaborillaException {
 		String desc = new String();
 
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_DESCRIPTION);
 
 		for (int i = 0; i < resp.responseData.length; i++) {
@@ -555,7 +570,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setDescription(java.lang.String)
 	 */
 	public void setDescription(String desc) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_DESCRIPTION + " "
+		sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_DESCRIPTION + " "
 				+ LDAPStringHelper.encode(desc));
 	}
 
@@ -563,7 +578,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeDescription()
 	 */
 	public void removeDescription() throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_DESCRIPTION);
+		sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_DESCRIPTION);
 	}
 	
 	/**
@@ -572,7 +587,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	public String getType() throws CollaborillaException {
 		String type = new String();
 
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_TYPE);
 
 		for (int i = 0; i < resp.responseData.length; i++) {
@@ -586,7 +601,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#setType(java.lang.String)
 	 */
 	public void setType(String type) throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_TYPE + " "
+		sendRequest(ServiceCommands.CMD_SET + " " + ServiceCommands.ATTR_TYPE + " "
 				+ LDAPStringHelper.encode(type));
 	}
 
@@ -594,7 +609,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#removeType()
 	 */
 	public void removeType() throws CollaborillaException {
-		this.sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_TYPE);
+		sendRequest(ServiceCommands.CMD_DEL + " " + ServiceCommands.ATTR_TYPE);
 	}
 
 	/**
@@ -603,14 +618,14 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	public String getLdif() throws CollaborillaException {
 		String ldif = new String();
 
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_LDIF);
 
 		for (int i = 0; i < resp.responseData.length; i++) {
 			ldif += resp.responseData[i];
 
 			if (i < (resp.responseData.length - 1)) {
-				ldif += "\n";
+				ldif += Configuration.LINEFEED;
 			}
 		}
 
@@ -623,14 +638,42 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	public CollaborillaDataSet getDataSet() throws CollaborillaException {
 		String xml = new String();
 
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_DATASET);
 
 		for (int i = 0; i < resp.responseData.length; i++) {
 			xml += resp.responseData[i];
 
 			if (i < (resp.responseData.length - 1)) {
-				xml += "\n";
+				xml += Configuration.LINEFEED;
+			}
+		}
+
+		return CollaborillaDataSet.decodeXML(xml);
+	}
+	
+	/**
+	 * Retrieves all information into a serializable object.
+	 * 
+	 * @param uri
+	 *            URI.
+	 * @param revision
+	 *            Revision. 0 means latest revision.
+	 * @return A DataSet object.
+	 * @throws CollaborillaException
+	 */
+	public CollaborillaDataSet getDataSet(String uri, int revision) throws CollaborillaException {
+		String strRev = Integer.toString(revision);
+		
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
+				+ encodeURI(uri) + " " + strRev);
+		
+		String xml = new String();
+		for (int i = 0; i < resp.responseData.length; i++) {
+			xml += resp.responseData[i];
+
+			if (i < (resp.responseData.length - 1)) {
+				xml += Configuration.LINEFEED;
 			}
 		}
 
@@ -641,7 +684,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getTimestampCreated()
 	 */
 	public Date getTimestampCreated() throws CollaborillaException {
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_INTERNAL_TIMESTAMP_CREATED);
 
 		return LDAPStringHelper.parseTimestamp(resp.responseData[0]);
@@ -651,7 +694,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getTimestampCreated()
 	 */
 	public Date getTimestampModified() throws CollaborillaException {
-		ResponseMessage resp = this.sendRequest(ServiceCommands.CMD_GET + " "
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
 				+ ServiceCommands.ATTR_INTERNAL_TIMESTAMP_MODIFIED);
 
 		return LDAPStringHelper.parseTimestamp(resp.responseData[0]);

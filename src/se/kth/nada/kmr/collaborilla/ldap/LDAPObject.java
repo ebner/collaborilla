@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 
+import se.kth.nada.kmr.collaborilla.util.Configuration;
+
 import com.novell.ldap.LDAPAttribute;
 import com.novell.ldap.LDAPAttributeSet;
 import com.novell.ldap.LDAPEntry;
@@ -493,7 +495,7 @@ public class LDAPObject implements Cloneable {
 	 */
 	public String exportEntryLdif(String dn, boolean encodeBase64) throws LDAPException {
 		/* build the whole DN */
-		StringBuffer entryLdif = new StringBuffer().append("dn:" + dn + "\n");
+		StringBuffer entryLdif = new StringBuffer().append("dn:" + dn + Configuration.LINEFEED);
 
 		this.ldapAccess.checkConnection();
 
@@ -534,7 +536,7 @@ public class LDAPObject implements Cloneable {
 					entryLdif.append(attributeName + ": " + attributeValue);
 
 					if (allAttributes.hasNext() || allValues.hasMoreElements()) {
-						entryLdif.append("\n");
+						entryLdif.append(Configuration.LINEFEED);
 					}
 				}
 			}

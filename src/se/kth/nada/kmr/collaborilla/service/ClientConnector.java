@@ -16,6 +16,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 import se.kth.nada.kmr.collaborilla.ldap.LDAPAccess;
+import se.kth.nada.kmr.collaborilla.util.Configuration;
 import se.kth.nada.kmr.collaborilla.util.InfoMessage;
 
 import com.novell.ldap.LDAPException;
@@ -73,14 +74,17 @@ public class ClientConnector implements Runnable {
 		this.serverDN = serverDN;
 		this.verbose = verbose;
 
-		this.clientIP = this.serverSocket.getInetAddress().getHostAddress();
+		clientIP = serverSocket.getInetAddress().getHostAddress();
+		
+		if (verbose) {
+			log.writeLog(clientIP, "Client connected");
+			log.writeLog("CollaborillaService", "Active clients: " + incClientCount());
+		}
 
 		// Non-shared connection:
 		// We create a new connection with the LDAP server.
 		// TODO replace this with a connection manager/connection pool.
 		this.ldapConnection = new LDAPAccess(ldapHostname, ldapLoginDN, ldapPassword);
-
-		incClientCount();
 	}
 
 	/**
@@ -97,11 +101,6 @@ public class ClientConnector implements Runnable {
 		BufferedWriter out = null;
 
 		try {
-			if (verbose) {
-				log.writeLog(clientIP, "Client connected");
-				log.writeLog("CollaborillaService", "Active clients: " + getClientCount());
-			}
-
 			// setup reader and writer
 			in = new BufferedReader(new InputStreamReader(new BufferedInputStream(serverSocket.getInputStream())));
 			writer = new OutputStreamWriter(serverSocket.getOutputStream(), "UTF-8");
@@ -121,7 +120,7 @@ public class ClientConnector implements Runnable {
 
 				// check whether client wants to quit the connection
 				if (request.equalsIgnoreCase(ServiceCommands.CMD_QUIT)) {
-					out.write(Status.getMessage(Status.SC_CLIENT_DISCONNECT) + "\r\n");
+					out.write(Status.getMessage(Status.SC_CLIENT_DISCONNECT) + Configuration.LINEFEED);
 					break;
 				}
 
@@ -132,7 +131,7 @@ public class ClientConnector implements Runnable {
 				if (response.responseData != null) {
 					for (int i = 0; i < response.responseData.length; i++) {
 						if (response.responseData[i] != null) {
-							out.write(response.responseData[i] + "\r\n");
+							out.write(response.responseData[i] + Configuration.LINEFEED);
 						}
 					}
 				}
@@ -140,16 +139,20 @@ public class ClientConnector implements Runnable {
 				statusMessage = Status.getMessage(response.statusCode);
 
 				// write the status message
-				out.write(statusMessage + "\r\n");
+				out.write(statusMessage + Configuration.LINEFEED);
 				out.flush();
 
 				if (verbose) {
 					log.writeLog(clientIP, "< " + statusMessage);
 				}
+				
+				if (!protocol.hasCollaborillaObject()) {
+					break;
+				}
 			}
 		} catch (SocketTimeoutException ste) {
 			try {
-				out.write(Status.getMessage(Status.SC_CLIENT_TIMEOUT) + "\r\n");
+				out.write(Status.getMessage(Status.SC_CLIENT_TIMEOUT) + Configuration.LINEFEED);
 			} catch (IOException e) {
 				log.writeLog(clientIP, e.getMessage());
 			}
@@ -180,11 +183,9 @@ public class ClientConnector implements Runnable {
 				log.writeLog(clientIP, ldape.getMessage());
 			}
 
-			decClientCount();
-
 			if (verbose) {
 				log.writeLog(clientIP, "Client disconnected");
-				log.writeLog("CollaborillaService", "Active clients: " + getClientCount());
+				log.writeLog("CollaborillaService", "Active clients: " + decClientCount());
 			}
 		}
 	}
@@ -197,20 +198,24 @@ public class ClientConnector implements Runnable {
 	}
 
 	/**
-	 * Increases client counter.
+	 * Increases client counter and returns the new value.
+	 *
+	 * @return Amount of connected clients.
 	 */
-	private static void incClientCount() {
+	private static int incClientCount() {
 		synchronized (mutex) {
-			clientCount++;
+			return ++clientCount;
 		}
 	}
 
 	/**
-	 * Decreases the client counter.
+	 * Decreases the client counter and returns the new value.
+	 * 
+	 * @return Amount of connected clients.
 	 */
-	private static void decClientCount() {
+	private static int decClientCount() {
 		synchronized (mutex) {
-			clientCount--;
+			return --clientCount;
 		}
 	}
 

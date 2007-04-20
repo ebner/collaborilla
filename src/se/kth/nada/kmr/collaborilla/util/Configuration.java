@@ -21,6 +21,8 @@ import java.util.Properties;
  * @see java.util.Properties
  */
 public class Configuration {
+	
+	public static String LINEFEED = "\n";
 
 	private Properties properties = new Properties();
 

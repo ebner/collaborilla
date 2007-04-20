@@ -6,11 +6,15 @@
 
 package se.kth.nada.kmr.collaborilla.service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.StringTokenizer;
 
 import se.kth.nada.kmr.collaborilla.client.CollaborillaDataSet;
 import se.kth.nada.kmr.collaborilla.ldap.CollaborillaObject;
 import se.kth.nada.kmr.collaborilla.ldap.LDAPAccess;
+import se.kth.nada.kmr.collaborilla.ldap.LDAPStringHelper;
+import se.kth.nada.kmr.collaborilla.util.Configuration;
 import se.kth.nada.kmr.collaborilla.util.InfoMessage;
 
 import com.novell.ldap.LDAPException;
@@ -33,6 +37,7 @@ public class CommandHandler {
 	private InfoMessage log = InfoMessage.getInstance();
 
 	private String availableCommands = "HLP                                \n"
+			+ "GET <uri> <rev nr> \n"
 			+ "URI <uri>                          \n" + "URI NEW <uri>                      \n\n"
 			+ "GET REVISIONCOUNT                  \n" + "GET REVISION                       \n"
 			+ "SET REVISION <rev nr>              \n" + "GET REVISIONINFO <rev nr>          \n"
@@ -102,10 +107,16 @@ public class CommandHandler {
 				return this.handleUri(command[1]);
 			}
 		}
+		
+		if ((collabObject == null) && command[0].equalsIgnoreCase(ServiceCommands.CMD_GET)) {
+			if (paramCount == 3) {
+				return handelGetUriRevision(command[1], command[2]);
+			}
+		}
 
 		/*
-		 * if the command was not URI and the LDAP object does not exist we
-		 * return an error
+		 * if the command was not URI or a GET (with URI and revision) and the
+		 * LDAP object does not exist we return an error
 		 */
 		if (collabObject == null) {
 			return new ResponseMessage(Status.SC_BAD_REQUEST);
@@ -264,16 +275,37 @@ public class CommandHandler {
 		/* if nothing matches we got a bad request */
 		return new ResponseMessage(Status.SC_BAD_REQUEST);
 	}
+	
+	public boolean hasCollaborillaObject() {
+		return (collabObject != null);
+	}
+	
+	private String decodeURL(String uri) {
+		try {
+			return URLDecoder.decode(uri, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return uri;
+		}
+	}
 
 	/*
 	 * command handling follows, method names are self-explaining
 	 */
-
-	private ResponseMessage handleUri(String uri) {
+	
+	private ResponseMessage handelGetUriRevision(String uri, String revision) {
+		String result;
+		
 		try {
-			this.collabObject = new CollaborillaObject(this.ldapConnection, this.serverDN, uri, false);
-
-			return new ResponseMessage(Status.SC_OK);
+			int rev = Integer.parseInt(revision);
+			collabObject = new CollaborillaObject(ldapConnection, serverDN, decodeURL(uri), false);
+			if (rev > 0) {
+				collabObject.setRevision(rev);
+			}
+			CollaborillaDataSet dataSet = collabObject.getDataSet();
+			collabObject = null; // we don't want this object to persist
+			result = dataSet.toXML();
+		} catch (NumberFormatException nfe) {
+			return new ResponseMessage(Status.SC_BAD_REQUEST);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_OBJECT) {
 				return new ResponseMessage(Status.SC_NO_SUCH_OBJECT);
@@ -282,30 +314,47 @@ public class CommandHandler {
 			this.log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
+		
+		return new ResponseMessage(Status.SC_OK, result);
+	}
+
+	private ResponseMessage handleUri(String uri) {
+		try {
+			collabObject = new CollaborillaObject(ldapConnection, serverDN, decodeURL(uri), false);
+
+			return new ResponseMessage(Status.SC_OK);
+		} catch (LDAPException e) {
+			if (e.getResultCode() == LDAPException.NO_SUCH_OBJECT) {
+				return new ResponseMessage(Status.SC_NO_SUCH_OBJECT);
+			}
+
+			log.write(e.toString());
+			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
+		}
 	}
 
 	private ResponseMessage handleNewUri(String uri) {
 		try {
-			this.collabObject = new CollaborillaObject(this.ldapConnection, this.serverDN, uri, true);
+			collabObject = new CollaborillaObject(ldapConnection, serverDN, decodeURL(uri), true);
 
 			return new ResponseMessage(Status.SC_OK);
 		} catch (LDAPException e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 	}
 
 	private ResponseMessage handleHelp() {
-		return new ResponseMessage(Status.SC_OK, this.availableCommands);
+		return new ResponseMessage(Status.SC_OK, availableCommands);
 	}
 
 	private ResponseMessage handleGetRequiredContainers() {
 		String[] uris;
 
 		try {
-			uris = this.collabObject.getRequiredContainers();
+			uris = collabObject.getRequiredContainers();
 		} catch (LDAPException e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -318,7 +367,7 @@ public class CommandHandler {
 			if (i == (uris.length - 1)) {
 				result += uris[i];
 			} else {
-				result += uris[i] + "\n";
+				result += uris[i] + Configuration.LINEFEED;
 			}
 		}
 
@@ -329,9 +378,9 @@ public class CommandHandler {
 		String[] uris;
 
 		try {
-			uris = this.collabObject.getOptionalContainers();
+			uris = collabObject.getOptionalContainers();
 		} catch (LDAPException e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -344,7 +393,7 @@ public class CommandHandler {
 			if (i == (uris.length - 1)) {
 				result += uris[i];
 			} else {
-				result += uris[i] + "\n";
+				result += uris[i] + Configuration.LINEFEED;
 			}
 		}
 
@@ -355,9 +404,9 @@ public class CommandHandler {
 		String[] urls;
 
 		try {
-			urls = this.collabObject.getLocation();
+			urls = collabObject.getLocation();
 		} catch (LDAPException e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -370,7 +419,7 @@ public class CommandHandler {
 			if (i == (urls.length - 1)) {
 				result += urls[i];
 			} else {
-				result += urls[i] + "\n";
+				result += urls[i] + Configuration.LINEFEED;
 			}
 		}
 
@@ -381,7 +430,7 @@ public class CommandHandler {
 		String[] urls;
 
 		try {
-			urls = this.collabObject.getAlignedLocation();
+			urls = collabObject.getAlignedLocation();
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
@@ -400,7 +449,7 @@ public class CommandHandler {
 			if (i == (urls.length - 1)) {
 				result += urls[i];
 			} else {
-				result += urls[i] + "\n";
+				result += urls[i] + Configuration.LINEFEED;
 			}
 		}
 
@@ -411,9 +460,9 @@ public class CommandHandler {
 		String result;
 
 		try {
-			result = this.collabObject.getDescription();
+			result = collabObject.getDescription();
 		} catch (Exception e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -428,9 +477,9 @@ public class CommandHandler {
 		String result;
 
 		try {
-			result = this.collabObject.getType();
+			result = collabObject.getType();
 		} catch (Exception e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -445,9 +494,9 @@ public class CommandHandler {
 		String result;
 
 		try {
-			result = this.collabObject.getLdif();
+			result = collabObject.getLdif();
 		} catch (LDAPException e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -458,10 +507,10 @@ public class CommandHandler {
 		String result;
 		
 		try {
-			CollaborillaDataSet dataSet = this.collabObject.getDataSet();
+			CollaborillaDataSet dataSet = collabObject.getDataSet();
 			result = dataSet.toXML();
 		} catch (LDAPException e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 		
@@ -472,9 +521,9 @@ public class CommandHandler {
 		String result;
 
 		try {
-			result = this.collabObject.getMetaData();
+			result = collabObject.getMetaData();
 		} catch (LDAPException e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -489,9 +538,9 @@ public class CommandHandler {
 		String result;
 
 		try {
-			result = this.collabObject.getContainerRevision();
+			result = collabObject.getContainerRevision();
 		} catch (Exception e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -506,9 +555,9 @@ public class CommandHandler {
 		String result;
 
 		try {
-			result = String.valueOf(this.collabObject.getRevision());
+			result = String.valueOf(collabObject.getRevision());
 		} catch (Exception e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -519,9 +568,9 @@ public class CommandHandler {
 		String result;
 
 		try {
-			result = String.valueOf(this.collabObject.getRevisionCount());
+			result = String.valueOf(collabObject.getRevisionCount());
 		} catch (Exception e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -532,13 +581,13 @@ public class CommandHandler {
 		String result;
 
 		try {
-			result = this.collabObject.getRevisionInfo(Integer.parseInt(rev));
+			result = collabObject.getRevisionInfo(Integer.parseInt(rev));
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_OBJECT) {
 				return new ResponseMessage(Status.SC_NO_SUCH_OBJECT);
 			}
 
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -552,9 +601,9 @@ public class CommandHandler {
 	private ResponseMessage handleSetRevision(String strRevision) {
 		try {
 			int rev = Integer.parseInt(strRevision);
-			this.collabObject.setRevision(rev);
+			collabObject.setRevision(rev);
 		} catch (NumberFormatException e) {
-			/* we didn't get an integer */
+			// We didn't get an integer
 			return new ResponseMessage(Status.SC_BAD_REQUEST);
 		} catch (LDAPException le) {
 			if (le.getResultCode() == LDAPException.NO_SUCH_OBJECT) {
@@ -565,7 +614,7 @@ public class CommandHandler {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(le.toString());
+			log.write(le.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -574,13 +623,13 @@ public class CommandHandler {
 
 	private ResponseMessage handleSetDescription(String description) {
 		try {
-			this.collabObject.setDescription(description);
+			collabObject.setDescription(LDAPStringHelper.decode(description));
 		} catch (LDAPException le) {
 			if (le.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(le.toString());
+			log.write(le.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -589,13 +638,13 @@ public class CommandHandler {
 	
 	private ResponseMessage handleSetType(String type) {
 		try {
-			this.collabObject.setType(type);
+			collabObject.setType(LDAPStringHelper.decode(type));
 		} catch (LDAPException le) {
 			if (le.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(le.toString());
+			log.write(le.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -604,13 +653,13 @@ public class CommandHandler {
 
 	private ResponseMessage handleSetMetaData(String rdfInfo) {
 		try {
-			this.collabObject.setMetaData(rdfInfo);
+			collabObject.setMetaData(LDAPStringHelper.decode(rdfInfo));
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -619,13 +668,13 @@ public class CommandHandler {
 
 	private ResponseMessage handleSetContainerRevision(String containerRevision) {
 		try {
-			this.collabObject.setContainerRevision(containerRevision);
+			collabObject.setContainerRevision(containerRevision);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -634,9 +683,9 @@ public class CommandHandler {
 
 	private ResponseMessage handleAddRevision() {
 		try {
-			this.collabObject.createRevision();
+			collabObject.createRevision();
 		} catch (LDAPException e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -645,7 +694,7 @@ public class CommandHandler {
 
 	private ResponseMessage handleAddRequiredContainer(String uri) {
 		try {
-			this.collabObject.addRequiredContainer(uri);
+			collabObject.addRequiredContainer(uri);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.ATTRIBUTE_OR_VALUE_EXISTS) {
 				return new ResponseMessage(Status.SC_ATTRIBUTE_OR_VALUE_EXISTS);
@@ -655,7 +704,7 @@ public class CommandHandler {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -664,7 +713,7 @@ public class CommandHandler {
 
 	private ResponseMessage handleAddOptionalContainer(String uri) {
 		try {
-			this.collabObject.addOptionalContainer(uri);
+			collabObject.addOptionalContainer(uri);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.ATTRIBUTE_OR_VALUE_EXISTS) {
 				return new ResponseMessage(Status.SC_ATTRIBUTE_OR_VALUE_EXISTS);
@@ -674,7 +723,7 @@ public class CommandHandler {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -683,7 +732,7 @@ public class CommandHandler {
 
 	private ResponseMessage handleAddLocation(String url) {
 		try {
-			this.collabObject.addLocation(url);
+			collabObject.addLocation(url);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.ATTRIBUTE_OR_VALUE_EXISTS) {
 				return new ResponseMessage(Status.SC_ATTRIBUTE_OR_VALUE_EXISTS);
@@ -693,7 +742,7 @@ public class CommandHandler {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -703,7 +752,7 @@ public class CommandHandler {
 	private ResponseMessage handleRestoreRevision(String strRevision) {
 		try {
 			int rev = Integer.parseInt(strRevision);
-			this.collabObject.restoreRevision(rev);
+			collabObject.restoreRevision(rev);
 		} catch (NumberFormatException e) {
 			/* we didn't get an integer */
 			return new ResponseMessage(Status.SC_BAD_REQUEST);
@@ -712,7 +761,7 @@ public class CommandHandler {
 				return new ResponseMessage(Status.SC_NO_SUCH_OBJECT);
 			}
 
-			this.log.write(le.toString());
+			log.write(le.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -721,7 +770,7 @@ public class CommandHandler {
 
 	private ResponseMessage handleDelLocation(String url) {
 		try {
-			this.collabObject.removeLocation(url);
+			collabObject.removeLocation(url);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
@@ -731,7 +780,7 @@ public class CommandHandler {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -740,7 +789,7 @@ public class CommandHandler {
 
 	private ResponseMessage handleDelRequiredContainer(String uri) {
 		try {
-			this.collabObject.removeRequiredContainer(uri);
+			collabObject.removeRequiredContainer(uri);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
@@ -750,7 +799,7 @@ public class CommandHandler {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -759,7 +808,7 @@ public class CommandHandler {
 
 	private ResponseMessage handleDelOptionalContainer(String uri) {
 		try {
-			this.collabObject.removeOptionalContainer(uri);
+			collabObject.removeOptionalContainer(uri);
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
@@ -769,7 +818,7 @@ public class CommandHandler {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -778,7 +827,7 @@ public class CommandHandler {
 
 	private ResponseMessage handleDelMetaData() {
 		try {
-			this.collabObject.removeMetaData();
+			collabObject.removeMetaData();
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
@@ -788,7 +837,7 @@ public class CommandHandler {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -797,7 +846,7 @@ public class CommandHandler {
 
 	private ResponseMessage handleDelDescription() {
 		try {
-			this.collabObject.removeDescription();
+			collabObject.removeDescription();
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
@@ -806,8 +855,8 @@ public class CommandHandler {
 			if (e.getResultCode() == LDAPException.UNWILLING_TO_PERFORM) {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
-
-			this.log.write(e.toString());
+			
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -816,7 +865,7 @@ public class CommandHandler {
 	
 	private ResponseMessage handleDelType() {
 		try {
-			this.collabObject.removeType();
+			collabObject.removeType();
 		} catch (LDAPException e) {
 			if (e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE) {
 				return new ResponseMessage(Status.SC_NO_SUCH_ATTRIBUTE);
@@ -826,7 +875,7 @@ public class CommandHandler {
 				return new ResponseMessage(Status.SC_REVISION_NOT_EDITABLE);
 			}
 
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -837,9 +886,9 @@ public class CommandHandler {
 		String result = null;
 
 		try {
-			result = this.collabObject.getTimestampCreatedAsString();
+			result = collabObject.getTimestampCreatedAsString();
 		} catch (LDAPException e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
@@ -854,9 +903,9 @@ public class CommandHandler {
 		String result = null;
 
 		try {
-			result = this.collabObject.getTimestampModifiedAsString();
+			result = collabObject.getTimestampModifiedAsString();
 		} catch (LDAPException e) {
-			this.log.write(e.toString());
+			log.write(e.toString());
 			return new ResponseMessage(Status.SC_INTERNAL_ERROR);
 		}
 
