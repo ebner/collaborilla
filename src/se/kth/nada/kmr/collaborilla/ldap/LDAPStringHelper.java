@@ -38,7 +38,7 @@ public class LDAPStringHelper {
 
 	private static final int ENCODING_ESCAPE = 2;
 
-	private static final int ENCODING = ENCODING_ESCAPE;
+	private static final int ENCODING = ENCODING_BASE64;
 
 	/*
 	 * Constructors
@@ -344,7 +344,9 @@ public class LDAPStringHelper {
 		}
 		switch (ENCODING) {
 		case ENCODING_BASE64:
-			return Base64.encode(input.getBytes());
+			String encodedString = Base64.encode(input.getBytes());
+			String escapedString = encodedString.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r");
+			return escapedString;
 		case ENCODING_ESCAPE:
 			return input.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r");
 		default:
@@ -366,7 +368,9 @@ public class LDAPStringHelper {
 		}
 		switch (ENCODING) {
 		case ENCODING_BASE64:
-			return new String(Base64.decode(input));
+			String unescapedString = input.replaceAll("\\\\n", "\n").replaceAll("\\\\r", "\r");
+			String decodedString = new String(Base64.decode(unescapedString));
+			return decodedString;
 		case ENCODING_ESCAPE:
 			return input.replaceAll("\\\\n", "\n").replaceAll("\\\\r", "\r");
 		default:
