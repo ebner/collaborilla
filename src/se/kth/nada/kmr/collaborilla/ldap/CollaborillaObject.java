@@ -817,7 +817,8 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 		}
 		
 		try {
-			data.setMetaData(LDAPStringHelper.decode(getMetaData()));
+			//data.setMetaData(LDAPStringHelper.decode(getMetaData()));
+			data.setMetaData(getMetaData());
 		} catch (LDAPException e) {
 			if (!(e.getResultCode() == LDAPException.NO_SUCH_ATTRIBUTE)) {
 				throw e;
