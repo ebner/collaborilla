@@ -369,7 +369,7 @@ public class LDAPObject implements Cloneable {
 		 */
 
 		/* add new CN */
-		attributeSet.add(new LDAPAttribute(entryAttributeType, LDAPStringHelper.dnToEntryID(destDN)));
+		attributeSet.add(new LDAPAttribute(entryAttributeType, LDAPStringHelper.dnToEntryID(destDN).getBytes()));
 
 		/* create new entry and add it to the directory */
 		LDAPEntry newEntry = new LDAPEntry(destDN, attributeSet);
@@ -457,8 +457,8 @@ public class LDAPObject implements Cloneable {
 		LDAPAttributeSet attributeSet = new LDAPAttributeSet();
 
 		/* add the necessary fields */
-		attributeSet.add(new LDAPAttribute("objectclass", entryObjectClass));
-		attributeSet.add(new LDAPAttribute(entryIDField, entryIDValue));
+		attributeSet.add(new LDAPAttribute("objectclass", entryObjectClass.getBytes()));
+		attributeSet.add(new LDAPAttribute(entryIDField, entryIDValue.getBytes()));
 
 		/* build the DN of the new entry */
 		String dn = entryIDField + "=" + entryIDValue + "," + containerPath;
@@ -695,7 +695,7 @@ public class LDAPObject implements Cloneable {
 	 */
 	public void addAttribute(String dn, String attrType, String attrValue) throws LDAPException {
 		/* build a new attribute */
-		LDAPAttribute attribute = new LDAPAttribute(attrType, attrValue);
+		LDAPAttribute attribute = new LDAPAttribute(attrType, attrValue.getBytes());
 
 		/* build a new modification */
 		LDAPModification modification = new LDAPModification(LDAPModification.ADD, attribute);
@@ -739,7 +739,7 @@ public class LDAPObject implements Cloneable {
 		if (attrValue == null) {
 			attribute = new LDAPAttribute(attrType);
 		} else {
-			attribute = new LDAPAttribute(attrType, attrValue);
+			attribute = new LDAPAttribute(attrType, attrValue.getBytes());
 		}
 
 		/* build a new modification */
@@ -863,7 +863,7 @@ public class LDAPObject implements Cloneable {
 		this.ldapAccess.checkConnection();
 
 		/* build an attribute */
-		LDAPAttribute attr = new LDAPAttribute(attrType, newValue);
+		LDAPAttribute attr = new LDAPAttribute(attrType, newValue.getBytes());
 
 		/* build a modification with the attribute */
 		LDAPModification modification = new LDAPModification(LDAPModification.REPLACE, attr);
