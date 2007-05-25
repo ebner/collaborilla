@@ -339,6 +339,9 @@ public class LDAPStringHelper {
 	 * @return Encoded string.
 	 */
 	public static String encode(String input) {
+		if (input == null) {
+			return null;
+		}
 		switch (ENCODING) {
 		case ENCODING_BASE64:
 			return Base64.encode(input.getBytes());
@@ -358,6 +361,9 @@ public class LDAPStringHelper {
 	 * @return Decoded string.
 	 */
 	public static String decode(String input) {
+		if (input == null) {
+			return null;
+		}
 		switch (ENCODING) {
 		case ENCODING_BASE64:
 			return new String(Base64.decode(input));
