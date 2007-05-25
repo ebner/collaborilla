@@ -34,11 +34,15 @@ public class LDAPStringHelper {
 
 	private String root = null;
 
+	/**
+	 * Using Base64 requires JLDAP to be in the classpath. It is in the package
+	 * com.novell.ldap.util.Base64.
+	 */
 	private static final int ENCODING_BASE64 = 1;
 
 	private static final int ENCODING_ESCAPE = 2;
 
-	private static final int ENCODING = ENCODING_BASE64;
+	private static final int ENCODING = ENCODING_ESCAPE;
 
 	/*
 	 * Constructors
