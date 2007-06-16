@@ -171,7 +171,9 @@ public class CollaborillaService {
 
 				// Set a timeout on the connection
 				server.setSoTimeout(clientTimeOut);
-				log.writeLog(applicationName, "Client connection timeout set to " + clientTimeOut);
+				if (verbose) {
+					log.writeLog(applicationName, "Client connection timeout set to " + clientTimeOut);
+				}
 
 				// Create a communication object (thread)
 				ClientConnector clientConnection = new ClientConnector(server, ldapServerDN, ldapHostname, ldapLoginDN,
