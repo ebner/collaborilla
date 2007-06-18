@@ -660,7 +660,7 @@ public class LDAPObject implements Cloneable {
 		/* we try to read the values */
 		LDAPAttribute ldapAttribute = ldapAttributeSet.getAttribute(attribute);
 
-		/* if we didn't a single value we return with null */
+		/* if we didn't get a single value we return with null */
 		if (ldapAttribute == null) {
 			return null;
 		}
