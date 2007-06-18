@@ -103,6 +103,9 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 					break;
 				}
 			}
+			
+			// make sure we get UTF-8
+			result = new String(result.getBytes(), "UTF-8");
 
 			answer = parseResponse(result);
 		} catch (SocketTimeoutException ste) {
