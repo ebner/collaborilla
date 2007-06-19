@@ -16,8 +16,8 @@ Copyright (c) 2006-2007
 Knowledge Management Research Group (http://kmr.nada.kth.se)
 Royal Institute of Technology (KTH), Sweden
 
-Collaborilla is licensed under the GNU GPL. For full terms see the
-file LICENSE.
+Collaborilla is licensed under the GNU LESSER GENERAL PUBLIC LICENSE.
+For full terms see the file LICENSE.
 
 Collaborilla makes use of JLDAP (LDAP Classes for Java), which
 provides functionality to write applications that access, manage, and
@@ -51,7 +51,8 @@ The repository is structured into
   Mostly releases, tagged with date and version number.
   
 - branches
-  Currently not used.
+  Stable branches, created after a new stable version has been
+  released.
   
 ----- Tarballs -------------------------------------------------------
 
