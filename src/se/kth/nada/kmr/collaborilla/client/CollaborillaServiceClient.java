@@ -12,11 +12,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashSet;
@@ -164,14 +162,6 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 			}
 		} else {
 			throw new CollaborillaException(Status.SC_UNKNOWN);
-		}
-	}
-	
-	private String encodeURI(String uri) {
-		try {
-			return URLEncoder.encode(uri, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			return uri;
 		}
 	}
 
@@ -668,8 +658,7 @@ public final class CollaborillaServiceClient implements CollaborillaStatefulClie
 	public CollaborillaDataSet getDataSet(String uri, int revision) throws CollaborillaException {
 		String strRev = Integer.toString(revision);
 		
-		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " "
-				+ encodeURI(uri) + " " + strRev);
+		ResponseMessage resp = sendRequest(ServiceCommands.CMD_GET + " " + uri + " " + strRev);
 		
 		String xml = new String();
 		for (int i = 0; i < resp.responseData.length; i++) {

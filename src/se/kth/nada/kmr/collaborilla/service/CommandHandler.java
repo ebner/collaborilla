@@ -7,7 +7,8 @@
 package se.kth.nada.kmr.collaborilla.service;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.StringTokenizer;
 
 import se.kth.nada.kmr.collaborilla.client.CollaborillaDataSet;
@@ -100,17 +101,18 @@ public class CommandHandler {
 		/* commands which start with URI */
 		if (command[0].equalsIgnoreCase(ServiceCommands.CMD_URI)) {
 			if ((paramCount >= 3) && command[1].equalsIgnoreCase(ServiceCommands.CMD_URI_NEW)) {
-				return this.handleNewUri(command[2]);
+				
+				return this.handleNewUri(encodeURI(command[2]));
 			}
 
 			if (paramCount >= 2) {
-				return this.handleUri(command[1]);
+				return this.handleUri(encodeURI(command[1]));
 			}
 		}
 		
 		if ((collabObject == null) && command[0].equalsIgnoreCase(ServiceCommands.CMD_GET)) {
 			if (paramCount == 3) {
-				return handelGetUriRevision(command[1], command[2]);
+				return handelGetUriRevision(encodeURI(command[1]), command[2]);
 			}
 		}
 
@@ -280,12 +282,22 @@ public class CommandHandler {
 		return (collabObject != null);
 	}
 	
-	private String decodeURL(String uri) {
+	private String encodeURI(String uri) {
+		String result = null;
+		
 		try {
-			return URLDecoder.decode(uri, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+			// We make sure that we get UTF-8
+			uri = new String(uri.getBytes(), "UTF-8");
+			result = new URI(uri).toASCIIString();
+		} catch (URISyntaxException urise) {
+			log.write(urise.toString());
+			return uri;
+		} catch (UnsupportedEncodingException uee) {
+			log.write(uee.toString());
 			return uri;
 		}
+		
+		return result;
 	}
 
 	/*
@@ -297,7 +309,7 @@ public class CommandHandler {
 		
 		try {
 			int rev = Integer.parseInt(revision);
-			collabObject = new CollaborillaObject(ldapConnection, serverDN, decodeURL(uri), false);
+			collabObject = new CollaborillaObject(ldapConnection, serverDN, uri, false);
 			if (rev > 0) {
 				collabObject.setRevision(rev);
 			}
@@ -320,7 +332,7 @@ public class CommandHandler {
 
 	private ResponseMessage handleUri(String uri) {
 		try {
-			collabObject = new CollaborillaObject(ldapConnection, serverDN, decodeURL(uri), false);
+			collabObject = new CollaborillaObject(ldapConnection, serverDN, uri, false);
 
 			return new ResponseMessage(Status.SC_OK);
 		} catch (LDAPException e) {
@@ -335,7 +347,7 @@ public class CommandHandler {
 
 	private ResponseMessage handleNewUri(String uri) {
 		try {
-			collabObject = new CollaborillaObject(ldapConnection, serverDN, decodeURL(uri), true);
+			collabObject = new CollaborillaObject(ldapConnection, serverDN, uri, true);
 
 			return new ResponseMessage(Status.SC_OK);
 		} catch (LDAPException e) {
