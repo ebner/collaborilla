@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 
 import com.novell.ldap.util.Base64;
 
@@ -394,6 +395,7 @@ public class LDAPStringHelper {
 
 		// Setup a generalized X.208 date/time formatter
 		DateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss'Z'");
+		formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		try {
 			// parse UTC into Date
