@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------
 README                                            Collaborilla project
 ----------------------------------------------------------------------
-The collaborative framework Conzilla has been developed to enhance the
+The collaborative framework Collaborilla has been developed to enhance the
 concept browser Conzilla with facilities to enable collaboration.
 Collaborilla is generically designed and may also be used within other
 projects.
@@ -27,7 +27,7 @@ Public License". For full terms see the file LICENSE_OPENLDAP.
 
 ----- Author ---------------------------------------------------------
 
-Hannes Ebner <hebner@nada.kth.se>
+Hannes Ebner <hebner@csc.kth.se>
 
 ----- Changelog ------------------------------------------------------
 
