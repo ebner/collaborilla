@@ -40,17 +40,7 @@ public interface CollaborillaStatelessClient {
 	CollaborillaDataSet get(URI uri, int revision);
 
 	/**
-	 * Create a new entry in the information entry.
-	 * 
-	 * @param uri
-	 *            URI of the entry.
-	 * @param dataSet
-	 *            Dataset to be stored.
-	 */
-	void post(URI uri, CollaborillaDataSet dataSet);
-
-	/**
-	 * Update an already existing entry.
+	 * Update or create an entry.
 	 * 
 	 * A rollback of an entry to an earlier revision can be done by requesting a
 	 * revision with a get() operation and storing it again with put(). This
@@ -61,7 +51,7 @@ public interface CollaborillaStatelessClient {
 	 * @param dataSet
 	 *            Dataset to be stored.
 	 */
-	void put(URI uri, CollaborillaDataSet dataSet);
+	boolean put(URI uri, CollaborillaDataSet dataSet);
 
 	/**
 	 * Already published information cannot be removed from the directory, it

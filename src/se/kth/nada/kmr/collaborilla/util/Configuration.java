@@ -22,6 +22,8 @@ import java.util.Properties;
  */
 public class Configuration {
 	
+	public static String APPVERSION = "1.1";
+	
 	public static String LINEFEED = "\n";
 
 	private Properties properties = new Properties();

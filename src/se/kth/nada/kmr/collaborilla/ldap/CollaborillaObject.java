@@ -6,6 +6,8 @@
 
 package se.kth.nada.kmr.collaborilla.ldap;
 
+import java.util.Iterator;
+
 import se.kth.nada.kmr.collaborilla.client.CollaborillaDataSet;
 
 import com.novell.ldap.LDAPConnection;
@@ -877,4 +879,89 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 		
 		return data;
 	}
+
+	/**
+	 * Sets all relevant fields in the directory with the values of a given dataset.
+	 * 
+	 * @param dataset A Collaborilla dataset.
+	 * @throws LDAPException
+	 */
+	public void setDataSet(CollaborillaDataSet dataset) throws LDAPException {
+		if (dataset == null) {
+			throw new IllegalArgumentException("Dataset must not be null");
+		}
+		
+		if (!getAccessUri().equals(dataset.getIdentifier())) {
+			if (dataset.getIdentifier() != null) {
+				setAccessUri(dataset.getIdentifier());
+			} else {
+				throw new IllegalArgumentException("Identifier must not be null");
+			}
+		}
+		
+		// save the old data
+		createRevision();
+		
+		// remove (almost) everything
+		removeAllAttributes();
+		
+		if (dataset.getContainerRevision() != null) {
+			setContainerRevision(dataset.getContainerRevision());
+		}
+		
+		if (dataset.getDescription() != null) {
+			setDescription(dataset.getDescription());
+		}
+		
+		if (dataset.getLocations() != null) {
+			Iterator it = dataset.getLocations().iterator();
+			while (it.hasNext()) {
+				String location = (String) it.next();
+				try {
+					addLocation(location);
+				} catch (LDAPException e) {
+					if (!(e.getResultCode() == LDAPException.ATTRIBUTE_OR_VALUE_EXISTS)) {
+						throw e;
+					}
+				}
+			}
+		}
+		
+		if (dataset.getMetaData() != null) {
+			setMetaData(dataset.getMetaData());
+		}
+		
+		if (dataset.getRequiredContainers() != null) {
+			Iterator it = dataset.getRequiredContainers().iterator();
+			while (it.hasNext()) {
+				String container = (String) it.next();
+				try {
+					addRequiredContainer(container);
+				} catch (LDAPException e) {
+					if (!(e.getResultCode() == LDAPException.ATTRIBUTE_OR_VALUE_EXISTS)) {
+						throw e;
+					}
+				}
+			}
+		}
+		
+		if (dataset.getOptionalContainers() != null) {
+			Iterator it = dataset.getOptionalContainers().iterator();
+			while (it.hasNext()) {
+				String container = (String) it.next();
+				try {
+					addOptionalContainer(container);
+				} catch (LDAPException e) {
+					if (!(e.getResultCode() == LDAPException.ATTRIBUTE_OR_VALUE_EXISTS)) {
+						throw e;
+					}
+				}
+			}
+		}
+		
+		if (dataset.getType() != null) {
+			setType(dataset.getType());
+		}
+	}
+
 }

@@ -14,6 +14,8 @@ import java.net.URI;
  * 
  * @author Hannes Ebner
  * @version $Id$
+ * 
+ * @deprecated Use CollaborillaRestClient instead
  */
 public class CollaborillaStatelessServiceClient implements CollaborillaStatelessClient {
 	
@@ -56,17 +58,9 @@ public class CollaborillaStatelessServiceClient implements CollaborillaStateless
 	}
 
 	/**
-	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatelessClient#post(java.net.URI, se.kth.nada.kmr.collaborilla.client.CollaborillaDataSet)
-	 */
-	public void post(URI uri, CollaborillaDataSet dataSet) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
-	}
-
-	/**
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatelessClient#put(java.net.URI, se.kth.nada.kmr.collaborilla.client.CollaborillaDataSet)
 	 */
-	public void put(URI uri, CollaborillaDataSet dataSet) {
+	public boolean put(URI uri, CollaborillaDataSet dataSet) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}

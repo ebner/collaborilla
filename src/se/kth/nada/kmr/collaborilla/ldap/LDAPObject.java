@@ -363,10 +363,6 @@ public class LDAPObject implements Cloneable {
 
 		/* remove old CN */
 		attributeSet.remove(new LDAPAttribute(entryAttributeType));
-		/*
-		 * old method: attributeSet.remove(new LDAPAttribute(entryAttributeType,
-		 * LdapStringHelper.dnToEntryID(sourceDN)));
-		 */
 
 		/* add new CN */
 		attributeSet.add(new LDAPAttribute(entryAttributeType, LDAPStringHelper.dnToEntryID(destDN).getBytes()));
@@ -783,8 +779,9 @@ public class LDAPObject implements Cloneable {
 			String attributeName = attribute.getName();
 
 			/* if the attribute is part of the RDN we skip the mod */
-			if (attributeName.equalsIgnoreCase(this.entryAttributeType)
-					|| attributeName.equalsIgnoreCase("objectclass")) {
+			if (attributeName.equalsIgnoreCase(this.entryAttributeType) ||
+					attributeName.equalsIgnoreCase(CollaborillaObjectConstants.URI) ||
+					attributeName.equalsIgnoreCase("objectclass")) {
 				continue;
 			}
 
@@ -907,4 +904,5 @@ public class LDAPObject implements Cloneable {
 			this.ldapAccess.ldapConnection.modify(destDN, modification);
 		}
 	}
+
 }

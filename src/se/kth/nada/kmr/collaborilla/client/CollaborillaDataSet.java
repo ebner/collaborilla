@@ -35,15 +35,15 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 
 	private String identifier;
 	
-	private Set locations;
+	private Set<String> locations;
 
-	private Set alignedLocations;
+	private Set<String> alignedLocations;
 
 	private String metaData;
 
-	private Set requiredContainers;
+	private Set<String> requiredContainers;
 
-	private Set optionalContainers;
+	private Set<String> optionalContainers;
 
 	private Date timestampCreated;
 
@@ -241,7 +241,7 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	 *            Set to convert.
 	 * @return Array of Strings.
 	 */
-	public final static String[] setToStringArray(Set coll) {
+	public final static String[] setToStringArray(Set<String> coll) {
 		if (coll == null) {
 			return null;
 		}
@@ -262,13 +262,13 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	 *            String array to convert.
 	 * @return Set of Strings
 	 */
-	public final static Set stringArrayToSet(String[] strArray) {
+	public final static Set<String> stringArrayToSet(String[] strArray) {
 		if (strArray == null) {
 			return null;
 		}
 
 		int size = strArray.length;
-		Set result = new HashSet(size);
+		Set<String> result = new HashSet<String>(size);
 
 		for (int i = 0; i < size; i++) {
 			result.add(strArray[i]);
@@ -285,19 +285,19 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 		this.identifier = ident;
 	}
 	
-	public Set getLocations() {
+	public Set<String> getLocations() {
 		return this.locations;
 	}
 	
-	public void setLocations(Set coll) {
+	public void setLocations(Set<String> coll) {
 		this.locations = coll;
 	}
 	
-	public Set getAlignedLocations() {
+	public Set<String> getAlignedLocations() {
 		return this.alignedLocations;
 	}
 	
-	public void setAlignedLocations(Set coll) {
+	public void setAlignedLocations(Set<String> coll) {
 		this.alignedLocations = coll;
 	}
 	
@@ -309,19 +309,19 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 		this.metaData = metaData;
 	}
 	
-	public Set getRequiredContainers() {
+	public Set<String> getRequiredContainers() {
 		return this.requiredContainers;
 	}
 	
-	public void setRequiredContainers(Set coll) {
+	public void setRequiredContainers(Set<String> coll) {
 		this.requiredContainers = coll;
 	}
 	
-	public Set getOptionalContainers() {
+	public Set<String> getOptionalContainers() {
 		return this.optionalContainers;
 	}
 	
-	public void setOptionalContainers(Set coll) {
+	public void setOptionalContainers(Set<String> coll) {
 		this.optionalContainers = coll;
 	}
 	
