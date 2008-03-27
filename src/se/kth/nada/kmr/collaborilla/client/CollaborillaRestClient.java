@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.restlet.Client;
 import org.restlet.data.ClientInfo;
 import org.restlet.data.MediaType;
@@ -29,7 +29,7 @@ import se.kth.nada.kmr.collaborilla.util.URIHelper;
  */
 public class CollaborillaRestClient implements CollaborillaStatelessClient {
 	
-	Logger log = Logger.getLogger(CollaborillaRestClient.class.toString());
+	Log log = LogFactory.getLog(CollaborillaRestClient.class);
 	
 	private String root;
 	
@@ -41,7 +41,9 @@ public class CollaborillaRestClient implements CollaborillaStatelessClient {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatelessClient#get(java.net.URI)
 	 */
 	public CollaborillaDataSet get(URI uri) {
-		Request request = new Request(Method.GET, createResourceURI("element", uri));
+		String resourceURI = createResourceURI("element", uri);
+		log.debug("Using HTTP GET for requesting data from " + resourceURI);
+		Request request = new Request(Method.GET, resourceURI);
 		ClientInfo clientInfo = new ClientInfo();
 		clientInfo.setAgent("Collaborilla Client " + Configuration.APPVERSION);
 		List<Preference<MediaType>> preferences = new ArrayList<Preference<MediaType>>();
@@ -57,12 +59,12 @@ public class CollaborillaRestClient implements CollaborillaStatelessClient {
 			try {
 				result = new ObjectRepresentation<CollaborillaDataSet>(rep).getObject();
 			} catch (IllegalArgumentException e) {
-				log.log(Level.FINER, e.getMessage());
+				log.info(e.getMessage());
 				log.info("No published data available for " + uri);
 			} catch (IOException e) {
-				log.log(Level.WARNING, e.getMessage());
+				log.warn(e.getMessage());
 			} catch (ClassNotFoundException e) {
-				log.log(Level.SEVERE, e.getMessage());
+				log.error(e.getMessage());
 			}
 		}
 		return result;
@@ -72,7 +74,9 @@ public class CollaborillaRestClient implements CollaborillaStatelessClient {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatelessClient#put(java.net.URI, se.kth.nada.kmr.collaborilla.client.CollaborillaDataSet)
 	 */
 	public boolean put(URI uri, CollaborillaDataSet dataSet) {
-		Request request = new Request(Method.PUT, createResourceURI("element", uri));
+		String resourceURI = createResourceURI("element", uri);
+		log.debug("Using HTTP PUT for sending data to " + resourceURI);
+		Request request = new Request(Method.PUT, resourceURI);
 		ClientInfo clientInfo = new ClientInfo();
 		clientInfo.setAgent("Collaborilla Client " + Configuration.APPVERSION);
 		request.setClientInfo(clientInfo);
@@ -89,8 +93,10 @@ public class CollaborillaRestClient implements CollaborillaStatelessClient {
 		if (!root.endsWith("/")) {
 			result += "/";
 		}
-		result += resource + "/";
-		result += URIHelper.encodeURI(uri.toASCIIString());	
+		result += resource;
+		result += "?uri=";
+		result += URIHelper.encodeURI(uri.toASCIIString());
+
 		return result;
 	}
 	

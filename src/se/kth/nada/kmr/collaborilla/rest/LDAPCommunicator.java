@@ -25,16 +25,10 @@ public class LDAPCommunicator {
 	private String ldapPassword;
 	
 	public LDAPCommunicator() {
-//		String configFile = "collaborilla.properties";
-//		Configuration conf = new Configuration(configFile);
-//		ldapServerDN = conf.getProperty("ldap.serverdn");
-//		ldapHostname = conf.getProperty("ldap.hostname");
-//		ldapLoginDN = conf.getProperty("ldap.logindn");
-//		ldapPassword = conf.getProperty("ldap.password");
-		ldapHostname = "collaborilla.conzilla.org";
-		ldapServerDN = "dc=collaborilla,dc=conzilla,dc=org";
-		ldapLoginDN = "cn=admin,dc=collaborilla,dc=conzilla,dc=org";
-		ldapPassword = "conzilla-collab";
+		this.ldapHostname = CollaborillaApplication.getLdapHostname();
+		this.ldapServerDN = CollaborillaApplication.getLdapServerDN();
+		this.ldapLoginDN = CollaborillaApplication.getLdapLoginDN();
+		this.ldapPassword = CollaborillaApplication.getLdapPassword();
 	}
 	
 	public LDAPAccess getLDAPConnection() {

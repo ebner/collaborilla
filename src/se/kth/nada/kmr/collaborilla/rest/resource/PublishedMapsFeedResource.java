@@ -126,6 +126,7 @@ public class PublishedMapsFeedResource extends Resource {
 		
 		for (SearchResultEntry searchEntry : searchResult) {
 			SyndEntry entry;
+	        SyndContent rdf;
 	        SyndContent description;
 	        entry = new SyndEntryImpl();
 	        entry.setTitle(searchEntry.getTitle());
@@ -133,10 +134,20 @@ public class PublishedMapsFeedResource extends Resource {
 	        entry.setPublishedDate(searchEntry.getCreationDate());
 	        entry.setUpdatedDate(searchEntry.getModificationDate());
 	        entry.setAuthor(searchEntry.getAuthorName());
+	        
+	        rdf = new SyndContentImpl();
+	        rdf.setType(MediaType.APPLICATION_RDF_XML.toString());
+	        rdf.setValue(searchEntry.getMetadata());
+	        
 	        description = new SyndContentImpl();
-	        description.setType(MediaType.APPLICATION_RDF_XML.toString());
-	        description.setValue(searchEntry.getMetadata());
+	        description.setValue(searchEntry.getDescription());
+	        
+	        List<SyndContent> contents = new ArrayList<SyndContent>();
+	        contents.add(rdf);
+	        
+	        entry.setContents(contents);
 	        entry.setDescription(description);
+	        
 	        entries.add(entry);
 		}
 		

@@ -2,7 +2,7 @@
 
 <project basedir="." default="compilation" name="collaborilla">
 
-	<property name="java_version"			value="1.4"/>
+	<property name="java_version"			value="1.5"/>
 	<property name="build.compiler"			value="javac${java_version}"/>
 
 	<property name="main_class"				value="se.kth.nada.kmr.collaborilla.service.CollaborillaService"/>
@@ -14,6 +14,7 @@
 	<property name="settings_string"		value="settings"/>
 	<property name="library_string"			value="lib"/>
 	<property name="javadoc_string"			value="doc"/>
+	<property name="servlet_string"			value="servlet"/>
 	<property name="tmp_string"				value="tmp-build"/>
 		
 	<property name="source_directory"		location="${source_string}"/>
@@ -23,13 +24,32 @@
 	<property name="settings_directory"		location="${settings_string}"/>
 	<property name="library_directory"		location="${library_string}"/>
 	<property name="javadoc_directory"		location="${javadoc_string}"/>
+	<property name="servlet_directory"		location="${servlet_string}"/>
 	<property name="tmp_directory"			location="${tmp_string}"/>
 	
-	<property name="dependency_jars"		value="jldap.jar"/>
+	<property name="dependency_jars"		value="
+		com.noelios.restlet.jar,
+		com.noelios.restlet.ext.net.jar,
+		com.noelios.restlet.ext.servlet_2.5.jar,
+		com.noelios.restlet.ext.simple_3.1.jar,
+		commons-logging.jar,
+		icu4j.jar,
+		jdom-1.0.jar,
+		jena.jar,
+		jldap.jar,
+		iri.jar,
+		org.json.jar,
+		org.restlet.ext.json_2.0.jar,
+		org.restlet.ext.wadl_1.0.jar,
+		org.restlet.jar,
+		org.simpleframework.jar,
+		rome-0.9.jar,
+		xercesImpl.jar
+		"/>
 	
     <path id="project_classpath">
         <pathelement location="${build_directory}"/>
-        <pathelement location="${library_string}/jldap.jar"/>
+    	<fileset dir="${library_directory}" includes="**/*.jar"/>
     </path>
 	
 	<target name="all" depends="jar,zip" description="Builds everything"/>
@@ -48,6 +68,8 @@
 			srcdir="${source_directory}"
 			destdir="${build_directory}"
 			classpathref="project_classpath"
+			debug="true"
+			debuglevel="source,lines,vars"
 			deprecation="true"
 			excludes="**/test/*"
 			source="${java_version}"
@@ -120,7 +142,6 @@
 		<chmod dir="${distribution_directory}" perm="660" includes="**/*.properties"/>
 	</target>
 	
-	<!--
 	<target name="jar_all" depends="compilation" description="Generate a JAR that includes all dependencies">
 		<mkdir dir="${distribution_directory}"/>
 		<property name="distname" value="all"/>
@@ -138,7 +159,6 @@
 		</jar>
 		<delete dir="${tmp_directory}"/>
 	</target>
-	-->
 	
 	<target name="init_tstamp">
 		<tstamp>
@@ -184,8 +204,17 @@
 			<!--<tarfileset dir="${source_directory}" prefix="${source_string}"/>-->
 		</tar>
 	</target>
-	
+
 	<target name="release" depends="zip,gzip,bzip2" description="Generates archive files in the formats ZIP, TAR/GZIP and TAR/BZIP2">
 	</target>
-	
+
+	<target name="war" depends="jar" description="Builds a servlet container file, e.g. for using Restlets inside Tomcat">
+		<zip destfile="${distribution_directory}/${ant.project.name}.war">
+			<zipfileset dir="${library_directory}" prefix="WEB-INF/lib" includes="**/*"/>
+			<zipfileset dir="${build_directory}" prefix="WEB-INF/classes" includes="**/*"/>
+			<!--<zipfileset dir="${distribution_directory}" prefix="WEB-INF/lib" includes="${ant.project.name}.jar"/>-->
+			<fileset dir="${servlet_directory}" includes="web.xml" />
+		</zip>
+	</target>
+
 </project>

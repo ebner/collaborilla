@@ -163,6 +163,7 @@ public class SearchResultEntry implements Comparable<SearchResultEntry> {
     	if (other != null) {
     		return other;
     	}
+
     	return uri;
     }
     
@@ -184,10 +185,7 @@ public class SearchResultEntry implements Comparable<SearchResultEntry> {
 			}
 		}
 
-		if (result != null) {
-			return result;
-		}
-		return "No description available";
+		return result;
     }
 	
     private static String getAuthorName(Model model) {
@@ -202,6 +200,7 @@ public class SearchResultEntry implements Comparable<SearchResultEntry> {
     			authorName = names.nextStatement().getObject().toString();
     		}
     	}
+
     	return authorName;
     }
 
