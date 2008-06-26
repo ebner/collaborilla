@@ -2,6 +2,22 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/jldap.jar"/>
+	<classpathentry kind="lib" path="lib/org.json.jar"/>
+	<classpathentry kind="lib" path="lib/com.noelios.restlet.ext.net.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/iri.jar"/>
+	<classpathentry kind="lib" path="lib/icu4j.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/rome-0.9.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/com.noelios.restlet.ext.servlet_2.5.jar"/>
+	<classpathentry kind="lib" path="lib/com.noelios.restlet.ext.simple_3.1.jar"/>
+	<classpathentry kind="lib" path="lib/com.noelios.restlet.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.ext.json_2.0.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.ext.wadl_1.0.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.jar"/>
+	<classpathentry kind="lib" path="lib/org.simpleframework.jar"/>
+	<classpathentry kind="lib" path="lib/jena.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

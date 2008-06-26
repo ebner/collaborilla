@@ -15,6 +15,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -278,11 +280,21 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	}
 	
 	public String getIdentifier() {
-		return this.identifier;
+		try {
+			URI uri = new URI(identifier);
+			return uri.toASCIIString();
+		} catch (URISyntaxException e) {
+			return identifier;
+		}
 	}
 	
 	public void setIdentifier(String ident) {
-		this.identifier = ident;
+		try {
+			URI uri = new URI(ident);
+			this.identifier = uri.toASCIIString();
+		} catch (URISyntaxException e) {
+			this.identifier = ident;	
+		}
 	}
 	
 	public Set<String> getLocations() {
