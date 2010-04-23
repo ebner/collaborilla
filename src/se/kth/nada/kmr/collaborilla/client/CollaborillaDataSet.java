@@ -280,21 +280,25 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	}
 	
 	public String getIdentifier() {
-		try {
-			URI uri = new URI(identifier);
-			return uri.toASCIIString();
-		} catch (URISyntaxException e) {
-			return identifier;
+		if (identifier != null) {
+			try {
+				URI uri = new URI(identifier);
+				return uri.toASCIIString();
+			} catch (URISyntaxException e) {
+			}
 		}
+		return identifier;
 	}
 	
 	public void setIdentifier(String ident) {
-		try {
-			URI uri = new URI(ident);
-			this.identifier = uri.toASCIIString();
-		} catch (URISyntaxException e) {
-			this.identifier = ident;	
+		if (identifier != null) {
+			try {
+				URI uri = new URI(ident);
+				this.identifier = uri.toASCIIString();
+			} catch (URISyntaxException e) {
+			}
 		}
+		this.identifier = ident;
 	}
 	
 	public Set<String> getLocations() {
