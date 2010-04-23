@@ -6,6 +6,8 @@
 
 package se.kth.nada.kmr.collaborilla.ldap;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Iterator;
 
 import se.kth.nada.kmr.collaborilla.client.CollaborillaDataSet;
@@ -900,13 +902,19 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 		}
 		
 		// save the old data
+		System.out.println("createRevision() ->");
 		createRevision();
+		System.out.println("<- createRevision()");
 		
 		// remove (almost) everything
+		System.out.println("removeAllAttributes() ->");
 		removeAllAttributes();
+		System.out.println("<- removeAllAttributes()");
 		
 		if (dataset.getContainerRevision() != null) {
+			System.out.println("setContainerRevision() ->");
 			setContainerRevision(dataset.getContainerRevision());
+			System.out.println("<- setContainerRevision()");
 		}
 		
 		if (dataset.getDescription() != null) {
@@ -918,7 +926,14 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 			while (it.hasNext()) {
 				String location = (String) it.next();
 				try {
+					System.out.println("addLocation() ->");
+					try {
+						URI asciiURI = new URI(location);
+						location = asciiURI.toASCIIString();
+					} catch (URISyntaxException e) {
+					}
 					addLocation(location);
+					System.out.println("<- addLocation()");
 				} catch (LDAPException e) {
 					if (!(e.getResultCode() == LDAPException.ATTRIBUTE_OR_VALUE_EXISTS)) {
 						throw e;
@@ -928,7 +943,9 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 		}
 		
 		if (dataset.getMetaData() != null) {
+			System.out.println("setMetadata() ->");
 			setMetaData(dataset.getMetaData());
+			System.out.println("<- setMetadata()");
 		}
 		
 		if (dataset.getRequiredContainers() != null) {
@@ -936,7 +953,9 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 			while (it.hasNext()) {
 				String container = (String) it.next();
 				try {
+					System.out.println("addRequiredContainers() ->");
 					addRequiredContainer(container);
+					System.out.println("<- addRequiredContainers()");
 				} catch (LDAPException e) {
 					if (!(e.getResultCode() == LDAPException.ATTRIBUTE_OR_VALUE_EXISTS)) {
 						throw e;
@@ -950,7 +969,9 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 			while (it.hasNext()) {
 				String container = (String) it.next();
 				try {
+					System.out.println("addOptionalContainers() ->");
 					addOptionalContainer(container);
+					System.out.println("<- addOptionalContainers()");
 				} catch (LDAPException e) {
 					if (!(e.getResultCode() == LDAPException.ATTRIBUTE_OR_VALUE_EXISTS)) {
 						throw e;
@@ -960,7 +981,9 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 		}
 		
 		if (dataset.getType() != null) {
+			System.out.println("setType() ->");
 			setType(dataset.getType());
+			System.out.println("<- setType()");
 		}
 	}
 
