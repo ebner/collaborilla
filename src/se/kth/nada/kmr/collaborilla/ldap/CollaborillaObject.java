@@ -853,7 +853,7 @@ public class CollaborillaObject extends LDAPObject implements Cloneable {
 			}
 		}
 		
-		data.setRevisionNumber(getRevision());
+		data.setRevisionNumber(Integer.toString(getRevision()));
 		
 		try {
 			data.setTimestampCreated(getTimestampCreated());

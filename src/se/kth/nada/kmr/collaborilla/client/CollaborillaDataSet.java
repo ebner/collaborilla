@@ -22,6 +22,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.annotate.JsonWriteNullProperties;
+
 /**
  * A data set to hold information of a Collaborilla data node.
  * Contains some functionality to convert between String[] and Collection. The
@@ -31,10 +34,12 @@ import java.util.Set;
  * @author Hannes Ebner
  * @version $Id$
  */
+@JsonWriteNullProperties(false)
 public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	
 	private static final long serialVersionUID = -1923564557152264954L;
 
+	@JsonProperty("_id")
 	private String identifier;
 	
 	private Set<String> locations;
@@ -57,9 +62,12 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	
 	private String type;
 
-	private int revisionNumber = -1;
+	private String revisionNumber;
 
 	private String revisionInfo;
+	
+	@JsonProperty("_rev")
+	private String revision;
 	
 	/**
 	 * Is used to determine whether a dataset (e.g. metadata) has been modified
@@ -72,131 +80,7 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 	 * the fields can be set afterwards.
 	 */
 	public CollaborillaDataSet() {
-	}
-	
-//	/**
-//	 * By calling this constructor all fields are fetched automatically via a stateful client.
-//	 * 
-//	 * @param client An instance of CollaborillaStatefulClient
-//	 * @throws CollaborillaException
-//	 */
-//	public CollaborillaDataSet(CollaborillaStatefulClient client) throws CollaborillaException {
-//		try {
-//			setIdentifier(client.getIdentifier());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setAlignedLocations(client.getAlignedLocations());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setMetaData(client.getMetaData());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setLocations(client.getLocations());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setTimestampCreated(client.getTimestampCreated());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setTimestampModified(client.getTimestampModified());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setRequiredContainers(client.getRequiredContainers());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setOptionalContainers(client.getOptionalContainers());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setContainerRevision(client.getContainerRevision());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setDescription(client.getDescription());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setType(client.getType());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setRevisionNumber(client.getRevisionNumber());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//		
-//		try {
-//			setRevisionInfo(client.getRevisionInfo());
-//		} catch (CollaborillaException ce) {
-//			if (!(ce.getResultCode() == CollaborillaException.ErrorCode.SC_NO_SUCH_ATTRIBUTE)) {
-//				throw ce;
-//			}
-//		}
-//
-//		setModifiedLocally(false);
-//	}
-		
-//	/**
-//	 * By calling this constructor all fields are fetched automatically via a stateless client.
-//	 * 
-//	 * @param client An instance of CollaborillaStatelessClient
-//	 * @throws CollaborillaException
-//	 */
-//	public CollaborillaDataSet(CollaborillaStatelessClient client) throws CollaborillaException {
-//
-//	}
+	}	
 	
 	/**
 	 * Decodes a String (an encoded CollaborillaDataSet) into a
@@ -250,8 +134,8 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 
 		String[] result = new String[coll.size()];
 		int i = 0;
-		for (Iterator it = coll.iterator(); it.hasNext(); i++) {
-			result[i] = (String) it.next();
+		for (Iterator<String> it = coll.iterator(); it.hasNext(); i++) {
+			result[i] = it.next();
 		}
 
 		return result;
@@ -279,27 +163,44 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 		return result;
 	}
 	
+	@JsonProperty("_id")
 	public String getIdentifier() {
 		if (identifier != null) {
 			try {
 				URI uri = new URI(identifier);
+				// return URLEncoder.encode(uri.toASCIIString(), "UTF-8");
 				return uri.toASCIIString();
 			} catch (URISyntaxException e) {
-			}
+				e.printStackTrace();
+			}// catch (UnsupportedEncodingException e) {
+//				e.printStackTrace();
+//			}
 		}
 		return identifier;
 	}
 	
+	@JsonProperty("_id")
 	public void setIdentifier(String ident) {
 		if (identifier != null) {
 			try {
 				URI uri = new URI(ident);
 				this.identifier = uri.toASCIIString();
 			} catch (URISyntaxException e) {
+				e.printStackTrace();
 			}
 		}
 		this.identifier = ident;
 	}
+	
+    @JsonProperty("_rev")
+    public String getRevision() {
+            return revision;
+    }
+
+    @JsonProperty("_rev")
+    public void setRevision(String s) {
+            this.revision = s;
+    }
 	
 	public Set<String> getLocations() {
 		return this.locations;
@@ -373,11 +274,11 @@ public final class CollaborillaDataSet implements Serializable, EntryTypes {
 		this.revisionInfo = revInfo;
 	}
 
-	public int getRevisionNumber() {
+	public String getRevisionNumber() {
 		return this.revisionNumber;
 	}
 	
-	public void setRevisionNumber(int rev) {
+	public void setRevisionNumber(String rev) {
 		this.revisionNumber = rev;
 	}
 	

@@ -199,7 +199,7 @@ public class BufferedCollaborillaClient implements CollaborillaStatefulClient {
 	 * @see se.kth.nada.kmr.collaborilla.client.CollaborillaStatefulClient#getRevisionNumber()
 	 */
 	public int getRevisionNumber() throws CollaborillaException {
-		return this.dataset.getRevisionNumber();
+		return Integer.valueOf(this.dataset.getRevisionNumber());
 	}
 
 	/**
